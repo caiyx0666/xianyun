@@ -1,10 +1,37 @@
 <template>
     <div class="container">
+        <!-- 主要内容 -->
+        <el-row 
+        type="flex" 
+        justify="center" 
+        align="middle" 
+        class="main">
+
+            <div class="form-wrapper">
+                <!-- 表单头部tab -->
+                <el-row type="flex" justify="center" class="tabs">
+                    <span :class="{active: currentTab === index}" 
+                    v-for="(item, index) in [`登录`, `注册`]"
+                    :key="index" 
+                    @click="handleChangeTab(index)">
+                        {{item}}
+                    </span>
+                </el-row>
     </div>
 </template>
 
 <script>
 export default {
+    data(){
+        return {
+            currentTab: 0
+        }
+    },
+    methods: {
+        handleChangeTab(index){
+            this.currentTab = index;
+        },
+    }
 }
 </script>
 
