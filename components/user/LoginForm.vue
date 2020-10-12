@@ -71,9 +71,9 @@ export default {
                         min:6,
                         message:'最少输入6位及以上',
                         trigger:'blur'
-        }
+                    }
                 ]
-    },
+            },
         }
     },
     methods: {
@@ -82,6 +82,20 @@ export default {
             // 在发送请求之前进行一次总校验 
             this.$refs.form.validate().then(res =>{
                 if(res){
+                    // 发送请求
+                    this.$axios({
+                        method:'post',
+                        url:'/accounts/login',
+                        data:this.form
+                    }).then(res=>{
+                        if(res.status === 200){
+                            this.$message.success('登录成功')
+                        }
+                    }).catch(err=>{
+                        // console.dir(err.response.data.message);
+                        this.$message.error('用户名或密码错误')
+                    })
+                }
             }).catch(err=>{
                 console.log(err);
             })
