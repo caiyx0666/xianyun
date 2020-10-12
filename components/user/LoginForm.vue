@@ -5,7 +5,7 @@
         :rules="rules" 
         class="form">
 
-        <el-form-item class="form-item">
+        <el-form-item class="form-item" prop="username">
             <el-input 
                 placeholder="用户名/手机"
                 v-model="form.username"
@@ -14,7 +14,7 @@
             </el-input>
         </el-form-item>
 
-        <el-form-item class="form-item">
+        <el-form-item class="form-item" prop="password">
             <el-input 
                 placeholder="密码" 
                 type="password"
@@ -42,11 +42,38 @@ export default {
         return {
             // 表单数据
             form: {
-                username:'',
-                password:''
+                username:'13800138000',
+                password:'123456'
             },
             // 表单规则
-            rules: {},
+            rules: {
+                username:[
+                    {
+                        required:true,
+                        message:'请输入用户名',
+                        trigger:'blur',
+                        transform(value) {
+                          return value.trim();
+                        },
+                    },{
+                        pattern: /^1[3456789]\d{9}$/,
+                        message: '请输入11位合法手机号',
+                        trigger: 'blur'
+                    }
+                ],
+                password:[
+                    {
+                        required:true,
+                        message:'请输入密码',
+                        trigger:'blur'
+                    },
+                    {
+                        min:6,
+                        message:'最少输入6位及以上',
+                        trigger:'blur'
+        }
+                ]
+    },
         }
     },
     methods: {
