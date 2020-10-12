@@ -1,20 +1,21 @@
 {
-  "name": "xianyun",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "dev": "nuxt",
-    "build": "nuxt build",
-    "start": "nuxt start",
-    "generate": "nuxt generate"
-  },
-  "dependencies": {
-    "@nuxtjs/axios": "^5.12.2",
-    "core-js": "^3.6.5",
-    "element-ui": "^2.13.2",
-    "less": "^3.12.2",
-    "less-loader": "^7.0.2",
-    "nuxt": "^2.14.6"
-  },
-  "devDependencies": {}
+    "name": "xianyun",
+    "description": "国内酒店预订,闲云酒店为您提供国内数千城市的酒店预订,酒店价格查询,优质的宾馆住宿推荐、以及酒店地址、酒店图片,真实用户点评等酒店信息。",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "nuxt --open",
+        "build": "nuxt build",
+        "start": "nuxt start",
+        "generate": "nuxt generate"
+    },
+    "dependencies": {
+        "@nuxtjs/axios": "^5.12.2",
+        "core-js": "^3.6.5",
+        "element-ui": "^2.13.2",
+        "less": "^3.12.2",
+        "less-loader": "^7.0.2",
+        "nuxt": "^2.14.6"
+    },
+    "devDependencies": {}
 }
