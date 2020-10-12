@@ -9,8 +9,7 @@
             <el-input 
                 placeholder="用户名/手机"
                 v-model="form.username"
-                >
-                
+                @focus="hideErrMsg('username')">
             </el-input>
         </el-form-item>
 
@@ -18,7 +17,8 @@
             <el-input 
                 placeholder="密码" 
                 type="password"
-                v-model="form.password">
+                v-model="form.password"
+                @focus="hideErrMsg('password')">
             </el-input>
         </el-form-item>
 
@@ -77,6 +77,11 @@ export default {
         }
     },
     methods: {
+        // 当输入框获取焦点时隐藏验证信息
+        hideErrMsg(propName){
+            this.$refs.form.clearValidate(propName)
+        },
+
         // 提交登录
         handleLoginSubmit(){
             // 在发送请求之前进行一次总校验 
