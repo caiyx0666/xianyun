@@ -1,13 +1,20 @@
 <template>
   <div>
+    <PageHeader/>
     <!-- 内容占位组件 -->
     <nuxt />
+    <PageFooter/>
   </div>
 </template>
 
 <script>
+import PageHeader from '@/components/PageHeader'
+import PageFooter from '@/components/PageFooter'
 export default {
-
+  components:{
+    PageHeader,
+    PageFooter
+  }
 }
 </script>
 
