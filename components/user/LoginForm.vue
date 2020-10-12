@@ -79,7 +79,12 @@ export default {
     methods: {
         // 提交登录
         handleLoginSubmit(){
-           console.log(this.form)
+            // 在发送请求之前进行一次总校验 
+            this.$refs.form.validate().then(res =>{
+                if(res){
+            }).catch(err=>{
+                console.log(err);
+            })
         }
     }
 }
