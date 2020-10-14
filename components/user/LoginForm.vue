@@ -100,9 +100,6 @@ export default {
                             // 利用 commit 调用 mutation
                             this.$store.commit('user/setUserInfo',res.data)
                         }
-                    }).catch(err=>{
-                        // console.dir(err.response.data.message);
-                        this.$message.error('用户名或密码错误')
                     })
                 }
             }).catch(err=>{

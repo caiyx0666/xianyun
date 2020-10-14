@@ -153,7 +153,7 @@ export default {
                 })
               }
             }).catch(err =>{
-              console.log(err);
+              // console.log(err);
               this.$message.warning('请输入正确的信息')
             })
         },
