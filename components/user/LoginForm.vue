@@ -95,6 +95,10 @@ export default {
                     }).then(res=>{
                         if(res.status === 200){
                             this.$message.success('登录成功')
+                            console.log(res.data);
+                            // 将获取的数据存放到 vuex 当中
+                            // 利用 commit 调用 mutation
+                            this.$store.commit('user/setUserInfo',res.data)
                         }
                     }).catch(err=>{
                         // console.dir(err.response.data.message);
