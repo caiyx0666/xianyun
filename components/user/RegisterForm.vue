@@ -141,6 +141,21 @@ export default {
         // 注册
         handleRegSubmit(){
            console.log(this.form)
+            this.$refs.form.validate().then(res=>{
+              if(res){
+                const { checkPassword,...data } = this.form
+                this.$axios({
+                  method:'post',
+                  url:'/accounts/register',
+                  data
+                }).then(res =>{
+                  console.log(res.data);
+                })
+              }
+            }).catch(err =>{
+              console.log(err);
+              this.$message.warning('请输入正确的信息')
+            })
         },
 
         // 表单获取焦点时，取消验证信息
