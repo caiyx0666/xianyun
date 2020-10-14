@@ -44,7 +44,8 @@ export default {
             src: '@/plugins/localStorage',
             // 指定这个插件不可以在服务端执行(只能等到浏览器当中再执行)
             ssr: false
-        }
+        },
+        '@/plugins/axios'
     ],
 
     components: true,
