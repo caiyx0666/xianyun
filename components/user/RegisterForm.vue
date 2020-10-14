@@ -140,7 +140,8 @@ export default {
 
         // 注册
         handleRegSubmit(){
-           console.log(this.form)
+          //  console.log(this.form)
+          // 提交注册前来一次总校验
             this.$refs.form.validate().then(res=>{
               if(res){
                 const { checkPassword,...data } = this.form
