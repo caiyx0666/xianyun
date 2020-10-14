@@ -36,7 +36,15 @@ export default {
      ** Plugins to load before mounting the App
      */
     plugins: [
-        '@/plugins/element-ui'
+        '@/plugins/element-ui',
+        // '@/plugins/localstorage'
+        // 引入插件的时候, 默认是字符串
+        // 如果需要额外的配置, 就变成对象
+        {
+            src: '@/plugins/localstorage',
+            // 指定这个插件不可以在服务端执行(只能等到浏览器当中再执行)
+            ssr: false
+        }
     ],
 
     /*
