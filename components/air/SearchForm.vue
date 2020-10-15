@@ -124,7 +124,9 @@ export default {
                 }).map(city =>{
                     return{
                         ...city,
-                        value:city.name
+                        // 处理参数，将 '市' 字去掉
+                        value:city.name.replace(/市$/,'')
+                        
                     }
                 })
                 // console.log(data);
@@ -150,6 +152,8 @@ export default {
         // 提交搜索
         handleSubmit() {
             console.log(this.form);
+            
+           
         },
         // 选择日期
         handleDate(date) {
