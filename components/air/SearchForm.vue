@@ -21,6 +21,7 @@
                     placeholder="请搜索出发城市"
                     @select="handleDepartSelect"
                     class="el-autocomplete"
+                    v-model="form.departCity"
                 ></el-autocomplete>
             </el-form-item>
             <el-form-item label="到达城市">
@@ -29,6 +30,7 @@
                     placeholder="请搜索到达城市"
                     @select="handleDestSelect"
                     class="el-autocomplete"
+                    v-model="form.destCity"
                 ></el-autocomplete>
             </el-form-item>
 
@@ -57,20 +59,91 @@ export default {
                    name:'往返'
                }
            ],
-           currentTab:0
+           currentTab:0,
+           // 管理全部数据
+           form: {
+               departCity: '',
+               departCode: '',
+               destCity: '',
+               destCode: '',
+               departDate: ''
+           }
        }
    },
    methods:{
         // 切换 tab
         handleSearchTab() {},
         // 显示搜索建议
-        queryDepartSearch() {},
-        queryDestSearch() {},
+        queryDepartSearch(queryString,showList) {
+            // 第一个参数：当前输入的值
+            // 第二个参数：输出列表的回调
+            if(!queryString){
+                showList([{
+                    value:'请输入关键字'
+                }])
+                return
+            }
+            // 通过服务器获取数据
+            this.$axios({
+                url:'/airs/city',
+                params:{
+                    name:queryString
+                }
+            }).then(res =>{
+                console.log(res.data);
+                // 获取到的数据缺少 value
+                // 对获取到的数据进行改造
+                const data = res.data.data.map(city =>{
+                    return{
+                        ...city,
+                        value:city.name
+                    }
+                })
+                console.log(data);
+                showList(data)
+            })
+        },
+        queryDestSearch(queryString,showList) {
+            // 第一个参数：当前输入的值
+            // 第二个参数：输出列表的回调
+            if(!queryString){
+                showList([{
+                    value:'请输入关键字'
+                }])
+                return
+            }
+            // 通过服务器获取数据
+            this.$axios({
+                url:'/airs/city',
+                params:{
+                    name:queryString
+                }
+            }).then(res =>{
+                console.log(res.data);
+                // 获取到的数据缺少 value
+                // 对获取到的数据进行改造
+                const data = res.data.data.map(city =>{
+                    return{
+                        ...city,
+                        value:city.name
+                    }
+                })
+                console.log(data);
+                showList(data)
+            })
+        },
         // 搜索建议选择回调函数
-        handleDepartSelect() {},
-        handleDestSelect() {},
+        handleDepartSelect(item) {
+            console.log(item);
+            this.form.departCode = item.sort
+        },
+        handleDestSelect(item) {
+            this.form.departCode = item.sort
+        },
         // 提交搜索
-        handleSubmit() {},
+        handleSubmit() {
+            console.log(this.form);
+        },
    }
 }
 </script>
