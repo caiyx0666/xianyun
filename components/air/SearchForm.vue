@@ -23,6 +23,7 @@
                     class="el-autocomplete"
                     v-model="form.departCity"
                     :trigger-on-focus="false"
+                    :highlight-first-item="true"
                 ></el-autocomplete>
             </el-form-item>
             <el-form-item label="到达城市">
@@ -33,6 +34,7 @@
                     class="el-autocomplete"
                     v-model="form.destCity"
                     :trigger-on-focus="false"
+                    :highlight-first-item="true"
                 ></el-autocomplete>
             </el-form-item>
 
