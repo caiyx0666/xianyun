@@ -40,15 +40,59 @@
 
     <!-- 特价机票 -->
     <div class="air-sale">
-        
+        <el-row
+            type="flex"
+            class="air-sale-pic"
+            justify="space-between"
+        >
+            <el-col
+                :span="6"
+                v-for="(item, index) in sales"
+                :key="index"
+            >
+                <!-- 这里的点击无非是模拟一次请求
+                在用户没有输入的情况下,
+                根据机票的信息,拼接一个搜索连接 -->
+                <nuxt-link
+                    :to="`/air/flights?departCity=${item.departCity}&departCode=${item.departCode}&destCity=${item.destCity}&destCode=${item.destCode}&departDate=${item.departDate}`"
+                >
+                    <img :src="$axios.defaults.baseURL + item.cover" />
+                    <el-row
+                        class="layer-bar"
+                        type="flex"
+                        justify="space-between"
+                    >
+                        <span
+                            >{{ item.departCity }}-{{
+                                item.destCity
+                            }}</span
+                        >
+                        <span>￥{{item.price}}</span>
+                    </el-row>
+                </nuxt-link>
+            </el-col>
+        </el-row>
     </div>
   </section>
 </template>
 
 <script>
 export default {
-
+data() {
+    return {
+        sales: []
+    }
+},
+created() {
+    // 页面进来时, 根据接口获取特价机票
+    this.$axios({
+        url: '/airs/sale'
+    }).then(res=>{
+        console.log(res.data);
+        this.sales = res.data.data
+    })
 }
+};
 </script>
 
 <style scoped lang="less">
