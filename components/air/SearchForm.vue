@@ -152,12 +152,15 @@ export default {
         // 提交搜索
         handleSubmit() {
             console.log(this.form);
-            
-           
+            // 跳转到机票列表页
+            this.$router.push({
+                path: '/air/flights',
+                query:this.form
+            })
         },
         // 选择日期
         handleDate(date) {
-            // console.log(date);
+            // console.log(date)
             // 默认可以得到用户选中的日期对象
             // 可以修改完值之后再赋值给 this.form.departDate
             // 可以将日期对象传入 moment 函数改造成 moment.js 的对象
