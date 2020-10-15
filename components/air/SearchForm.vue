@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import moment from "moment";
 export default {
    data(){
        return{
@@ -163,7 +164,13 @@ export default {
         },
         // 选择日期
         handleDate(date) {
-            console.log(date);
+            // console.log(date);
+            // 默认可以得到用户选中的日期对象
+            // 可以修改完值之后再赋值给 this.form.departDate
+            // 可以将日期对象传入 moment 函数改造成 moment.js 的对象
+            const dateStr = moment(date).format('YYYY-MM-DD')
+            console.log(dateStr);
+            this.form.departDate = dateStr
         },
         // 交换城市
         handleReverse(){
