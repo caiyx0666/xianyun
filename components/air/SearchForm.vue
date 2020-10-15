@@ -5,7 +5,7 @@
             <span
                 v-for="(item, index) in tabs"
                 :key="index"
-                @click="handleSearchTab(item, index)"
+                @click="handleSearchTab(index)"
                 :class="{ active: index === currentTab }"
             >
                 <i :class="item.icon"></i>{{ item.name }}
@@ -94,9 +94,19 @@ export default {
    },
    methods:{
         // 切换 tab
-        handleSearchTab() {},
-        // 显示搜索建议
-        queryDepartSearch(queryString,showList) {
+        handleSearchTab(index) {
+                // 如果点击的 index == 1
+                // 就是点击了往返，弹出一个提示框即可
+                if(index == 1){
+                    this.$confirm('目前不支持往返，敬请期待','提示',{
+                        confirmButtonText:'知道了',
+                        showCancelButton:false,
+                        type:"warning"
+                    })
+                }
+        },
+
+        loadCityList(queryString, showList) {
             // 第一个参数：当前输入的值
             // 第二个参数：输出列表的回调
             // 通过服务器获取数据
@@ -121,34 +131,13 @@ export default {
                 showList(data)
             })
         },
+
+        // 显示搜索建议
+        queryDepartSearch(queryString,showList) {
+            this.loadCityList(queryString, showList)
+        },
         queryDestSearch(queryString,showList) {
-            // 第一个参数：当前输入的值
-            // 第二个参数：输出列表的回调
-            if(!queryString){
-                showList([{
-                    value:'请输入关键字'
-                }])
-                return
-            }
-            // 通过服务器获取数据
-            this.$axios({
-                url:'/airs/city',
-                params:{
-                    name:queryString
-                }
-            }).then(res =>{
-                // console.log(res.data);
-                // 获取到的数据缺少 value
-                // 对获取到的数据进行改造
-                const data = res.data.data.map(city =>{
-                    return{
-                        ...city,
-                        value:city.name
-                    }
-                })
-                // console.log(data);
-                showList(data)
-            })
+           this.loadCityList(queryString, showList)
         },
         // 搜索建议选择回调函数
         handleDepartSelect(item) {
@@ -156,7 +145,7 @@ export default {
             this.form.departCode = item.sort
         },
         handleDestSelect(item) {
-            this.form.departCode = item.sort
+            this.form.destCode = item.sort
         },
         // 提交搜索
         handleSubmit() {
