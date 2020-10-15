@@ -93,12 +93,6 @@ export default {
         queryDepartSearch(queryString,showList) {
             // 第一个参数：当前输入的值
             // 第二个参数：输出列表的回调
-            if(!queryString){
-                showList([{
-                    value:'请输入关键字'
-                }])
-                return
-            }
             // 通过服务器获取数据
             this.$axios({
                 url:'/airs/city',
@@ -109,7 +103,9 @@ export default {
                 // console.log(res.data);
                 // 获取到的数据缺少 value
                 // 对获取到的数据进行改造
-                const data = res.data.data.map(city =>{
+                const data = res.data.data.filter(city =>{
+                    return city.sort
+                }).map(city =>{
                     return{
                         ...city,
                         value:city.name
