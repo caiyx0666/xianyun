@@ -22,6 +22,7 @@
                     @select="handleDepartSelect"
                     class="el-autocomplete"
                     v-model="form.departCity"
+                    :trigger-on-focus="false"
                 ></el-autocomplete>
             </el-form-item>
             <el-form-item label="到达城市">
@@ -31,7 +32,20 @@
                     @select="handleDestSelect"
                     class="el-autocomplete"
                     v-model="form.destCity"
+                    :trigger-on-focus="false"
                 ></el-autocomplete>
+            </el-form-item>
+
+            <el-form-item label="出发时间">
+                <!-- change 用户确认选择日期时触发 -->
+                <el-date-picker
+                    type="date"
+                    placeholder="请选择日期"
+                    style="width: 100%"
+                    @change="handleDate"
+                    v-model="form.departDate"
+                >
+                </el-date-picker>
             </el-form-item>
 
             <el-form-item label="">
@@ -90,7 +104,7 @@ export default {
                     name:queryString
                 }
             }).then(res =>{
-                console.log(res.data);
+                // console.log(res.data);
                 // 获取到的数据缺少 value
                 // 对获取到的数据进行改造
                 const data = res.data.data.map(city =>{
@@ -99,7 +113,7 @@ export default {
                         value:city.name
                     }
                 })
-                console.log(data);
+                // console.log(data);
                 showList(data)
             })
         },
@@ -119,7 +133,7 @@ export default {
                     name:queryString
                 }
             }).then(res =>{
-                console.log(res.data);
+                // console.log(res.data);
                 // 获取到的数据缺少 value
                 // 对获取到的数据进行改造
                 const data = res.data.data.map(city =>{
@@ -128,7 +142,7 @@ export default {
                         value:city.name
                     }
                 })
-                console.log(data);
+                // console.log(data);
                 showList(data)
             })
         },
@@ -144,6 +158,10 @@ export default {
         handleSubmit() {
             console.log(this.form);
         },
+        // 选择日期
+        handleDate(date) {
+            console.log(date);
+        }
    }
 }
 </script>
