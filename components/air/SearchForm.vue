@@ -60,6 +60,11 @@
                     搜索
                 </el-button>
             </el-form-item>
+
+            <div class="reverse">
+                <span @click="handleReverse">换</span>
+            </div>
+
         </el-form>
     </div>
 </template>
@@ -159,6 +164,17 @@ export default {
         // 选择日期
         handleDate(date) {
             console.log(date);
+        },
+        // 交换城市
+        handleReverse(){
+            const oldDepartCity = this.form.departCity
+            const oldDepartCode = this.form.departCode
+
+            this.form.departCity = this.form.destCity
+            this.form.departCode = this.form.destCode
+
+            this.form.destCity = oldDepartCity
+            this.form.destCode = oldDepartCode
         }
    }
 }
