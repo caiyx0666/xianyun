@@ -10,7 +10,11 @@
                 <FlightsListHead />
 
                 <!-- 航班信息 -->
-                <div>航班信息</div>
+                 <FlightsItem 
+                    v-for="flight in flightsData.flights"
+                    :key="flight.id"
+                    :data="flight"
+                />
             </div>
 
             <!-- 侧边栏 -->
@@ -24,12 +28,18 @@
 
 <script>
 export default {
+    data(){
+        return{
+            flightsData: {}
+        }
+    },
     created() {
         this.$axios({
             url: '/airs',
             params: this.$route.query
         }).then(res=>{
             console.log(res.data);
+            this.flightsData = res.data
         })
     }
 }
