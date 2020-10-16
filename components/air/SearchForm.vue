@@ -151,8 +151,16 @@ export default {
         },
         // 提交搜索
         handleSubmit() {
-            console.log(this.form);
             // 跳转到机票列表页
+            for(let city in this.form){
+                if(!this.form[city]){
+                    this.$message({
+                      message: '请将信息填写完整',
+                      type: 'warning'
+                    });
+                    return
+                }
+            }
             this.$router.push({
                 path: '/air/flights',
                 query:this.form
