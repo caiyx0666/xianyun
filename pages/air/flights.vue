@@ -64,6 +64,10 @@ export default {
         }).then(res=>{
             console.log(res.data);
             this.flightsData = res.data
+            // 页面刚创建, 过滤器还没有任何选项
+            // 先将100条作为过滤后的数据用来显示
+            this.filteredList = this.flightsData.flights
+            // this.getList();
         })
     },
     methods:{
