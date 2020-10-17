@@ -12,7 +12,7 @@
                     size="mini"
                     v-model="airport"
                     placeholder="起飞机场"
-                    @change="handleAirport"
+                    @change="runFilters"
                 >
                     <el-option 
                         v-for="(item, index) in data.options.airport"
@@ -27,7 +27,7 @@
                     size="mini"
                     v-model="flightTimes"
                     placeholder="起飞时间"
-                    @change="handleFlightTimes"
+                    @change="runFilters"
                 >
                     <!-- 由于我们的筛选不经过后台, 这里的 value 可以随便定
                     只要后面写筛选, 根据这里的 value 值去过滤即可 -->
@@ -46,7 +46,7 @@
                     size="mini"
                     v-model="company"
                     placeholder="航空公司"
-                    @change="handleCompany"
+                    @change="runFilters"
                 >
                     <el-option 
                         v-for="(item, index) in data.options.company"
@@ -61,7 +61,7 @@
                     size="mini"
                     v-model="airSize"
                     placeholder="机型"
-                    @change="handleAirSize"
+                    @change="runFilters"
                 >
                     <el-option 
                         v-for="(item, index) in sizeOptions"
@@ -115,27 +115,66 @@ export default {
         },
 
         methods: {
-            // 选择机场时候触发
-            handleAirport(value) {},
-
-            // 选择出发时间时候触发
-            handleFlightTimes(value) {},
-
-            // 选择航空公司时候触发
-            handleCompany(value) {
-                // 默认会得到一个选中的 value 值
-                // 另外这个选择器也会绑定到 this.company
-                console.log('修改了航空公司选项');
-                console.log(value);
-                // 只要用 filter过滤 符合return true 其他 return false 即可
-                const res = this.data.flights.filter(flight =>{
-                    return flight.airline_name == value
-                })
+            runFilters(){
+                // 判断哪个过滤器有设置值，再执行过滤操作
+                let res= this.data.flights
+                if(this.airport){
+                    res= this.this.handleAirport(res)
+                }
+                if(this.flightTimes){
+                    res = this.handleFlightTimes(res)
+                }
+                if(this.company){
+                    res = this.handleCompany(res)
+                }
+                if(this.airSize){
+                    res = this.handleAirSize(res)
+                }
+                console.log('四个过滤器检查完毕');
+                console.log(res);
+                // 四个过滤器都执行过以后，真正发送给父页面
                 this.$emit('setFilteredList',res)
             },
 
+            // 选择机场时候触发
+            handleAirport(originList) {
+                const res = originList.filter(flight=>{
+                    return flight.org_airport_name == this.airport
+                })
+                return res
+            },
+
+            // 选择出发时间时候触发
+            handleFlightTimes(originList) {
+                const begin = Number(this.flightTimes.split(',')[0])
+                const end = Number(this.flightTimes.split(',')[1])
+
+                const res = originList.filter(flight =>{
+                    const depHour = Number(flight.dep_time.split(':')[0])
+                    return depHour >begin && depHour<end
+                })
+                return res
+            },
+
+            // 选择航空公司时候触发
+            handleCompany(originList) {
+                // 默认会得到一个选中的 originList 值
+                // 另外这个选择器也会绑定到 this.company
+                // 只要用 filter过滤 符合return true 其他 return false 即可
+                const res = originList.filter(flight =>{
+                    return flight.airline_name == this.company
+                })
+                return res
+            },
+
             // 选择机型时候触发
-            handleAirSize(value) {},
+            handleAirSize(originList) {
+                const res = originList.filter(flight =>{
+                    return flight.plane_size == this.airSize
+                })
+
+                return res
+            },
 
             // 撤销条件时候触发
             handleFiltersCancel() {},
