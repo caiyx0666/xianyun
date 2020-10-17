@@ -143,7 +143,7 @@ export default {
         },
         // 搜索建议选择回调函数
         handleDepartSelect(item) {
-            console.log(item);
+            // console.log(item);
             this.form.departCode = item.sort
         },
         handleDestSelect(item) {
@@ -173,7 +173,7 @@ export default {
             // 可以修改完值之后再赋值给 this.form.departDate
             // 可以将日期对象传入 moment 函数改造成 moment.js 的对象
             const dateStr = moment(date).format('YYYY-MM-DD')
-            console.log(dateStr);
+            // console.log(dateStr);
             this.form.departDate = dateStr
         },
         // 交换城市
