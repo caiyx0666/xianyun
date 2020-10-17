@@ -119,7 +119,7 @@ export default {
                 // 判断哪个过滤器有设置值，再执行过滤操作
                 let res= this.data.flights
                 if(this.airport){
-                    res= this.this.handleAirport(res)
+                    res= this.handleAirport(res)
                 }
                 if(this.flightTimes){
                     res = this.handleFlightTimes(res)
