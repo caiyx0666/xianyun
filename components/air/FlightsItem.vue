@@ -28,6 +28,9 @@
                 </el-col>
             </el-row>
         </div>
+        
+        <el-collapse-transition>
+
         <div class="flight-recommend" v-show="isShow">
             <!-- 隐藏的座位信息列表 -->
             <el-row type="flex" justify="space-between" align="middle">
@@ -54,6 +57,9 @@
                 </el-col>
             </el-row>
         </div>
+
+        </el-collapse-transition>
+
     </div>
 </template>
 
