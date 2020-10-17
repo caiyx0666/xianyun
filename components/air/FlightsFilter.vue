@@ -17,7 +17,7 @@
                     <el-option 
                         v-for="(item, index) in data.options.airport"
                         :key="index"
-                        :label="item" 
+                        :label="item"
                         :value="item"
                     > </el-option>
                 </el-select>
@@ -122,7 +122,17 @@ export default {
             handleFlightTimes(value) {},
 
             // 选择航空公司时候触发
-            handleCompany(value) {},
+            handleCompany(value) {
+                // 默认会得到一个选中的 value 值
+                // 另外这个选择器也会绑定到 this.company
+                console.log('修改了航空公司选项');
+                console.log(value);
+                // 只要用 filter过滤 符合return true 其他 return false 即可
+                const res = this.data.flights.filter(flight =>{
+                    return flight.airline_name == value
+                })
+                this.$emit('setFilteredList',res)
+            },
 
             // 选择机型时候触发
             handleAirSize(value) {},

@@ -6,6 +6,7 @@
                 <!-- 过滤条件 -->
                 <FlightsFilter 
                     v-if="flightsData.options"
+                    @setFilteredList="setFilteredList"
                     :data="flightsData"
                 />
                 
@@ -51,7 +52,7 @@ export default {
     data(){
         return{
             flightsData: {},
-                // 添加一个数组, 准备存放分页数据
+            filteredList: [],
             pageIndex: 1,
             pageSize: 10,
         }
@@ -66,6 +67,11 @@ export default {
         })
     },
     methods:{
+        setFilteredList(newList){
+            this.filteredList = newList
+            console.log('父组件收到了子组件的数据传递');
+            console.log(this.filteredList);
+        },
         // 每页显示的条数发生变化
         currentChange(newPageIndex){
             this.pageIndex = newPageIndex
