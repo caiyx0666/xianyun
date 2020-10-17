@@ -22,6 +22,10 @@
                 <!-- 航班头部布局 -->
                 <FlightsListHead />
 
+                <div v-if="flightsData.flights && flightsData.flights.length == 0">
+                    暂无数据
+                </div>
+
                 <!-- 航班信息 -->
                  <FlightsItem 
                     v-for="flight in dataList"
