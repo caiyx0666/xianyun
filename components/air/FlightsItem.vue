@@ -1,6 +1,6 @@
 <template>
     <div class="flight-item" v-if="data">
-        <div @click="headleClick">
+        <div @click="isShow = !isShow">
             <!-- 显示的机票信息 -->
             <el-row type="flex" align="middle" class="flight-info">
                 <el-col :span="6"> <span>{{data.airline_name}} </span> {{ data.flight_no }} </el-col>
@@ -24,7 +24,7 @@
                     </el-row>
                 </el-col>
                 <el-col :span="6" class="flight-info-right">
-                    ￥<span class="sell-price">{{ data.base_price/2 }}</span>起
+                    ￥<span class="sell-price">{{ bestPrice }}</span>起
                 </el-col>
             </el-row>
         </div>
@@ -48,7 +48,7 @@
                             <el-button type="warning" size="mini">
                                 选定
                             </el-button>
-                            <p>剩余：{{ info.discount }}</p>
+                            <p v-if="info.nums != 'A'">剩余：{{info.nums}}</p>
                         </el-col>
                     </el-row>
                 </el-col>
@@ -90,13 +90,22 @@ export default {
                 result = result + minute + '分钟';
               }
               return result
-        },
-        // 点击航班显示机票
-        headleClick(){
-            console.log('1');
-            this.isShow = !this.isShow
         }
-    }
+    },
+    computed: {
+        // 计算最低机票价格
+        bestPrice(){
+            // 遍历当前航班座位信息
+            // 找出最低价 return 出来
+            let bestPrice = this.data.seat_infos[0].settle_price_child
+            this.data.seat_infos.forEach(seat =>{
+                if(seat.settle_price_child < bestPrice){
+                    bestPrice = seat.settle_price_child
+                }
+            })
+            return bestPrice
+        }
+    },
 };
 </script>
 
