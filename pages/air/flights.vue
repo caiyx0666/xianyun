@@ -83,12 +83,14 @@ export default {
     },
     computed: {
         dataList(){
-            if(!this.flightsData.flights){
+            // 不可以用原来100条数据做分页
+            // 要用过滤后的数组分页
+            if(!this.filteredList){
                 return []
             }
             let beginIndex = (this.pageIndex - 1) * this.pageSize
             let endIndex = beginIndex + this.pageSize
-            return this.flightsData.flights.slice(
+            return this.filteredList.slice(
                 beginIndex,
                 endIndex
             )
