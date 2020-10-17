@@ -4,7 +4,7 @@
             <!-- 顶部过滤列表 -->
             <div class="flights-content">
                 <!-- 过滤条件 -->
-                <div>过滤条件</div>
+                <FlightsFilter />
                 
                 <!-- 分页组件 -->
                   <el-pagination
