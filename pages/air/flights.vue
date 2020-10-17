@@ -19,7 +19,7 @@
                     :page-size="pageSize"
                     :page-sizes="[2,5,10,20,50]"
                     @size-change="sizeChange"
-                    :total="flightsData.flights.length"
+                    :total="filteredList.length"
                     @current-change="currentChange"
                 />
 
