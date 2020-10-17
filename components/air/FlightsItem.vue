@@ -15,7 +15,7 @@
                             <span>{{ data.org_airport_name + data.org_airport_quay }}</span>
                         </el-col>
                         <el-col :span="8" class="flight-time">
-                            <span>{{ setDate(data.dep_datetime,data.arr_datetime) }}</span>
+                            <span>{{ duration }}</span>
                         </el-col>
                         <el-col :span="8" class="flight-airport">
                             <strong>{{ data.arr_time }}</strong>
@@ -81,7 +81,7 @@ export default {
         }
     },
     methods:{
-        // 计算时间差
+        // 利用moment第三方包计算航班时间
         setDate(starttime,endtime){
              var totalMinute = moment(endtime).diff(starttime) / (1000 * 60),
               hours = Math.floor(totalMinute / 60),
@@ -110,6 +110,21 @@ export default {
                 }
             })
             return bestPrice
+        },
+
+        // 自己计算航班时间
+        duration(){
+            // 先将触发和到达时间都变成分钟
+            const depTimeNum = Number(this.data.dep_time.split(':')[0]*60) + Number(this.data.dep_time.split(':')[1])
+            const arrTimeNum = Number(this.data.arr_time.split(':')[0]*60) + Number(this.data.arr_time.split(':')[1])
+            let durationNum = arrTimeNum - depTimeNum
+
+            if(durationNum < 0){
+                durationNum = durationNum + (24 * 60)
+            }
+
+            // 相减之后换回小时:分钟的格式
+            return Math.floor(durationNum/60)+'小时'+durationNum%60+'分钟'
         }
     },
 };
