@@ -42,12 +42,21 @@
         <div class="air-column">
             <h2>保险</h2>
             <div>
-                <div class="insurance-item">
-                    <el-checkbox 
-                    label="航空意外险：￥30/份×1  最高赔付260万" 
-                    border>
-                    </el-checkbox> 
-                </div>
+                <el-checkbox-group v-model="insurances">
+                    <div
+                        class="insurance-item"
+                        v-for="item in data.insurances"
+                        :key="item.id">
+                       <el-checkbox :label="item.id" border>
+                            {{
+                                `${item.type}: ￥${item.price}/份 x ${users.length} 最高赔付 ${item.compensation}`
+                            }}
+                        </el-checkbox>
+                    </div>
+                </el-checkbox-group>
+                <el-checkbox 
+                >
+                </el-checkbox> 
             </div>
         </div>
 
@@ -83,7 +92,7 @@ export default {
         data:Object
     },
     data(){
-        return{
+        return {
             users:[
                 // 这里来存放所有乘机人
                 // 每个对象都是一个乘机人数据对象
@@ -92,7 +101,8 @@ export default {
                     id:'',   // 身份证
                     uid:new Date().getTime()
                 }
-            ]
+            ],
+            insurances: [],
         }
     },
     methods: {
