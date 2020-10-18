@@ -48,7 +48,7 @@
                         </el-col>
                         <el-col :span="5" class="price"> ￥{{ info.org_settle_price }} </el-col>
                         <el-col :span="3" class="choose-button">
-                            <el-button type="warning" size="mini" @click.stop="handleSubmit">
+                            <el-button type="warning" size="mini" @click.stop="handleSubmit(info.seat_xid)">
                                 选定
                             </el-button>
                             <p v-if="info.nums != 'A'">剩余：{{info.nums}}</p>
@@ -77,8 +77,15 @@ export default {
         isShow: Boolean
     },
     methods:{
-        handleSubmit() {
-                console.log('hahaha');
+        handleSubmit(seat_xid) {
+            // console.log('hahaha');
+            this.$router.push({
+                path:'/air/order',
+                query:{
+                    id:this.data.id,
+                    seat_xid
+                }
+            })    
         },
         // 利用moment第三方包计算航班时间
         setDate(starttime,endtime){
