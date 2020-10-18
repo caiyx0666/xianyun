@@ -5,7 +5,7 @@
             <el-form class="member-info">
                 <div class="member-info-item" >
 
-                    <el-form-item label="乘机人类型">
+                    <el-form-item label="乘机人姓名">
                         <el-input placeholder="姓名" class="input-with-select">
                             <el-select 
                             slot="prepend" 
@@ -16,7 +16,7 @@
                         </el-input>
                     </el-form-item>
 
-                    <el-form-item label="证件类型">
+                    <el-form-item label="身份证号码">
                         <el-input 
                         placeholder="证件号码"  class="input-with-select">
                             <el-select 
