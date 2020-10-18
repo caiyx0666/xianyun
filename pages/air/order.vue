@@ -3,7 +3,7 @@
         <el-row type="flex" justify="space-between">
             <!-- 订单表单 -->
             <div class="main">
-                <OrderForm />
+                <OrderForm v-if="flightData.id" :data="flightData"/>
             </div>
 
             <!-- 侧边栏 -->
@@ -13,7 +13,26 @@
 </template>
 
 <script>
-    export default {};
+    export default {
+        data(){
+            return{
+                flightData:{}
+            }
+        },
+        created(){
+            // 父页面先获取机票数据
+            // 分别交给两个组件
+            this.$axios({
+                url:'/airs/'+this.$route.query.id,
+                params:{
+                    seat_xid:this.$route.query.seat_xid
+                }
+            }).then(res=>{
+                console.log(res.data);
+                this.flightData = res.data
+            })
+        }
+    };
 </script>
 
 <style lang="less" scoped>

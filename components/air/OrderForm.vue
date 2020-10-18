@@ -79,6 +79,9 @@
 
 <script>
 export default {
+    props:{
+        data:Object
+    },
     data(){
         return{
             users:[
