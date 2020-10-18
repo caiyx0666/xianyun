@@ -76,27 +76,6 @@
 <script>
 export default {
     methods: {
-        handleSubmit() {
-            console.log('点击按钮提交');
-        },
-        handleSendCaptcha() {
-            
-        },
-        handleAddUsers() {
-
-        },
-        handleDeleteUser() {
-            
-        }
-    }
-}
-</script>
-
-
-
-<script>
-export default {
-    methods: {
         // 添加乘机人
         handleAddUsers(){
             
