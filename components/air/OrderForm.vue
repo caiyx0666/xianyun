@@ -65,19 +65,19 @@
             <div class="contact">
                 <el-form label-width="60px">
                     <el-form-item label="姓名">
-                        <el-input></el-input>
+                        <el-input v-model="contactName"></el-input>
                     </el-form-item>
 
                     <el-form-item label="手机">
-                        <el-input placeholder="请输入内容">
+                        <el-input placeholder="请输入内容" v-model="contactPhone">
                             <template slot="append">
-                            <el-button @click="handleSendCaptcha">发送验证码</el-button>
+                            <el-button @click="handleSendCaptcha" >发送验证码</el-button>
                             </template>
                         </el-input>
                     </el-form-item>
 
                     <el-form-item label="验证码">
-                        <el-input></el-input>
+                        <el-input v-model="captcha"></el-input>
                     </el-form-item>
                 </el-form>   
                 <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
@@ -103,6 +103,9 @@ export default {
                 }
             ],
             insurances: [],
+            contactName: '',
+            contactPhone: '',
+            captcha: ''
         }
     },
     methods: {
@@ -122,7 +125,22 @@ export default {
         
         // 发送手机验证码
         handleSendCaptcha(){
-            
+            if(!this.contactPhone){
+                this.$message.warning('请先输入手机号')
+                return
+            }
+            this.$axios({
+                method:'post',
+                url:'/captchas',
+                data:{
+                    tel:this.contactPhone
+                }
+            }).then(res =>{
+                // console.log(res.data);
+                if(res.data.code){
+                    this.$message.success('发送成功'+res.data.code)
+                }
+            })
         },
 
         // 提交订单
