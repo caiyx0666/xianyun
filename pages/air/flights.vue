@@ -62,7 +62,17 @@ export default {
         }
     },
     created() {
-        this.$axios({
+        this.loadPage()
+    },
+    watch:{
+        // 监听路径变化，如果点击了搜索记录应该发起搜素请求
+        $route(){
+            this.loadPage()
+        }
+    },
+    methods:{
+         loadPage(){
+             this.$axios({
             url: '/airs',
             params: this.$route.query
         }).then(res=>{
@@ -73,8 +83,7 @@ export default {
             this.filteredList = this.flightsData.flights
             // this.getList();
         })
-    },
-    methods:{
+         },
         setCurrentIndex(index){
             // 判断 如果当前索引已经是激活
             // 那么点击就是想将所有都关起来
