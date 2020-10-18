@@ -43,7 +43,7 @@
             <!-- 侧边栏 -->
             <div class="aside">
                 <!-- 侧边栏组件 -->
-                侧边栏
+                <FlightsAside />
             </div>
         </el-row>
     </section>
