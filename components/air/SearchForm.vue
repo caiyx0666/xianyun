@@ -152,13 +152,18 @@ export default {
         // 提交搜索
         handleSubmit() {
             // 跳转到机票列表页
-                if(!this.form.departDate || !this.form.destCity || !this.form.departCity){
-                    this.$message({
-                      message: '请将信息填写完整',
-                      type: 'warning'
-                    });
-                    return
-                }
+            if(!this.form.departDate || !this.form.destCity || !this.form.departCity){
+                this.$message({
+                  message: '请将信息填写完整',
+                  type: 'warning'
+                });
+                return
+            }
+            // 在跳转搜索之前, 应该将当前的搜索数据
+            // 存放到 vuex 里面作为 历史记录
+            // 调用 mutation
+            this.$store.commit('history/addHistory', this.form)
+
             this.$router.push({
                 path: '/air/flights',
                 query:this.form
