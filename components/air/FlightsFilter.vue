@@ -6,7 +6,7 @@
             justify="space-between"
             align="middle"
         >
-            <el-col :span="8"> 单程： 广州 - 上海 / 2019-06-17 </el-col>
+            <el-col :span="8"> 单程： {{ data.info.departCity }} - {{ data.info.destCity }} / {{ data.info.departDate }} </el-col>
             <el-col :span="4">
                 <el-select
                     size="mini"
