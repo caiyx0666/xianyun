@@ -7,7 +7,9 @@
             </div>
 
             <!-- 侧边栏 -->
-            <div class="aside">侧边栏</div>
+            <div class="aside">
+                <OrderAside v-if="flightData.id" :data="flightData"/>
+            </div>
         </el-row>
     </div>
 </template>
