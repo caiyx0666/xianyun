@@ -3,14 +3,14 @@
         <div class="air-column">
             <h2>乘机人</h2>
             <el-form class="member-info">
-                <div class="member-info-item" >
+                <div class="member-info-item" v-for="user in users" :key="user.uid">
 
                     <el-form-item label="乘机人姓名">
-                        <el-input placeholder="姓名" class="input-with-select">
+                        <el-input placeholder="姓名" class="input-with-select" v-model="user.username">
                             <el-select 
-                            slot="prepend" 
-                            value="1" 
-                            placeholder="请选择">
+                                slot="prepend" 
+                                value="1" 
+                                placeholder="请选择">
                                 <el-option label="成人" value="1"></el-option>
                             </el-select>
                         </el-input>
@@ -18,7 +18,9 @@
 
                     <el-form-item label="身份证号码">
                         <el-input 
-                        placeholder="证件号码"  class="input-with-select">
+                            placeholder="证件号码"  
+                            class="input-with-select"
+                            v-model="user.id">
                             <el-select 
                             slot="prepend" 
                             value="1"           
@@ -75,6 +77,19 @@
 
 <script>
 export default {
+    data(){
+        return{
+            users:[
+                // 这里来存放所有乘机人
+                // 每个对象都是一个乘机人数据对象
+                {
+                    username:'',
+                    id:'',   // 身份证
+                    uid:new Date().getTime()
+                }
+            ]
+        }
+    },
     methods: {
         // 添加乘机人
         handleAddUsers(){
@@ -93,7 +108,7 @@ export default {
 
         // 提交订单
         handleSubmit(){
-            
+            console.log(this.users);
         }
     }
 }
