@@ -1,6 +1,6 @@
 <template>
-    <div class="flight-item" v-if="data">
-        <div @click="isShow = !isShow">
+    <div class="flight-item">
+        <div>
             <!-- 显示的机票信息 -->
             <el-row type="flex" align="middle" class="flight-info">
                 <el-col :span="6"> <span>{{data.airline_name}} </span> {{ data.flight_no }} </el-col>
@@ -48,7 +48,7 @@
                         </el-col>
                         <el-col :span="5" class="price"> ￥{{ info.org_settle_price }} </el-col>
                         <el-col :span="3" class="choose-button">
-                            <el-button type="warning" size="mini">
+                            <el-button type="warning" size="mini" @click.stop="handleSubmit">
                                 选定
                             </el-button>
                             <p v-if="info.nums != 'A'">剩余：{{info.nums}}</p>
@@ -66,11 +66,6 @@
 <script>
 import moment from 'moment'
 export default {
-    data(){
-        return{
-            isShow:false
-        }
-    },
     props: {
         data: {
             type: Object,
@@ -78,9 +73,13 @@ export default {
             default() {
                 return {}
             }
-        }
+        },
+        isShow: Boolean
     },
     methods:{
+        handleSubmit() {
+                console.log('hahaha');
+        },
         // 利用moment第三方包计算航班时间
         setDate(starttime,endtime){
              var totalMinute = moment(endtime).diff(starttime) / (1000 * 60),

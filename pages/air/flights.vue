@@ -32,9 +32,11 @@
 
                 <!-- 航班信息 -->
                  <FlightsItem 
-                    v-for="flight in dataList"
+                    v-for="(flight, index) in dataList"
                     :key="flight.id"
                     :data="flight"
+                    :isShow="index == currentIndex"
+                    @click.native="setCurrentIndex(index)"
                 />
             </div>
 
@@ -55,6 +57,8 @@ export default {
             filteredList: [],
             pageIndex: 1,
             pageSize: 10,
+            // 父页面储存当前激活的航班索引
+            currentIndex: -1
         }
     },
     created() {
@@ -71,6 +75,18 @@ export default {
         })
     },
     methods:{
+        setCurrentIndex(index){
+            // 判断 如果当前索引已经是激活
+            // 那么点击就是想将所有都关起来
+            // 将当前索引设为 -1
+            if(index == this.currentIndex){
+                this.currentIndex = -1
+            }else{
+                // 否则才将当前点击项为激活
+                this.currentIndex = index
+            }
+        },
+
         setFilteredList(newList){
             this.filteredList = newList
             // console.log('父组件收到了子组件的数据传递');
