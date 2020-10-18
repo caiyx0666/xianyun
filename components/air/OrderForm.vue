@@ -54,9 +54,11 @@
                         </el-checkbox>
                     </div>
                 </el-checkbox-group>
-                <el-checkbox 
-                >
-                </el-checkbox> 
+
+            </div>
+             <h2>发票</h2>
+            <div>
+                <el-checkbox v-model="invoice">需要发票</el-checkbox>
             </div>
         </div>
 
@@ -103,9 +105,10 @@ export default {
                 }
             ],
             insurances: [],
-            contactName: '',
-            contactPhone: '',
-            captcha: ''
+             contactName: '嘿嘿',
+                contactPhone: '13847474837',
+                captcha: '000000',
+                invoice: false,
         }
     },
     methods: {
@@ -145,8 +148,28 @@ export default {
 
         // 提交订单
         handleSubmit(){
-            console.log(this.users);
-        }
+            // console.log(this.users);
+             const data = {
+                    users: this.users,
+                    insurances: this.insurances,
+                    contactName: this.contactName,
+                    contactPhone: this.contactPhone,
+                    invoice: this.invoice,
+                    seat_xid: this.$route.query.seat_xid,
+                    air: this.$route.query.id,
+                    captcha: this.captcha
+            }
+             this.$axios({
+                    method: 'post',
+                    url: '/airorders',
+                    headers: {
+                        Authorization: "Bearer " + this.$store.state.user.userInfo.token
+                    },
+                    data
+                }).then(res=>{
+                    console.log(res.data);
+                })
+            },
     }
 }
 </script>
