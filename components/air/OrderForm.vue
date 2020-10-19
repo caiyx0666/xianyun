@@ -191,6 +191,7 @@ export default {
             console.log(insurancePrice);
             const totalPrice = ticketPrice + insurancePrice
             // 得出了总价
+            this.$emit('setTotalPrice', totalPrice)
         }
     },
     watch: {

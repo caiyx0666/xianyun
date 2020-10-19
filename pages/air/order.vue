@@ -3,12 +3,12 @@
         <el-row type="flex" justify="space-between">
             <!-- 订单表单 -->
             <div class="main">
-                <OrderForm v-if="flightData.id" :data="flightData"/>
+                <OrderForm v-if="flightData.id" :data="flightData" @setTotalPrice="setTotalPrice"/>
             </div>
 
             <!-- 侧边栏 -->
             <div class="aside">
-                <OrderAside v-if="flightData.id" :data="flightData"/>
+                <OrderAside v-if="flightData.id" :data="flightData" :totalPrice="totalPrice"/>
             </div>
         </el-row>
     </div>
@@ -18,7 +18,8 @@
     export default {
         data(){
             return{
-                flightData:{}
+                flightData:{},
+                totalPrice:0
             }
         },
         created(){
@@ -33,6 +34,11 @@
                 console.log(res.data);
                 this.flightData = res.data
             })
+        },
+        methods:{
+            setTotalPrice(newTotalPrice){
+                this.totalPrice = newTotalPrice
+            }
         }
     };
 </script>
