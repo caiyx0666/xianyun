@@ -85,6 +85,9 @@
                 <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
             </div>
         </div>
+        <div style="display: none">
+            {{totalPrice}}
+        </div>
     </div>
 </template>
 
@@ -170,7 +173,10 @@ export default {
                     console.log(res.data);
                 })
         },
-        getTotalPrice(){
+        
+    },
+    computed:{
+        TotalPrice(){
             // 计算总价格
             // 机票价格 = 人数 * 机票单价
             // 保险价格 = 人数 * 所有选中的保险单价
@@ -192,23 +198,24 @@ export default {
             const totalPrice = ticketPrice + insurancePrice
             // 得出了总价
             this.$emit('setTotalPrice', totalPrice)
+            return totalPrice
         }
     },
-    watch: {
-        users:{
-            handler(){
-                this.getTotalPrice()
-            },
-            // 这个属性可以强制 watch 在页面加载完毕马上触发一次
-            immediate:true
-        },
-        insurances:{
-            handler(){
-                this.getTotalPrice()
-            },
-            immediate:true
-        }
-    },
+    // watch: {
+        // users:{
+        //     handler(){
+        //         this.getTotalPrice()
+        //     },
+        //     // 这个属性可以强制 watch 在页面加载完毕马上触发一次
+        //     immediate:true
+        // },
+        // insurances:{
+        //     handler(){
+        //         this.getTotalPrice()
+        //     },
+        //     immediate:true
+        // }
+    // },
 }
 </script>
 
