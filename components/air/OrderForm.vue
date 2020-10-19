@@ -195,13 +195,18 @@ export default {
         }
     },
     watch: {
-        users() {
-            console.log('乘机人发生变化');
-            this.getTotalPrice()
+        users:{
+            handler(){
+                this.getTotalPrice()
+            },
+            // 这个属性可以强制 watch 在页面加载完毕马上触发一次
+            immediate:true
         },
-        insurances() {
-            console.log('保险发生变化');
-            this.getTotalPrice()
+        insurances:{
+            handler(){
+                this.getTotalPrice()
+            },
+            immediate:true
         }
     },
 }
