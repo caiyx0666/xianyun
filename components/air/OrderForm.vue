@@ -169,8 +169,40 @@ export default {
                 }).then(res=>{
                     console.log(res.data);
                 })
-            },
-    }
+        },
+        getTotalPrice(){
+            // 计算总价格
+            // 机票价格 = 人数 * 机票单价
+            // 保险价格 = 人数 * 所有选中的保险单价
+            const ticketPrice = this.data.base_price * this.users.length
+            let insurancePrice = 0
+
+            this.insurances.forEach(element=>{
+                // 遍历选中的保险，这里选中的储存都是保险的id
+                this.data.insurances.forEach(insurance => {
+                    if(insurance.id == element){
+                        // 拿到了当前选中 id 保险的价格
+                        // 应该乘以人数，添加到总价上
+                        insurancePrice += insurance.price * this.users.length
+                    }
+                })
+            })
+
+            console.log(insurancePrice);
+            const totalPrice = ticketPrice + insurancePrice
+            // 得出了总价
+        }
+    },
+    watch: {
+        users() {
+            console.log('乘机人发生变化');
+            this.getTotalPrice()
+        },
+        insurances() {
+            console.log('保险发生变化');
+            this.getTotalPrice()
+        }
+    },
 }
 </script>
 
