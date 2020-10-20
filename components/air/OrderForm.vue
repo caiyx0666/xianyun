@@ -86,7 +86,7 @@
             </div>
         </div>
         <div style="display: none">
-            {{totalPrice}}
+            {{TotalPrice}}
         </div>
     </div>
 </template>
