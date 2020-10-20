@@ -207,13 +207,23 @@ export default {
             // 如果两个表单都要校验，使用回调的形式会形成回调地狱
             // 先校验乘机人 => 回调中校验联系人 =》 成功后在发送请求
             
-            const isValidUsers = await this.$refs.usersForm.validate()
-            const isValidContact = await this.$refs.contactForm.validate()
+            // const isValidUsers = await this.$refs.usersForm.validate()
+            // const isValidContact = await this.$refs.contactForm.validate()
 
-            if(isValidUsers && isValidContact){
-                // 两个同时为真才发送请求
-                this.sendRequest()   
-                console.log('发送请求了');
+
+            // if(isValidUsers && isValidContact){
+            //     // 两个同时为真才发送请求
+            //     this.sendRequest()   
+            //     console.log('发送请求了');
+            // }
+
+            const [validUsers,validContact] = await Promise.all([
+                this.$refs.usersForm.validate(),
+                this.$refs.contactForm.validate()
+            ])
+            if(validUsers && validContact){
+                this.sendRequest()
+                console.log('运用Promise.all方法发送的请求');
             }
         },
         sendRequest() {
