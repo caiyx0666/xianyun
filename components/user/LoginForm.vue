@@ -88,18 +88,10 @@ export default {
             this.$refs.form.validate().then(res =>{
                 if(res){
                     // 发送请求
-                    this.$axios({
-                        method:'post',
-                        url:'/accounts/login',
-                        data:this.form
-                    }).then(res=>{
-                        if(res.status === 200){
-                            this.$message.success('登录成功')
-                            console.log(res.data);
-                            // 将获取的数据存放到 vuex 当中
-                            // 利用 commit 调用 mutation
-                            this.$store.commit('user/setUserInfo',res.data)
-                        }
+                    // this.$store.dispatch() 这个方法有两个参数
+                    // 第一个是 actions 的地址，第二个是数据
+                    this.$store.dispatch('user/login',this.form).then(res=>{
+                        this.$router.push('/')
                     })
                 }
             }).catch(err=>{

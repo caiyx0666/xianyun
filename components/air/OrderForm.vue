@@ -267,25 +267,25 @@ export default {
         },
         sendRequest() {
             const data = {
-                            users: this.users,
-                            insurances: this.insurances,
-                            contactName: this.contactName,
-                            contactPhone: this.contactPhone,
-                            invoice: this.invoice,
-                            seat_xid: this.$route.query.seat_xid,
-                            air: this.$route.query.id,
-                            captcha: this.captcha
-                    }
-                    this.$axios({
-                           method: 'post',
-                           url: '/airorders',
-                           headers: {
-                               Authorization: "Bearer " + this.$store.state.user.userInfo.token
-                           },
-                           data
-                    }).then(res=>{
-                        console.log(res.data);
-                    })
+                    users: this.users,
+                    insurances: this.insurances,
+                    contactName: this.contactName,
+                    contactPhone: this.contactPhone,
+                    invoice: this.invoice,
+                    seat_xid: this.$route.query.seat_xid,
+                    air: this.$route.query.id,
+                    captcha: this.captcha
+            }
+            this.$axios({
+                   method: 'post',
+                   url: '/airorders',
+                   headers: {
+                       Authorization: "Bearer " + this.$store.state.user.userInfo.token
+                   },
+                   data
+            }).then(res=>{
+                console.log(res.data);
+            })
         }
         
     },
