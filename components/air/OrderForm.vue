@@ -102,9 +102,16 @@
                         <el-input v-model="captcha"></el-input>
                     </el-form-item>
                 </el-form>   
-                <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
+                <el-button 
+                    type="warning" 
+                    class="submit" 
+                    @click="handleSubmit"
+                    v-if="$store.state.user.userInfo.token"
+                >
+                    提交订单
+                </el-button>
 
-                <div class="container">
+                <div class="container" v-else>
                     <!-- 主要内容 -->
                     <el-row
                         type="flex"
