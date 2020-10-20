@@ -4,7 +4,8 @@
             <h2>乘机人</h2>
             <el-form 
                 class="member-info"
-                :medel="{
+                ref="usersForm"
+                :model="{
                     users:users
                 }">
                 <div class="member-info-item"
@@ -16,18 +17,12 @@
                         :prop="`users[${index}].username`"
                         :rules="[
                             {
-                                required:true,
-                                message:'请输入您的姓名',
-                                trigger:'blur'
+                                required: true,
+                                message: '请输入您的姓名',
+                                trigger: 'blur'
                             }
                         ]">
                         <el-input placeholder="姓名" class="input-with-select" v-model="user.username">
-                            <el-select 
-                                slot="prepend" 
-                                value="1" 
-                                placeholder="请选择">
-                                <el-option label="成人" value="1"></el-option>
-                            </el-select>
                         </el-input>
                     </el-form-item>
 
@@ -45,12 +40,6 @@
                             placeholder="证件号码"  
                             class="input-with-select"
                             v-model="user.id">
-                            <el-select 
-                            slot="prepend" 
-                            value="1"           
-                            placeholder="请选择">
-                                <el-option label="身份证" value="1" :checked="true"></el-option>
-                            </el-select>
                         </el-input>
                     </el-form-item>
 
@@ -87,7 +76,10 @@
         <div class="air-column">
             <h2>联系人</h2>
             <div class="contact">
-               <el-form label-width="80px" :model="{
+               <el-form 
+                label-width="80px" 
+                ref="contactForm"
+                :model="{
                     contactName,
                     contactPhone,
                     captcha
@@ -209,29 +201,43 @@ export default {
         },
 
         // 提交订单
-        handleSubmit(){
-            // console.log(this.users);
-             const data = {
-                    users: this.users,
-                    insurances: this.insurances,
-                    contactName: this.contactName,
-                    contactPhone: this.contactPhone,
-                    invoice: this.invoice,
-                    seat_xid: this.$route.query.seat_xid,
-                    air: this.$route.query.id,
-                    captcha: this.captcha
+        async handleSubmit(){
+            // 异步函数写成同步的样子
+            // 发送请求之前先调用饿了么校验方法进行一次总校验
+            // 如果两个表单都要校验，使用回调的形式会形成回调地狱
+            // 先校验乘机人 => 回调中校验联系人 =》 成功后在发送请求
+            
+            const isValidUsers = await this.$refs.usersForm.validate()
+            const isValidContact = await this.$refs.contactForm.validate()
+
+            if(isValidUsers && isValidContact){
+                // 两个同时为真才发送请求
+                this.sendRequest()   
+                console.log('发送请求了');
             }
-             this.$axios({
-                    method: 'post',
-                    url: '/airorders',
-                    headers: {
-                        Authorization: "Bearer " + this.$store.state.user.userInfo.token
-                    },
-                    data
-                }).then(res=>{
-                    console.log(res.data);
-                })
         },
+        sendRequest() {
+            const data = {
+                            users: this.users,
+                            insurances: this.insurances,
+                            contactName: this.contactName,
+                            contactPhone: this.contactPhone,
+                            invoice: this.invoice,
+                            seat_xid: this.$route.query.seat_xid,
+                            air: this.$route.query.id,
+                            captcha: this.captcha
+                    }
+                    this.$axios({
+                           method: 'post',
+                           url: '/airorders',
+                           headers: {
+                               Authorization: "Bearer " + this.$store.state.user.userInfo.token
+                           },
+                           data
+                    }).then(res=>{
+                        console.log(res.data);
+                    })
+        }
         
     },
     computed:{
