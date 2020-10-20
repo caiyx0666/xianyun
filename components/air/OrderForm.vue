@@ -135,6 +135,14 @@ export default {
                 this.$message.warning('请先输入手机号')
                 return
             }
+
+            // 订单发送验证码前先进行校验手机号码是否合法
+            const regexp = /^1[3456789]\d{9}$/
+            if(!regexp.test(this.contactPhone)){
+                this.$message.error('手机号不合法')
+                return
+            }
+
             this.$axios({
                 method:'post',
                 url:'/captchas',
