@@ -244,7 +244,7 @@ export default {
             // 异步函数写成同步的样子
             // 发送请求之前先调用饿了么校验方法进行一次总校验
             // 如果两个表单都要校验，使用回调的形式会形成回调地狱
-            // 先校验乘机人 => 回调中校验联系人 =》 成功后在发送请求
+            // 先校验乘机人 => 回调中校验联系人 => 成功后在发送请求
             
             // const isValidUsers = await this.$refs.usersForm.validate()
             // const isValidContact = await this.$refs.contactForm.validate()
@@ -255,14 +255,21 @@ export default {
             //     this.sendRequest()   
             //     console.log('发送请求了');
             // }
-
-            const [validUsers,validContact] = await Promise.all([
+            let isOk =[]
+            try {
+                isOk = await Promise.all([
                 this.$refs.usersForm.validate(),
                 this.$refs.contactForm.validate()
             ])
+            } catch (err) {
+                this.$message.warning('请将信息填写完整')
+                return
+            }
+
+            const [validUsers,validContact] = isOk
+
             if(validUsers && validContact){
                 this.sendRequest()
-                console.log('运用Promise.all方法发送的请求');
             }
         },
         sendRequest() {
@@ -285,6 +292,9 @@ export default {
                    data
             }).then(res=>{
                 console.log(res.data);
+                if(res.data.message == "订单提交成功"){
+                    this.$router.push(`/air/pay?id=${res.data.data.id}`)
+                }
             })
         }
         
