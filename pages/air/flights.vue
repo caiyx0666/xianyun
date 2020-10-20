@@ -17,6 +17,7 @@
                     :pager-count="5"
                     layout="total, sizes, prev, pager, next, jumper"
                     :page-size="pageSize"
+                    :current-page="pageIndex"
                     :page-sizes="[2,5,10,20,50]"
                     @size-change="sizeChange"
                     :total="filteredList.length"
@@ -97,6 +98,7 @@ export default {
         },
 
         setFilteredList(newList){
+            this.pageIndex = 1
             this.filteredList = newList
             // console.log('父组件收到了子组件的数据传递');
             // console.log(this.filteredList);
