@@ -64,7 +64,12 @@ import QRcode from 'qrcode'
                             // 其中二维码链接在res.data.payInfo.code_url
                             // 需要两个东西 字符串res.data.payinfo.code_url
                             // 另外一个是存放二维码的 dom this.$ref.qrcodeDom
-                            QRcode.toCanvas(this.$refs.qrcodeDom,res.data.payInfo.code_url)
+                            QRcode.toCanvas(this.$refs.qrcodeDom,res.data.payInfo.code_url,{
+                                width: 200,
+                                color: {
+                                    dark: '#000088'
+                                }
+                            })
                         })
                     }
                 },
