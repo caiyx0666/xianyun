@@ -45,7 +45,11 @@ export default {
             // 指定这个插件不可以在服务端执行(只能等到浏览器当中再执行)
             ssr: false
         },
-        '@/plugins/axios'
+        '@/plugins/axios',
+        {
+            src: '@/plugins/editor',
+            ssr: false
+        }
     ],
 
     components: true,
