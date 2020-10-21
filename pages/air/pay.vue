@@ -107,7 +107,7 @@ import QRcode from 'qrcode'
                         out_trade_no:this.payData.payInfo.order_no
                     }
                 }).then(res =>{
-                    console.log(res.data);
+                    // console.log(res.data);
                     this.showPayState(res.data.trade_state);
                     if(res.data.trade_state == "SUCCESS"){
                         this.$message.success('感谢巨款0.01元')
@@ -128,8 +128,8 @@ import QRcode from 'qrcode'
                     USERPAYING: "用户支付中",
                     PAYERROR: "支付失败",
                 };
-                console.log('这里是处理各种状态的方法');
-                console.log(stateOption[state]);
+                // console.log('这里是处理各种状态的方法');
+                // console.log(stateOption[state]);
             }
         }
     };
