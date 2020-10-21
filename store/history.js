@@ -11,10 +11,10 @@ export const mutations = {
         let isUnique = true
         state.historyList.forEach(history => {
             if (
-                history.departCity == data.departCity,
-                history.departCode == data.departCode,
-                history.destCity == data.destCity,
-                history.destCode == data.destCode,
+                history.departCity == data.departCity &&
+                history.departCode == data.departCode &&
+                history.destCity == data.destCity &&
+                history.destCode == data.destCode &&
                 history.departDate == data.departDate
             ) {
                 isUnique = false
