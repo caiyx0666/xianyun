@@ -99,6 +99,10 @@ import QRcode from 'qrcode'
                     console.log(res.data);
                     if(res.data.trade_state == "SUCCESS"){
                         this.$message.success('感谢巨款0.01元')
+                    }else{
+                        setTimeout(()=>{
+                            this.checkPayState()
+                        },3000)
                     }
                 })
             }
