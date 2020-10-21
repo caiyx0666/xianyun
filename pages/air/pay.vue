@@ -97,6 +97,7 @@ import QRcode from 'qrcode'
                     }
                 }).then(res =>{
                     console.log(res.data);
+                    this.showPayState(res.data.trade_state);
                     if(res.data.trade_state == "SUCCESS"){
                         this.$message.success('感谢巨款0.01元')
                     }else{
@@ -105,6 +106,19 @@ import QRcode from 'qrcode'
                         },3000)
                     }
                 })
+            },
+            showPayState(state){
+                const stateOption = {
+                    SUCCESS: "支付成功",
+                    REFUND: "转入退款",
+                    NOTPAY: "未支付",
+                    CLOSED: "已关闭",
+                    REVOKED: "已撤销",
+                    USERPAYING: "用户支付中",
+                    PAYERROR: "支付失败",
+                };
+                console.log('这里是处理各种状态的方法');
+                console.log(stateOption[state]);
             }
         }
     };
