@@ -70,14 +70,37 @@ import QRcode from 'qrcode'
                                     dark: '#000088'
                                 }
                             })
+                            this.checkPayState()
                         })
                     }
                 },
-                    // 默认情况下只能监听到有变化的情况
-                    // 但是如果是正常跳转，token 本来就存在
-                    // 触发不了监听器
-                    // immediate 设置默认执行一遍
-                    immediate: true
+                // 默认情况下只能监听到有变化的情况
+                // 但是如果是正常跳转，token 本来就存在
+                // 触发不了监听器
+                // immediate 设置默认执行一遍
+                immediate: true
+            }
+        },
+        methods:{
+            checkPayState(){
+                this.$axios({
+                    method:'post',
+                    url:'/airorders/checkpay',
+                    headers:{
+                        Authorization:
+                        "Bearer " + this.$store.state.user.userInfo.token
+                    },
+                    data:{
+                        id:this.payData.id,
+                        nonce_str:this.payData.price,
+                        out_trade_no:this.payData.payInfo.order_no
+                    }
+                }).then(res =>{
+                    console.log(res.data);
+                    if(res.data.trade_state == "SUCCESS"){
+                        this.$message.success('感谢巨款0.01元')
+                    }
+                })
             }
         }
     };
