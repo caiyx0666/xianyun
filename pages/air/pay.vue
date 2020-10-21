@@ -38,10 +38,21 @@ import QRcode from 'qrcode'
         // 需要利用监听器
         data() {
             return {
+                timerId : null,
                 payData: {
                     price: "***"
                 }
             }
+        },
+        // 声明周期钩子函数，在页面销毁的时候触发
+        destroyed(){
+            // 在组件（页面）跳出时，记得把当前轮询的定时器清理掉
+            // 创建时将 id 存起来
+            // let timerId = setTimeout(()=>{},timeout)
+            // 之后清理即可
+            // 因为在创建时生成的 id 这里没法直接拿
+            // 通过data 缓存定时器 id
+            clearTimeout(this.timerId)
         },
         watch:{
             // 其实 watch 是可以单独监听对象里面的特点属性的
@@ -101,7 +112,7 @@ import QRcode from 'qrcode'
                     if(res.data.trade_state == "SUCCESS"){
                         this.$message.success('感谢巨款0.01元')
                     }else{
-                        setTimeout(()=>{
+                        this.timerId = setTimeout(()=>{
                             this.checkPayState()
                         },3000)
                     }
