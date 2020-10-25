@@ -58,13 +58,22 @@
 
             <!-- 条件筛选 -->
             <HotelFilter />
+
+            <!-- 酒店列表 -->
+            <HotelList :hotel="hotel" v-for="hotel in hotelList" :key="hotel.id"/>
         </section>
     </div>
 </template>
 
 <script>
 export default {
-    mounted() {
+    data(){
+        return{
+            cityId:'',
+            hotelList:[]
+        }
+    },
+    async mounted() {
         window.onLoad = () => {
             var map = new AMap.Map('container', {
                 zoom: 11, // 放大级别
@@ -79,6 +88,30 @@ export default {
         jsapi.charset = 'utf-8';
         jsapi.src = url;
         document.head.appendChild(jsapi);
+
+        // 获取传递过来的城市的id
+        await this.$axios({
+            url:'/cities?name='+this.$route.query.cityName
+        }).then(res =>{
+            // console.log(res.data.data[0].id);
+            this.cityId = res.data.data[0].id
+        })
+
+        // 获取城市列表
+        this.getHotelList()
+    },
+    methods:{
+        async getHotelList(){
+            const HotelList = await this.$axios({
+                url:'/hotels',
+                params:{
+                    city:this.cityId
+                }
+            })
+
+            console.log(HotelList.data);
+            this.hotelList = HotelList.data.data
+        }
     }
 };
 </script>
