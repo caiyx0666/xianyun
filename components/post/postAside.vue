@@ -47,16 +47,16 @@ export default {
     this.$axios({
       url: "/posts/cities",
     }).then((res) => {
-      console.log(res.data.data);
+      // console.log(res.data.data);
       this.titleList = res.data.data;
     });
   },
   methods: {
     mouseover(index) {
       this.cityList = this.titleList[index].children;
-      console.log(this.cityList);
+      // console.log(this.cityList);
       this.currentIndex = index;
-      console.log(this.currentIndex);
+      // console.log(this.currentIndex);
     },
     mouseleave() {
       this.currentIndex = -1;
