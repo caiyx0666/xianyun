@@ -7,18 +7,34 @@
   </el-tabs> -->
   <div class="nav">
     <div>
-      <ul>
-        <li>预定</li>
-        <li>位置</li>
-        <li>基本信息</li>
-        <li>点评</li>
+      <ul v-for="(item, index) in navList" :key="index">
+        <li>{{ item.name }}</li>
       </ul>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      navList: [
+        {
+          name: "预定",
+        },
+        {
+          name: "位置",
+        },
+        {
+          name: "基本信息",
+        },
+        {
+          name: "点评",
+        },
+      ],
+    };
+  },
+};
 </script>
 
 <style scoped lang="less">
