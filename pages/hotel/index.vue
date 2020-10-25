@@ -60,7 +60,15 @@
             <HotelFilter />
 
             <!-- 酒店列表 -->
-            <HotelList :hotel="hotel" v-for="hotel in hotelList" :key="hotel.id"/>
+            <el-pagination
+              background
+              layout="prev, pager, next"
+              :total="hotelList.total"
+              @current-change="currentChange"
+              :current-page="currentPage">
+              
+            </el-pagination>
+            <HotelList v-loading="loading" :hotel="hotel" v-for="hotel in hotelList.data" :key="hotel.id"/>
         </section>
     </div>
 </template>
@@ -70,7 +78,12 @@ export default {
     data(){
         return{
             cityId:'',
-            hotelList:[]
+            loading:false,
+            hotelList:{},
+            currentPage:1,
+            // 获取的条数
+            limit:10,
+            hotelOption:{}
         }
     },
     async mounted() {
@@ -96,21 +109,42 @@ export default {
             // console.log(res.data.data[0].id);
             this.cityId = res.data.data[0].id
         })
-
-        // 获取城市列表
         this.getHotelList()
+
+        // 获取酒店选项
+        this.$axios({
+            url:'/hotels/options'
+        }).then(res =>{
+            console.log(res.data.data);
+            this.hotelOption = res.data.data
+        })
     },
     methods:{
+        // 获取酒店列表
         async getHotelList(){
+            this.loading = true
             const HotelList = await this.$axios({
                 url:'/hotels',
                 params:{
+                    _limit:this.limit,
                     city:this.cityId
                 }
             })
+            
+            HotelList.data.data = HotelList.data.data.slice((this.currentPage-1)*10,(this.currentPage)*10)
+            this.hotelList = HotelList.data
+            this.loading = false
+        },
 
-            console.log(HotelList.data);
-            this.hotelList = HotelList.data.data
+        
+
+        // 当前页发生变化
+        currentChange(newCurrent){
+            // console.log(newCurrent);
+            // 先根据页数获取酒店的条数
+            this.currentPage = newCurrent
+            this.limit = newCurrent * 10
+            this.getHotelList()
         }
     }
 };
