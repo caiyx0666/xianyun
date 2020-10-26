@@ -110,14 +110,6 @@ export default {
             this.cityId = res.data.data[0].id
         })
         this.getHotelList()
-
-        // 获取酒店选项
-        this.$axios({
-            url:'/hotels/options'
-        }).then(res =>{
-            console.log(res.data.data);
-            this.hotelOption = res.data.data
-        })
     },
     methods:{
         // 获取酒店列表
