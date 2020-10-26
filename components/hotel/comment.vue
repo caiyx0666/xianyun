@@ -38,13 +38,13 @@ export default {
       active: false,
     };
   },
-  created() {
-    this.$axios({
-      url: "/hotels/comments?id=266",
-    }).then((res) => {
-      console.log(res.data);
-    });
-  },
+  // created() {
+  //   this.$axios({
+  //     url: "/hotels/comments?id=266",
+  //   }).then((res) => {
+  //     console.log(res.data);
+  //   });
+  // },
   methods: {
     hide() {
       setTimeout(() => {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="first_head">
     <div class="container">
       <!-- 面包屑导航栏 -->
       <el-row>
@@ -65,6 +65,29 @@
       <Evaluate ref="evaluate" :hotelList="hotelList"></Evaluate>
       <!-- 评论部分 -->
       <comment></comment>
+
+      <!-- <template>
+        <el-backtop target=".first_head" :bottom="100">
+          <div
+            style="
+               {
+                height: 100%;
+                width: 100%;
+                background-color: #f2f5f6;
+                box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
+                text-align: center;
+                line-height: 40px;
+                color: #1989fa;
+              }
+            "
+          >
+            UP
+          </div>
+        </el-backtop>
+      </template> -->
+    </div>
+  </div>
+</template>
     </div>
   </div>
 </template>
@@ -184,6 +207,9 @@ export default {
 </script>
 
 <style scoped lang="less">
+.first_head {
+  height: 100%;
+}
 .container {
   width: 1000px;
   margin: 0 auto;
