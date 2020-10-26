@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="infoContainer">
     <div class="info">
       <el-row>
         <el-col :span="4">基本信息</el-col>
@@ -12,33 +12,48 @@
       </el-row>
       <el-row>
         <el-col :span="4">酒店服务</el-col>
-        <el-col :span="20">
-          <span v-for="(item, index) in hotelList.hotelassets" :key="index">
-            <i v-if="item.type == '酒店服务'" class="facility">{{
-              item.name
-            }}</i>
+        <el-col :span="20" v-if="hotelList.hotelassets">
+          <span v-if="hotelList.hotelassets.length == 0">
+            <i class="facility">暂无数据</i>
+          </span>
+          <span v-else>
+            <span v-for="(item, index) in hotelList.hotelassets" :key="index">
+              <i v-if="item.type == '酒店服务'" class="facility">{{
+                item.name
+              }}</i>
+            </span>
           </span>
         </el-col>
       </el-row>
 
       <el-row>
         <el-col :span="4">主要设施</el-col>
-        <el-col :span="20">
-          <span v-for="(item, index) in hotelList.hotelassets" :key="index">
-            <i v-if="item.type == '主要设施'" class="facility">{{
-              item.name
-            }}</i>
+        <el-col :span="20" v-if="hotelList.hotelassets">
+          <span v-if="hotelList.hotelassets.length == 0">
+            <i class="facility">暂无数据</i>
+          </span>
+          <span v-else>
+            <span v-for="(item, index) in hotelList.hotelassets" :key="index">
+              <i v-if="item.type == '主要设施'" class="facility">{{
+                item.name
+              }}</i>
+            </span>
           </span>
         </el-col>
       </el-row>
 
       <el-row>
         <el-col :span="4">房间设施</el-col>
-        <el-col :span="20">
-          <span v-for="(item, index) in hotelList.hotelassets" :key="index">
-            <i v-if="item.type == '房间设施'" class="facility">{{
-              item.name
-            }}</i>
+        <el-col :span="20" v-if="hotelList.hotelassets">
+          <span v-if="hotelList.hotelassets.length == 0">
+            <i class="facility">暂无数据</i>
+          </span>
+          <span v-else>
+            <span v-for="(item, index) in hotelList.hotelassets" :key="index">
+              <i v-if="item.type == '房间设施'" class="facility">{{
+                item.name
+              }}</i>
+            </span>
           </span>
         </el-col>
       </el-row>
@@ -71,5 +86,8 @@ export default {
   font-size: 14px;
   text-align: center;
   border-radius: 7px;
+}
+.kong {
+  padding: 10px 0;
 }
 </style>

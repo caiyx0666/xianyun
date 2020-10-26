@@ -45,6 +45,7 @@ export default {
       distance: {},
     };
   },
+  props: ["hotelList1"],
   watch: {
     activeName() {
       // console.log(this.map);
@@ -53,37 +54,75 @@ export default {
       this.placeSearch.setType(this.activeName == "交通" ? "交通" : "风景");
       this.logActive();
     },
+    hotelList1() {
+      this.logMap();
+    },
   },
   mounted() {
-    window.onLoad = () => {
-      var map = new AMap.Map("container", {
-        zoom: 50,
-        center: [113.324463, 23.10647],
-      });
-      this.map = map;
-      AMap.service(["AMap.PlaceSearch"], () => {
-        //构造地点查询类
-        var placeSearch = new AMap.PlaceSearch({
-          type: "风景", // 兴趣点类别
-          pageSize: 20, // 单页显示结果条数
-          pageIndex: 1, // 页码
-          citylimit: true, //是否强制限制在设置的城市内搜索
-          map: map, // 展现结果的地图实例
-          autoFitView: true, // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
-        });
-        this.placeSearch = placeSearch;
-
-        this.logActive();
-      });
-    };
-    var url =
-      "https://webapi.amap.com/maps?v=1.4.15&key=d5192dea5a16faf3b3afdd0fb562d794&callback=onLoad";
-    var jsapi = document.createElement("script");
-    jsapi.charset = "utf-8";
-    jsapi.src = url;
-    document.head.appendChild(jsapi);
+    // window.onLoad = () => {
+    //   var map = new AMap.Map("container", {
+    //     zoom: 50,
+    //     center: this.hotelList.location.longitude
+    //       ? [
+    //           this.hotelList.location.longitude,
+    //           this.hotelList.location.latitude,
+    //         ]
+    //       : [113.324463, 23.10647],
+    //   });
+    //   this.map = map;
+    //   AMap.service(["AMap.PlaceSearch"], () => {
+    //     //构造地点查询类
+    //     var placeSearch = new AMap.PlaceSearch({
+    //       type: "风景", // 兴趣点类别
+    //       pageSize: 20, // 单页显示结果条数
+    //       pageIndex: 1, // 页码
+    //       citylimit: true, //是否强制限制在设置的城市内搜索
+    //       map: map, // 展现结果的地图实例
+    //       autoFitView: true, // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
+    //     });
+    //     this.placeSearch = placeSearch;
+    //     this.logActive();
+    //   });
+    // };
+    // var url =
+    //   "https://webapi.amap.com/maps?v=1.4.15&key=d5192dea5a16faf3b3afdd0fb562d794&callback=onLoad";
+    // var jsapi = document.createElement("script");
+    // jsapi.charset = "utf-8";
+    // jsapi.src = url;
+    // document.head.appendChild(jsapi);
   },
   methods: {
+    logMap() {
+      this.$nextTick(() => {
+        window.onLoad = () => {
+          var map = new AMap.Map("container", {
+            zoom: 50,
+            center: [this.hotelList1.longitude, this.hotelList1.latitude],
+          });
+          this.map = map;
+          AMap.service(["AMap.PlaceSearch"], () => {
+            //构造地点查询类
+            var placeSearch = new AMap.PlaceSearch({
+              type: "风景", // 兴趣点类别
+              pageSize: 20, // 单页显示结果条数
+              pageIndex: 1, // 页码
+              citylimit: true, //是否强制限制在设置的城市内搜索
+              map: map, // 展现结果的地图实例
+              autoFitView: true, // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
+            });
+            this.placeSearch = placeSearch;
+
+            this.logActive();
+          });
+        };
+        var url =
+          "https://webapi.amap.com/maps?v=1.4.15&key=d5192dea5a16faf3b3afdd0fb562d794&callback=onLoad";
+        var jsapi = document.createElement("script");
+        jsapi.charset = "utf-8";
+        jsapi.src = url;
+        document.head.appendChild(jsapi);
+      });
+    },
     handleClick(tab, event) {
       console.log(this.activeName);
       console.log(tab, event);
@@ -94,7 +133,7 @@ export default {
       this.map.setCenter([item.position[0], item.position[1]]); //设置地图中心点
     },
     logActive() {
-      var cpoint = [113.324463, 23.10647]; //中心点坐 标
+      var cpoint = [this.hotelList1.longitude, this.hotelList1.latitude]; //中心点坐 标
       this.placeSearch.searchNearBy("", cpoint, 2000, (status, result) => {
         // console.log(result);
         // console.log(result.poiList.pois);
