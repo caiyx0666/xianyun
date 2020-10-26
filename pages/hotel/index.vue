@@ -3,7 +3,7 @@
         <section class="container">
             <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
                 <el-breadcrumb-item>酒店</el-breadcrumb-item>
-                <el-breadcrumb-item>广州市酒店预订</el-breadcrumb-item>
+                <el-breadcrumb-item>{{urlCityName}}酒店预订</el-breadcrumb-item>
             </el-breadcrumb>
 
             <!-- 表单查询 -->
@@ -64,7 +64,16 @@
 
 <script>
 export default {
+    data() {
+        return {
+            urlCityName: '',
+        }
+    },
     mounted() {
+        // 获取url传过来的参数
+        this.urlCityName = this.$route.query.cityName
+
+        // 高德地图
         window.onLoad = () => {
             var map = new AMap.Map('container', {
                 zoom: 11, // 放大级别
@@ -72,7 +81,6 @@ export default {
                 viewMode: '3D', // 使用3D视图
             });
         }
-
         var key = "d5192dea5a16faf3b3afdd0fb562d794"; // 你的key
         var url = `https://webapi.amap.com/maps?v=1.4.15&key=${key}&callback=onLoad`;
         var jsapi = document.createElement('script');
