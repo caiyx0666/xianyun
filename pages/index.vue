@@ -100,18 +100,11 @@ export default {
             // 判断输入的字段是否带有'市'字
             if (this.searchValue.indexOf('市') > -1) {
                 // 跳转 带上搜索内容
-<<<<<<< HEAD
-                this.$router.push(optionItem.pageUrl + this.searchValue)
-
-            } else {
-                this.$router.push(optionItem.pageUrl + this.searchValue + '市')
-=======
                 // 存在'市'，要去掉之后再跳转
-                this.$router.push(optionItem.pageUrl + this.searchValue.replace('市',''))
+                this.$router.push(optionItem.pageUrl + this.searchValue.replace('市', ''))
             } else {
                 // 不存在市就不用去掉，直接跳转
                 this.$router.push(optionItem.pageUrl + this.searchValue)
->>>>>>> aebd3910dc8aec093abb531f8b2327fb85dff9ed
             }
         },
     },
