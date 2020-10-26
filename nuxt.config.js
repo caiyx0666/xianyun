@@ -85,16 +85,4 @@ export default {
          */
         extend(config, ctx) {}
     },
-
-    /*
-     ** Build configuration
-     */
-    build: {
-        transpile: [/^element-ui/],
-
-        /*
-         ** You can extend webpack config here
-         */
-        extend(config, ctx) {}
-    },
 }
