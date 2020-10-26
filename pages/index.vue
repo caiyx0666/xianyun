@@ -97,11 +97,11 @@ export default {
             // 判断输入的字段是否带有'市'字
             if (this.searchValue.indexOf('市') > -1) {
                 // 跳转 带上搜索内容
-                // this.$router.push(optionItem.pageUrl + this.searchValue)
-
+                // 存在'市'，要去掉之后再跳转
+                this.$router.push(optionItem.pageUrl + this.searchValue.replace('市',''))
             } else {
-                console.log(1);
-                // this.$router.push(optionItem.pageUrl + this.searchValue + '市')
+                // 不存在市就不用去掉，直接跳转
+                this.$router.push(optionItem.pageUrl + this.searchValue)
             }
         },
         sendRequest() {

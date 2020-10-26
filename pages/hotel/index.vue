@@ -57,19 +57,45 @@
             </el-row>
 
             <!-- 条件筛选 -->
-            <HotelFilter />
+            <HotelFilter @getHotelList="getHotelList"/>
+
+            <!-- 酒店列表 -->
+            <el-pagination
+              background
+              layout="prev, pager, next"
+              :total="hotelList.total"
+              @current-change="currentChange"
+              :current-page="currentPage">
+              
+            </el-pagination>
+            <div v-if="hotelList.data.length != 0" >
+                <HotelList v-loading="loading" :hotel="hotel" v-for="hotel in hotelList.data" :key="hotel.id"/>
+            </div>
+
+            <div v-else>
+                找不到符合要求的酒店了😥
+            </div>
         </section>
     </div>
 </template>
 
 <script>
 export default {
-    data() {
-        return {
+    data(){
+        return{
+            cityId:'',
+            loading:false,
+            hotelList:{
+                data:[]
+            },
+            currentPage:1,
+            // 获取的条数
+            limit:10,
+            hotelOption:{},
             urlCityName: '',
         }
     },
-    mounted() {
+    async created() {
         // 获取url传过来的参数
         this.urlCityName = this.$route.query.cityName
 
@@ -87,6 +113,63 @@ export default {
         jsapi.charset = 'utf-8';
         jsapi.src = url;
         document.head.appendChild(jsapi);
+
+        if(this.$route.query.cityName){
+            // 获取传递过来的城市的id
+            await this.$axios({
+                url:'/cities?name='+this.$route.query.cityName
+            }).then(res =>{
+                // console.log(res.data.data[0].id);
+                this.cityId = res.data.data[0].id
+            })
+        }else{
+            this.$router.push('/')
+        }
+        this.getHotelList()
+    
+    },
+    methods:{
+        // 获取酒店列表
+        async getHotelList(hotelOption){
+            this.loading = true
+            let str = "";
+            if(hotelOption){
+                // 将获取过来的数据进行拼接
+                var keys = Object.keys(hotelOption); // ["city", "price_lt", "hotellevel", "hoteltype"]
+                keys.forEach(Option => {
+                    if(Array.isArray(hotelOption[Option])){
+                        // hotelOption[Option] => [1,2]
+                        hotelOption[Option].forEach(item => {
+                            str += `${Option}=${item}&`;
+                        })
+                    }else{
+                        str += `${Option}=${hotelOption[Option]}&`;
+                    }
+                })
+
+                // 定位到第一页显示
+                this.currentPage = 1
+            }
+            str += `_limit=${this.limit}&city=${this.cityId}`
+            console.log(str)
+            
+            const HotelList = await this.$axios({
+                url: `/hotels?${str}`,
+            })
+            console.log(HotelList);
+            HotelList.data.data = HotelList.data.data.slice((this.currentPage-1)*10,(this.currentPage)*10)
+            this.hotelList = HotelList.data
+            this.loading = false
+        },
+
+        // 当前页发生变化
+        currentChange(newCurrent){
+            // console.log(newCurrent);
+            // 先根据页数获取酒店的条数
+            this.currentPage = newCurrent
+            this.limit = newCurrent * 10
+            this.getHotelList()
+        },
     }
 };
 </script>
@@ -120,5 +203,8 @@ export default {
             margin-top: 20px;
         }
     }
+}
+.filter-list {
+    margin-bottom: 10px !important;
 }
 </style>
