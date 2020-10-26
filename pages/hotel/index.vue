@@ -12,44 +12,49 @@
             <!-- 区域均价 -->
             <el-row type="flex" class="sights" style="height:260px">
                 <!-- 左边内容 -->
-                <el-col :span="14" style="background:#ccc">
+                <el-col :span="14" style="background:#fff">
                     <el-row type="flex" class="regional">
                         <el-col :span="3">区域:</el-col>
-                        <el-col :span="19">
-                            <ul>
-                                <li>全部</li>
-                                <li>人民广场</li>
-                                <li>城桥镇</li>
-                                <li>奉贤区</li>
-                                <li>人民广场</li>
-                                <li>城桥镇</li>
-                                <li>奉贤区</li>
-                                <li>人民广场</li>
-                                <li>城桥镇</li>
-                                <li>奉贤区</li>
-                                <li>人民广场</li>
-                                <li>城桥镇</li>
-                                <li>奉贤区</li>
-                                <li>人民广场</li>
-                                <li>城桥镇</li>
-                                <li>奉贤区</li>
-                                <li>人民广场</li>
-                                <li>城桥镇</li>
-                                <li>奉贤区</li>
-                                <li>人民广场</li>
-                                <li>城桥镇</li>
-                                <li>奉贤区</li>
-                                <li>人民广场</li>
-                                <li>城桥镇</li>
-                                <li>奉贤区</li>
-                            </ul>
+                        <el-col :span="19" class="cities">
+                            <el-tag class="citie" v-for="citie in cities" :hit="true" :key="citie.id" effect="plain">{{ citie.name }}</el-tag>
+                            
                         </el-col>
                     </el-row>
                     <el-row class="price">
                         <el-col :span="3">均价:</el-col>
-                        <el-col :span="21">¥332 ¥521 ¥768</el-col>
+ 
+                        <el-popover
+                          placement="top"
+                          width="200"
+                          trigger="click"
+                          >
+                              <div class="popbox">等级评定是针对房价，设施和服务等各方面水平的综合评估</div>
+                            <el-col slot="reference" :span="30" class="dishini"> <i class="iconfont icon-dishini-" v-for="(item,index) in 3" :key="index"></i>¥332 </el-col>
+                        </el-popover>
+
+                        <el-popover
+                          placement="top"
+                          width="200"
+                          trigger="click"
+                          >
+                              <div class="popbox">等级评定是针对房价，设施和服务等各方面水平的综合评估</div>
+                            <el-col slot="reference" :span="30" class="dishini"> <i class="iconfont icon-dishini-" v-for="(item,index) in 4" :key="index"></i>¥521 </el-col>
+                        </el-popover>
+
+                        <el-popover
+                          placement="top"
+                          width="200"
+                          trigger="click"
+                          >
+                              <div class="popbox">等级评定是针对房价，设施和服务等各方面水平的综合评估</div>
+                            <el-col slot="reference" :span="30" class="dishini"> <i class="iconfont icon-dishini-" v-for="(item,index) in 5" :key="index"></i>¥768 </el-col>
+                        </el-popover>
+
+                        
+                        
                     </el-row>
                 </el-col>
+
                 <!-- 高德地图 -->
                 <el-col :span="10" style="background:#eee">
                     <div id="container" style="height:260px;width:420px"></div>
@@ -93,9 +98,10 @@ export default {
             limit:10,
             hotelOption:{},
             urlCityName: '',
+            cities:[]
         }
     },
-    async created() {
+    async mounted() {
         // 获取url传过来的参数
         this.urlCityName = this.$route.query.cityName
 
@@ -126,7 +132,14 @@ export default {
             this.$router.push('/')
         }
         this.getHotelList()
-    
+
+        // 获取城市区域景点
+        this.$axios({
+            url:`/cities?name=${this.$route.query.cityName}`
+        }).then(res =>{
+            console.log(res.data.data[0].scenics);
+            this.cities = res.data.data[0].scenics
+        })
     },
     methods:{
         // 获取酒店列表
@@ -183,28 +196,52 @@ export default {
     }
     .sights {
         font-size: 14px;
-        color: #666;
+        // color: #666;
         margin-bottom: 20px;
-        .regional {
-            ul li {
-                &:first-child {
-                    font-size: 14px;
-                    padding: 2px 5px;
-                    border-radius: 5px;
-                    color: #eee;
-                    background-color: #ffb200;
-                }
-                float: left;
-                padding: 2px 5px;
-                margin: 0px 2px 3px 0px;
+        .cities {
+            max-height: 200px;
+            overflow-y: auto;
+            position: relative;
+
+            &::-webkit-scrollbar {
+                position: absolute;
+                width: 10px;
+                padding-right: -20px;  
+                right: -20px;
+                /*height: 4px;*/
+            }
+
+            &::-webkit-scrollbar-thumb {
+                border-radius: 10px;
+                background: rgba(0,0,0,0.2);
+            }
+
+            &::-webkit-scrollbar-track {
+                border-radius: 0;
+                background: rgba(0,0,0,0.1);
+            }
+
+            .citie {
+                margin: 4px;
             }
         }
         .price {
             margin-top: 20px;
+
+            .dishini {
+                margin-right: 14px;
+
+                .icon-dishini- {
+                    color: #ff9900;
+                }
+            }
         }
     }
 }
 .filter-list {
     margin-bottom: 10px !important;
+}
+.popbox{
+    font-size: 12px;
 }
 </style>
