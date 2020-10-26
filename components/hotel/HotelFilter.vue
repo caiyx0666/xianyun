@@ -4,9 +4,9 @@
         <!-- 价格滑块 -->
         <el-col :span="5" class="box">
             <span>价格</span>
-            <span style="float:right">￥0-{{value}}</span>
+            <span style="float:right">￥0-{{priceScope}}</span>
             <div class="block">
-                <el-slider v-model="value" :show-tooltip="false" :max="4000">
+                <el-slider v-model="priceScope" :show-tooltip="false" :max="4000" @change="priceChange">
                 </el-slider>
             </div>
         </el-col>
@@ -21,7 +21,7 @@
               :offset="-20">
                  <el-checkbox-group v-model="levelsIndex" @change="levelsChange">
                     <div v-for="item in hotelOption.levels" :key="item.id">
-                         <el-checkbox v-model="item.id" :label="item.id">{{ item.name }}</el-checkbox>
+                         <el-checkbox v-model="item.id" :label="item.id" :checked="isChecked">{{ item.name }}</el-checkbox>
                     </div>
                 </el-checkbox-group>
 
@@ -40,7 +40,7 @@
 
                  <el-checkbox-group v-model="typesIndex" @change="typesChange">
                     <div v-for="item in hotelOption.types" :key="item.id">
-                         <el-checkbox v-model="item.id" :label="item.id">{{ item.name }}</el-checkbox>
+                         <el-checkbox v-model="item.id" :label="item.id" :checked="isChecked">{{ item.name }}</el-checkbox>
                     </div>
                 </el-checkbox-group>
               <el-button type="text" slot="reference">{{ isTypes }}<i class="el-icon-arrow-down down"></i></el-button>
@@ -58,7 +58,7 @@
 
                  <el-checkbox-group v-model="assetsIndex" @change="assetsChange">
                     <div v-for="item in hotelOption.assets" :key="item.id">
-                       <el-checkbox v-model="item.id" :label="item.id">{{ item.name }}</el-checkbox>
+                       <el-checkbox v-model="item.id" :label="item.id" :checked="isChecked">{{ item.name }}</el-checkbox>
                     </div>
                 </el-checkbox-group>
 
@@ -78,7 +78,7 @@
                 <div class="popover">
                     <el-checkbox-group v-model="brandsIndex" @change="brandsChange">
                       <div v-for="item in hotelOption.brands" :key="item.id">
-                         <el-checkbox v-model="item.id" :label="item.id">{{ item.name }}</el-checkbox>
+                         <el-checkbox v-model="item.id" :label="item.id" :checked="isChecked">{{ item.name }}</el-checkbox>
                       </div>
                     </el-checkbox-group>
                 </div>
@@ -89,7 +89,7 @@
 
         <!-- 撤销按钮 -->
         <el-col :span="3" class="box">
-            <el-button type="primary">撤销条件</el-button>
+            <el-button type="primary" @click="repeal">撤销条件</el-button>
         </el-col>
     </el-row>
 </template>
@@ -99,8 +99,7 @@ export default {
     data() {
         return {
             hotelOption: [],
-            value: 1400,
-            value2: [],
+            priceScope: 4000,
             // 酒店等级
             levels:'',
             // 酒店类型
@@ -116,7 +115,9 @@ export default {
             levelsIndex:[],
             typesIndex:[],
             assetsIndex:[],
-            brandsIndex:[]
+            brandsIndex:[],
+            // 控制所有的多选框的选中状态
+            isChecked: false
         }
     },
     created(){
@@ -129,12 +130,21 @@ export default {
         })
     },
     methods:{
+        // 价格区间发生变化
+        priceChange(newPrice){
+            console.log(newPrice);
+        },
         // 住宿等级数组发生变化
         levelsChange(newLevels){
             if(!newLevels.length){
                 this.isLevels = '不限'
             }else if(newLevels.length == 1){
-                this.isLevels = this.hotelOption.levels[newLevels[0]-1].name
+                this.hotelOption.levels.forEach(item =>{
+                    if(item.id == newLevels[0]){
+                        this.isLevels = item.name
+                        return
+                    }
+                })
             }else{
                 this.isLevels = `已选${newLevels.length}项`
             }
@@ -145,7 +155,12 @@ export default {
             if(!newTypes.length){
                 this.isTypes = '不限'
             }else if(newTypes.length == 1){
-                this.isTypes = this.hotelOption.types[newTypes[0]-1].name
+                this.hotelOption.types.forEach(item =>{
+                    if(item.id == newTypes[0]){
+                        this.isTypes = item.name
+                        return
+                    }
+                })
             }else{
                 this.isTypes = `已选${newTypes.length}项`
             }
@@ -156,7 +171,12 @@ export default {
             if(!newAssets.length){
                 this.isAssets = '不限'
             }else if(newAssets.length == 1){
-                this.isAssets = this.hotelOption.assets[newAssets[0]-1].name
+                this.hotelOption.assets.forEach(item =>{
+                    if(item.id == newAssets[0]){
+                        this.isAssets = item.name
+                        return
+                    }
+                })
             }else{
                 this.isAssets = `已选${newAssets.length}项`
             }
@@ -167,11 +187,29 @@ export default {
             if(!newBrands.length){
                 this.isBrands = '不限'
             }else if(newBrands.length == 1){
-                this.isBrands = this.hotelOption.brands[newBrands[0]-1].name
+                this.hotelOption.brands.forEach(item =>{
+                    if(item.id == newBrands[0]){
+                        this.isBrands = item.name
+                        return
+                    }
+                })
             }else{
                 this.isBrands = `已选${newBrands.length}项`
             }
             console.log(newBrands);
+        },
+        // 撤销按钮点击事件
+        repeal(){
+            // 将价格区间变回最开始的4000
+            this.priceScope = 4000
+            // 将所有的多选框都变成未选中状态
+            this.isChecked = false
+            // 此时的数据还未渲染到筛选器上
+            // 需要手动触发一次
+            this.levelsChange([])
+            this.typesChange([])
+            this.assetsChange([])
+            this.brandsChange([])
         }
     }
 }
