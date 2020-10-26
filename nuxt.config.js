@@ -4,8 +4,8 @@ export default {
   mode: 'universal',
 
   /*
-  ** Headers of the page
-  */
+   ** Headers of the page
+   */
   head: {
     title: "闲云旅游网", // 修改title
     meta: [
@@ -20,21 +20,21 @@ export default {
   },
 
   /*
-  ** Customize the progress-bar color
-  */
+   ** Customize the progress-bar color
+   */
   loading: { color: '#fff' },
 
   /*
-  ** Global CSS
-  */
+   ** Global CSS
+   */
   css: [
     'element-ui/lib/theme-chalk/index.css',
     'assets/main.css' // 新增自定义的页面过渡样式（文件来自3.4.1）
   ],
 
   /*
-  ** Plugins to load before mounting the App
-  */
+   ** Plugins to load before mounting the App
+   */
   //  所有在 plugins 这里引入的文件
   //  都会想之前的 main.js 代码一样
   //  在创建 根实例之前执行
@@ -57,9 +57,10 @@ export default {
 
   components: true,
 
+
   /*
-  ** Nuxt.js modules
-  */
+   ** Nuxt.js modules
+   */
   modules: [
     // https://axios.nuxtjs.org/setup
     '@nuxtjs/axios'
@@ -73,19 +74,26 @@ export default {
 
     baseURL: "http://157.122.54.189:9095" // 新增备用地址
     //baseURL: "http://127.0.0.1:1337" // 新增axios默认请求路径 		  
-
   },
 
   /*
-  ** Build configuration
-  */
+   ** Axios module configuration
+   */
+  axios: {
+    // See https://github.com/nuxt-community/axios-module#options
+    baseURL: "http://157.122.54.189:9095" // 新增备用地址
+    // baseURL: "http://127.0.0.1:1337" // 新增axios默认请求路径 		  
+  },
+
+  /*
+   ** Build configuration
+   */
   build: {
     transpile: [/^element-ui/],
 
     /*
-    ** You can extend webpack config here
-    */
-    extend(config, ctx) {
-    }
+     ** You can extend webpack config here
+     */
+    extend(config, ctx) { }
   },
 }

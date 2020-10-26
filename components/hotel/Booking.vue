@@ -8,11 +8,16 @@
       </el-table-column>
 
       <el-table-column label="最低价格/每晚" class="lastNumber">
-        <template slot-scope="scope">
-          <span class="yellow">
-            <i class="yellow1">¥</i>
-            {{ scope.row.price }} </span
-          >起<i class="el-icon-arrow-right yellow"></i>
+        <template slot-scope="scope"
+          ><a
+            href="https://hotels.ctrip.com/hotels/detail/?hotelId=65822792&checkIn=2020-10-25&checkOut=2020-10-26&cityId=2&minprice=&mincurr=&adult=1&children=0&ages=&crn=1&curr=&fgt=&stand=&stdcode=&hpaopts=&mproom=&allianceid=&sid=&ouid=&shoppingid=&roomkey=&highprice=-1&lowprice=0&showtotalamt=&hotelUniqueKey="
+            target="_blank"
+          >
+            <span class="yellow">
+              <i class="yellow1">¥</i>
+              {{ scope.row.price }} </span
+            >起<i class="el-icon-arrow-right yellow"></i
+          ></a>
         </template>
       </el-table-column>
     </el-table>

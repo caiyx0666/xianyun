@@ -4,7 +4,11 @@
       <!-- 面包屑导航栏 -->
       <el-row>
         <el-col>
-          <div class="breadcrumb">首页 > 广州酒店 > xxx</div>
+          <div class="breadcrumb">
+            您在这里：酒店 >
+            <span @click="handleClick">{{ hotelList.real_city }}</span> >
+            {{ hotelList.name }}
+          </div>
         </el-col>
       </el-row>
 
@@ -39,16 +43,28 @@
       </div>
     </div>
     <!-- 导航栏组件 -->
-    <Nav></Nav>
+    <!-- <Nav></Nav> -->
+    <div class="nav" ref="nav">
+      <div :class="{ fixed: isFixed }">
+        <ul>
+          <li @click="bookingJump">预定</li>
+          <li @click="mapJump">位置</li>
+          <li @click="infoJump">基本信息</li>
+          <li @click="evaluateJump">点评</li>
+        </ul>
+      </div>
+    </div>
     <div class="container">
       <!-- 预定部分 -->
-      <Booking :hotelList="hotelList.products"></Booking>
+      <Booking :hotelList="hotelList.products" ref="book"></Booking>
       <!-- 地图部分 -->
-      <Map></Map>
+      <Map ref="map" :hotelList1="hotelList.location"></Map>
       <!-- 基本信息部分 -->
-      <Info :hotelList="hotelList"></Info>
+      <Info :hotelList="hotelList" ref="info"></Info>
       <!-- 评价部分 -->
-      <Evaluate></Evaluate>
+      <Evaluate ref="evaluate" :hotelList="hotelList"></Evaluate>
+      <!-- 评论部分 -->
+      <comment></comment>
     </div>
   </div>
 </template>
@@ -58,7 +74,8 @@ import Booking from "../../components/hotel/Booking";
 import Map from "../../components/hotel/Map";
 import Info from "../../components/hotel/Info";
 import Evaluate from "../../components/hotel/Evaluate";
-import Nav from "../../components/hotel/Nav";
+import loginVue from "../user/login.vue";
+// import Nav from "../../components/hotel/Nav";
 
 export default {
   data() {
@@ -85,16 +102,55 @@ export default {
           address: require("~/assets/images/6.jpeg"),
         },
       ],
+      isFixed: false,
     };
   },
+  computed: {},
   mounted() {
     this.logpage();
     console.log(this.hotelList.address);
+
+    window.onscroll = () => {
+      let offset = this.getPageOffsetTop(this.$refs.nav);
+
+      if (offset < window.pageYOffset) {
+        this.isFixed = true;
+      } else {
+        this.isFixed = false;
+      }
+    };
   },
   methods: {
+    getPageOffsetTop(elm) {
+      let offset = 0;
+      while (true) {
+        if (elm == document.body) {
+          return offset;
+        }
+        offset += elm.offsetTop;
+        elm = elm.offsetParent;
+      }
+    },
+    scrollToElement(elm) {
+      var t = elm.offsetTop - 60;
+
+      let offset = window.pageYOffset;
+      let timer = null;
+      if (timer) {
+        clearInterval(timer);
+      }
+      timer = setInterval(() => {
+        window.scrollTo(0, offset);
+        offset += offset - t < 0 ? 12 : -12;
+        if (Math.abs(offset - t) < 12) {
+          window.scrollTo(0, t);
+          clearInterval(timer);
+        }
+      }, 8);
+    },
     logpage() {
       this.$axios({
-        url: "/hotels?id=266",
+        url: "/hotels?id=95",
       }).then((res) => {
         // console.log(res.data);
         this.hotelList = res.data.data[0];
@@ -103,6 +159,25 @@ export default {
     },
     handleClick(item) {
       this.baseSrc = item.address;
+    },
+    mapJump() {
+      var map = this.$refs.map.$el;
+      this.scrollToElement(map);
+    },
+    bookingJump() {
+      var book = this.$refs.book.$el;
+      this.scrollToElement(book);
+    },
+    infoJump() {
+      var info = this.$refs.info.$el;
+      this.scrollToElement(info);
+    },
+    evaluateJump() {
+      var evaluate = this.$refs.evaluate.$el;
+      this.scrollToElement(evaluate);
+    },
+    handleClick() {
+      this.$router.push("/hotel");
     },
   },
 };
@@ -116,6 +191,7 @@ export default {
 }
 .breadcrumb {
   padding: 20px 0;
+  cursor: pointer;
 }
 .hotel {
   display: flex;
@@ -129,7 +205,7 @@ export default {
   }
 }
 .photo {
-  margin: 40px 0;
+  margin: 30px 0;
   cursor: pointer;
   .photoleft {
     width: 640px;
@@ -154,5 +230,36 @@ export default {
       object-fit: cover;
     }
   }
+}
+.nav {
+  cursor: pointer;
+  width: 100vw;
+  height: 50px;
+  & > div {
+    width: 100vw;
+    height: 50px;
+    border-bottom: 1px solid #dedede;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    ul {
+      // position: fixed;
+      width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      height: 50px;
+      line-height: 50px;
+      z-index: 10;
+      li {
+        padding: 0 50px;
+      }
+    }
+  }
+}
+
+.fixed {
+  position: fixed;
+  z-index: 999;
 }
 </style>
