@@ -202,14 +202,11 @@ export default {
         repeal(){
             // 将价格区间变回最开始的4000
             this.priceScope = 4000
-            // 将所有的多选框都变成未选中状态
-            this.isChecked = false
-            // 此时的数据还未渲染到筛选器上
-            // 需要手动触发一次
-            this.levelsChange([])
-            this.typesChange([])
-            this.assetsChange([])
-            this.brandsChange([])
+            // 取消选中的数据，并手动触发一次数据变化事件
+            this.levelsChange(this.levelsIndex = [])
+            this.typesChange(this.typesIndex = [])
+            this.assetsChange(this.assetsIndex = [])
+            this.brandsChange(this.brandsIndex = [])
         }
     }
 }
