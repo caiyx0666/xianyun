@@ -3,33 +3,47 @@
     <!-- 单照片组件 -->
     <div class="singleContain" v-if="data.images.length == 1">
       <!-- 左边图片部分 -->
-      <div class="photo">
+      <div class="photo" @click="handleClickArticle(data.id)">
         <img :src="data.images[0]" alt="" />
       </div>
       <!-- 右边内容 -->
 
       <div class="content">
         <!-- 上面标题 -->
-        <div class="articleTitle">{{ data.title }}</div>
+        <div class="articleTitle" @click="handleClickArticle(data.id)">
+          {{ data.title }}
+        </div>
         <!-- 文章内容 -->
-        <div class="article">{{ data.summary }}</div>
+        <div class="article" @click="handleClickArticle(data.id)">
+          {{ data.summary }}
+        </div>
         <!-- 作者 -->
         <div class="subcontain">
           <div class="info">
             <div class="address">
-              <span class="el-icon-location-outline"></span> {{ data.cityName }}
+              <span class="el-icon-location-outline"></span>
+              {{ data.cityName }}
             </div>
             <div class="user" @click="handleClickUser">
               by
-              <span class="userImg"></span>
+              <span class="userImg">
+                <img
+                  :src="$axios.defaults.baseURL + userInfo.user.defaultAvatar"
+                  alt=""
+                />
+              </span>
 
-              <span class="username"> 地球发动机 </span>
+              <span class="username">
+                {{ userInfo.user.nickname }}
+              </span>
             </div>
             <div class="viwer">
               <span class="el-icon-view"></span> {{ data.watch }}
             </div>
           </div>
-          <div class="dianzan">{{ data.like }} 赞</div>
+          <div class="dianzan" @click="handleClickLike(data.id)">
+            {{ data.like }} 赞
+          </div>
         </div>
       </div>
     </div>
@@ -37,11 +51,17 @@
     <!-- 双图片模式 -->
     <div class="twoContain" v-if="data.images.length == 2">
       <!-- 上面标题 -->
-      <div class="articleTitle">{{ data.title }}</div>
+      <div class="articleTitle" @click="handleClickArticle(data.id)">
+        {{ data.title }}
+      </div>
       <!-- 文章内容 -->
-      <div class="article" v-html="data.content"></div>
+      <div
+        class="article"
+        v-html="data.content"
+        @click="handleClickArticle(data.id)"
+      ></div>
       <!-- 图片部分 -->
-      <div class="photo">
+      <div class="photo" @click="handleClickArticle(data.id)">
         <img :src="data.images[0]" alt="" />
         <img :src="data.images[1]" alt="" />
       </div>
@@ -54,26 +74,41 @@
           </div>
           <div class="user" @click="handleClickUser">
             by
-            <span class="userImg"></span>
+            <span class="userImg">
+              <img
+                :src="$axios.defaults.baseURL + userInfo.user.defaultAvatar"
+                alt=""
+              />
+            </span>
 
-            <span class="username"> 地球发动机 </span>
+            <span class="username">
+              {{ userInfo.user.nickname }}
+            </span>
           </div>
           <div class="viwer">
             <span class="el-icon-view"></span> {{ data.watch }}
           </div>
         </div>
-        <div class="dianzan">{{ data.like }} 赞</div>
+        <div class="dianzan" @click="handleClickLike(data.id)">
+          {{ data.like }} 赞
+        </div>
       </div>
     </div>
 
     <!-- 多图片组件 -->
     <div class="multiContain" v-if="data.images.length >= 3">
       <!-- 上面标题 -->
-      <div class="articleTitle">{{ data.title }}</div>
+      <div class="articleTitle" @click="handleClickArticle(data.id)">
+        {{ data.title }}
+      </div>
       <!-- 文章内容 -->
-      <div class="article" v-html="data.content"></div>
+      <div
+        class="article"
+        v-html="data.content"
+        @click="handleClickArticle(data.id)"
+      ></div>
       <!-- 图片部分 -->
-      <div class="photo">
+      <div class="photo" @click="handleClickArticle(data.id)">
         <img :src="data.images[0]" alt="" />
         <img :src="data.images[1]" alt="" />
         <img :src="data.images[2]" alt="" />
@@ -87,24 +122,37 @@
           </div>
           <div class="user" @click="handleClickUser">
             by
-            <span class="userImg"></span>
+            <span class="userImg">
+              <img
+                :src="$axios.defaults.baseURL + userInfo.user.defaultAvatar"
+                alt=""
+              />
+            </span>
 
-            <span class="username"> 地球发动机 </span>
+            <span class="username"> {{ userInfo.user.nickname }}</span>
           </div>
           <div class="viwer">
             <span class="el-icon-view"></span> {{ data.watch }}
           </div>
         </div>
-        <div class="dianzan">{{ data.like }} 赞</div>
+        <div class="dianzan" @click="handleClickLike(data.id)">
+          {{ data.like }} 赞
+        </div>
       </div>
     </div>
 
     <!-- 无图片组件 -->
     <div class="noContain" v-if="data.images.length == 0">
       <!-- 标题部分 -->
-      <div class="articleTitle">{{ data.title }}</div>
+      <div class="articleTitle" @click="handleClickArticle(data.id)">
+        {{ data.title }}
+      </div>
       <!-- 文章内容 -->
-      <div class="article" v-html="data.content"></div>
+      <div
+        class="article"
+        v-html="data.content"
+        @click="handleClickArticle(data.id)"
+      ></div>
       <!-- 用户信息 -->
       <div class="subcontain">
         <div class="info">
@@ -114,27 +162,76 @@
           </div>
           <div class="user" @click="handleClickUser">
             by
-            <span class="userImg"></span>
+            <span class="userImg">
+              <img
+                :src="$axios.defaults.baseURL + userInfo.user.defaultAvatar"
+                alt=""
+              />
+            </span>
 
-            <span class="username"> 地球发动机 </span>
+            <span class="username"> {{ userInfo.user.nickname }}</span>
           </div>
           <div class="viwer">
             <span class="el-icon-view"></span> {{ data.watch }}
           </div>
         </div>
-        <div class="dianzan">{{ data.like }} 赞</div>
+        <div class="dianzan" @click="handleClickLike(data.id)">
+          {{ data.like }} 赞
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import loginVue from "~/pages/user/login.vue";
 export default {
   props: ["data"],
+  data() {
+    return {};
+  },
+  mounted() {
+    if (this.data.like == null) {
+      this.data.like = 0;
+    }
+  },
+  computed: {
+    userInfo() {
+      return this.$store.state.user.userInfo;
+    },
+  },
 
   methods: {
     handleClickUser() {
       this.$router.push("user/personal");
+    },
+    handleClickArticle(id) {
+      console.log(id);
+      this.$router.push("/post/detail?id=" + id);
+    },
+    handleClickLike(id) {
+      console.log(id);
+      this.$axios({
+        url: "/posts/like",
+        headers: {
+          Authorization: "Bearer " + this.$store.state.user.userInfo.token,
+        },
+        params: {
+          id,
+        },
+      })
+        .then((res) => {
+          console.log(res.data);
+
+          if (res.data.message == "点赞成功") {
+            this.data.like += 1;
+            this.$message.success("点赞成功");
+            return;
+          }
+        })
+        .catch((err) => {
+          return;
+        });
     },
   },
 };
@@ -152,9 +249,11 @@ export default {
       width: 220px;
       height: 150px;
       cursor: pointer;
+      object-fit: cover;
     }
   }
   .content {
+    width: 100%;
     .articleTitle {
       font-size: 18px;
       height: 40px;
@@ -189,8 +288,21 @@ export default {
       margin-top: 10px;
       .info {
         display: flex;
+        flex: 1;
+        align-items: center;
         .user {
           margin: 0 20px;
+          display: flex;
+          align-items: center;
+          .userImg {
+            margin: 0 5px;
+            img {
+              height: 15px;
+              width: 15px;
+              vertical-align: middle;
+              object-fit: cover;
+            }
+          }
           .username {
             color: orange;
           }
@@ -204,12 +316,9 @@ export default {
       .dianzan {
         font-size: 16px;
         color: orange;
+        cursor: pointer;
       }
     }
-  }
-  .dianzan {
-    font-size: 16px;
-    color: orange;
   }
 }
 
@@ -246,18 +355,33 @@ export default {
       height: 150px;
       margin-right: 9px;
       cursor: pointer;
+      object-fit: cover;
     }
   }
   .subcontain {
     display: flex;
     font-size: 12px;
     justify-content: space-between;
+    align-items: center;
     color: #888;
     margin-top: 10px;
     .info {
       display: flex;
+      flex: 1;
       .user {
         margin: 0 20px;
+        // border: 1px solid #000;
+        display: flex;
+        align-items: center;
+        .userImg {
+          margin: 0 5px;
+          img {
+            height: 15px;
+            width: 15px;
+            vertical-align: middle;
+            object-fit: cover;
+          }
+        }
         .username {
           color: orange;
         }
@@ -271,6 +395,7 @@ export default {
     .dianzan {
       font-size: 16px;
       color: orange;
+      cursor: pointer;
     }
   }
 }
@@ -308,18 +433,31 @@ export default {
       height: 150px;
       margin-right: 9px;
       cursor: pointer;
+      object-fit: cover;
     }
   }
   .subcontain {
     display: flex;
     font-size: 12px;
     justify-content: space-between;
+    align-items: center;
     color: #888;
     margin-top: 10px;
     .info {
       display: flex;
       .user {
         margin: 0 20px;
+        display: flex;
+        align-items: center;
+        .userImg {
+          margin: 0 5px;
+          img {
+            height: 15px;
+            width: 15px;
+            vertical-align: middle;
+            object-fit: cover;
+          }
+        }
         .username {
           color: orange;
         }
@@ -333,6 +471,7 @@ export default {
     .dianzan {
       font-size: 16px;
       color: orange;
+      cursor: pointer;
     }
   }
 }
@@ -367,12 +506,24 @@ export default {
     display: flex;
     font-size: 12px;
     justify-content: space-between;
+    align-items: center;
     color: #888;
     margin-top: 10px;
     .info {
       display: flex;
+      align-items: center;
       .user {
         margin: 0 20px;
+        display: flex;
+        align-items: center;
+        .userImg {
+          margin: 0 5px;
+          img {
+            height: 15px;
+            width: 15px;
+            vertical-align: middle;
+          }
+        }
         .username {
           color: orange;
         }
@@ -386,6 +537,7 @@ export default {
     .dianzan {
       font-size: 16px;
       color: orange;
+      cursor: pointer;
     }
   }
 }

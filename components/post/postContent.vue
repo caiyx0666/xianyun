@@ -3,7 +3,7 @@
     <!-- 顶部搜索部分 -->
     <div class="search">
       <div class="big">
-        <el-input placeholder="请输入内容" class="input" v-model="value">
+        <el-input placeholder="请输入内容" class="sousuo" v-model="value">
         </el-input>
         <span class="el-icon-search" @click="searchClick"></span>
       </div>
@@ -24,12 +24,17 @@
     <div class="title">
       <div class="strate">推荐攻略</div>
       <div class="button">
-        <el-button type="primary" icon="el-icon-edit">写游记</el-button>
+        <el-button type="primary" icon="el-icon-edit" @click="editorPage"
+          >写游记</el-button
+        >
       </div>
     </div>
 
     <!-- 文章列表部分 -->
     <div>
+      <div class="message" v-if="totalList.total == 0">
+        该页面正在制作中,敬请期待!!
+      </div>
       <PostArticle
         v-for="(article, index) in articleList"
         :key="index"
@@ -54,13 +59,13 @@ export default {
   data() {
     return {
       cities: ["广州", "上海", "北京"],
-      totalList: [],
+      totalList: {},
       articleList: [],
       // 默认在第一页
       pageIndex: 1,
 
       // 默认显示十条
-      pageSize: 2,
+      pageSize: 5,
       start: 0,
       value: "",
     };
@@ -68,9 +73,10 @@ export default {
   components: {
     PostArticle,
   },
+
   created() {
     this.getList();
-    console.log(this.$route.query.city);
+    // console.log(this.$route.query.city);
   },
   watch: {
     // 监听url变化
@@ -99,6 +105,9 @@ export default {
         console.log(res.data.data);
         this.articleList = res.data.data;
         this.totalList = res.data;
+        // setTimeout(() => {
+        this.$emit("sendArticleList", this.articleList);
+        // }, 1000);
       });
     },
 
@@ -118,6 +127,10 @@ export default {
       }
       this.$router.push(`/post?city=${this.value}`);
     },
+
+    editorPage() {
+      this.$router.push("/post/create");
+    },
   },
 };
 </script>
@@ -129,14 +142,17 @@ export default {
   .search {
     .big {
       position: relative;
-      .input {
-        outline: none;
-        border: 3px solid orange;
-        margin-bottom: 2px;
+      /deep/ .sousuo {
+        input {
+          border: none;
+          outline: none;
+          border: 3px solid orange;
+          margin-bottom: 2px;
+        }
       }
       .el-icon-search {
         position: absolute;
-        top: 12px;
+        top: 8px;
         right: 10px;
         font-size: 25px;
         font-weight: 700;
@@ -174,6 +190,10 @@ export default {
       line-height: 60px;
       border-bottom: 3px solid orange;
     }
+  }
+  .message {
+    width: 300px;
+    margin: 100px auto;
   }
 }
 </style>

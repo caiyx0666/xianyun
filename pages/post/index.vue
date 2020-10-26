@@ -1,12 +1,24 @@
 <template>
   <div class="container">
-    <PostAside />
-    <PostContent />
+    <PostAside :valueList="valueList" />
+    <PostContent @sendArticleList="sendArticleList" />
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      valueList: "",
+    };
+  },
+  methods: {
+    sendArticleList(articleList) {
+      this.valueList = articleList;
+      // console.log(this.valueList);
+    },
+  },
+};
 </script>
 
 <style lang="less" scoped>
