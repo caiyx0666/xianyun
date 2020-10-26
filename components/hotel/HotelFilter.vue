@@ -95,6 +95,7 @@
 </template>
 
 <script>
+import { Option } from 'element-ui';
 export default {
     data() {
         return {
@@ -130,12 +131,26 @@ export default {
         })
     },
     methods:{
+        // 这里统一处理筛选发生变化发送请求
+        getHotelList(){
+            const hotelOption = {
+                'price_in': this.priceScope,
+                'hotelleval': this.levelsIndex,
+                'hoteltype': this.typesIndex,
+                'hotelasset': this.assetsIndex,
+                'hotelbrand': this.brandsIndex
+            }
+            this.$emit('getHotelList',hotelOption)
+        },
         // 价格区间发生变化
-        priceChange(newPrice){
-            console.log(newPrice);
+        priceChange(newPrice,isGet){
+            // console.log(priceScope);
+            if(!isGet){
+                this.getHotelList()
+            }
         },
         // 住宿等级数组发生变化
-        levelsChange(newLevels){
+        levelsChange(newLevels,isGet){
             if(!newLevels.length){
                 this.isLevels = '不限'
             }else if(newLevels.length == 1){
@@ -148,10 +163,13 @@ export default {
             }else{
                 this.isLevels = `已选${newLevels.length}项`
             }
-            console.log(newLevels);
+            // console.log(newLevels);
+            if(!isGet){
+                this.getHotelList()
+            }
         },
         // 住宿类型数组发生变化
-        typesChange(newTypes){
+        typesChange(newTypes,isGet){
             if(!newTypes.length){
                 this.isTypes = '不限'
             }else if(newTypes.length == 1){
@@ -164,10 +182,13 @@ export default {
             }else{
                 this.isTypes = `已选${newTypes.length}项`
             }
-            console.log(newTypes);
+            // console.log(newTypes);
+            if(!isGet){
+                this.getHotelList()
+            }
         },
         // 酒店设施数组发生变化
-        assetsChange(newAssets){
+        assetsChange(newAssets,isGet){
             if(!newAssets.length){
                 this.isAssets = '不限'
             }else if(newAssets.length == 1){
@@ -180,10 +201,13 @@ export default {
             }else{
                 this.isAssets = `已选${newAssets.length}项`
             }
-            console.log(newAssets);
+            // console.log(newAssets);
+            if(!isGet){
+                this.getHotelList()
+            }
         },
         // 酒店品牌数组发生变化
-        brandsChange(newBrands){
+        brandsChange(newBrands,isGet){
             if(!newBrands.length){
                 this.isBrands = '不限'
             }else if(newBrands.length == 1){
@@ -196,17 +220,21 @@ export default {
             }else{
                 this.isBrands = `已选${newBrands.length}项`
             }
-            console.log(newBrands);
+            // console.log(newBrands);
+            if(!isGet){
+                this.getHotelList()
+            }
         },
         // 撤销按钮点击事件
         repeal(){
             // 将价格区间变回最开始的4000
             this.priceScope = 4000
             // 取消选中的数据，并手动触发一次数据变化事件
-            this.levelsChange(this.levelsIndex = [])
-            this.typesChange(this.typesIndex = [])
-            this.assetsChange(this.assetsIndex = [])
-            this.brandsChange(this.brandsIndex = [])
+            this.levelsChange(this.levelsIndex = [],true)
+            this.typesChange(this.typesIndex = [],true)
+            this.assetsChange(this.assetsIndex = [],true)
+            this.brandsChange(this.brandsIndex = [],true)
+            this.getHotelList()
         }
     }
 }

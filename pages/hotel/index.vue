@@ -57,7 +57,7 @@
             </el-row>
 
             <!-- 条件筛选 -->
-            <HotelFilter />
+            <HotelFilter @getHotelList="getHotelList"/>
 
             <!-- 酒店列表 -->
             <el-pagination
@@ -113,7 +113,10 @@ export default {
     },
     methods:{
         // 获取酒店列表
-        async getHotelList(){
+        async getHotelList(hotelOption){
+            if(hotelOption){
+                console.log(hotelOption);
+            }
             this.loading = true
             const HotelList = await this.$axios({
                 url:'/hotels',
