@@ -56,8 +56,6 @@ export default {
         }
     ],
 
-    components: true,
-
     /*
      ** Nuxt.js modules
      */
@@ -65,6 +63,7 @@ export default {
         // https://axios.nuxtjs.org/setup
         '@nuxtjs/axios'
     ],
+    components: true,
 
     /*
      ** Axios module configuration

@@ -45,6 +45,7 @@ export default {
         return {
             banners: [],
             currentOption: 0,
+            isLoading: false,
             // 搜索内容
             searchValue: '',
             options: [
@@ -76,6 +77,9 @@ export default {
             }
         },
         handleSearch() {
+            // 防止多次点击 判断开门还是关门  true => return 关门   false => 继续执行 开门
+            if (this.isLoading) return
+
             // tab栏切换，定位到具体对象的
             const optionItem = this.options[this.currentOption]
 
@@ -83,30 +87,26 @@ export default {
             if (this.searchValue.replace(/[ ]/g, "").length == 0) return
 
             // 发送请求检验输入的城市是否合法
-            setTimeout(() => {
-                this.$axios({
-                    url: '/cities?name=' + this.searchValue
-                }).then(res => {
-                    if (res.data.data.length == 0) {
-                        Message.error('您输入的城市不存在')
-                    }
-                    return
-                })
-            }, 5000)
+            this.isLoading = true
+            this.$axios({
+                url: '/cities?name=' + this.searchValue
+            }).then(res => {
+                if (res.data.data.length == 0) {
+                    Message.error('您输入的城市不存在')
+                    setTimeout(() => { this.isLoading = false }, 1500)
+                }
+            })
 
             // 判断输入的字段是否带有'市'字
             if (this.searchValue.indexOf('市') > -1) {
                 // 跳转 带上搜索内容
                 // 存在'市'，要去掉之后再跳转
-                this.$router.push(optionItem.pageUrl + this.searchValue.replace('市',''))
+                this.$router.push(optionItem.pageUrl + this.searchValue.replace('市', ''))
             } else {
                 // 不存在市就不用去掉，直接跳转
                 this.$router.push(optionItem.pageUrl + this.searchValue)
             }
         },
-        sendRequest() {
-
-        }
     },
 };
 </script>

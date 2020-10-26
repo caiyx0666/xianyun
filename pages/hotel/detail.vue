@@ -67,24 +67,13 @@
       <comment></comment>
 
       <!-- <template>
-        <el-backtop target=".first_head" :bottom="100">
-          <div
-            style="
-               {
-                height: 100%;
-                width: 100%;
-                background-color: #f2f5f6;
-                box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
-                text-align: center;
-                line-height: 40px;
-                color: #1989fa;
-              }
-            "
-          >
-            UP
-          </div>
-        </el-backtop>
-      </template> -->
+        <el-backtop
+          target=".first_head"
+          :visibility-height="200"
+          :right="40"
+          :bottom="40"
+        ></el-backtop></template -->
+      >　
     </div>
   </div>
 </template>
@@ -207,9 +196,12 @@ export default {
 </script>
 
 <style scoped lang="less">
-.first_head {
-  height: 100%;
-}
+// .first_head {
+//   width: 100%;
+//   height: 100vh;
+//   overflow: scroll;
+//   // overflow-x: hidden;
+// }
 .container {
   width: 1000px;
   margin: 0 auto;

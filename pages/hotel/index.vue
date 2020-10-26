@@ -137,7 +137,7 @@ export default {
         this.$axios({
             url:`/cities?name=${this.$route.query.cityName}`
         }).then(res =>{
-            console.log(res.data.data[0].scenics);
+            // console.log(res.data.data[0].scenics);
             this.cities = res.data.data[0].scenics
         })
     },
