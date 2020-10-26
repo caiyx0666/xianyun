@@ -95,7 +95,6 @@
 </template>
 
 <script>
-import { Option } from 'element-ui';
 export default {
     data() {
         return {
@@ -247,13 +246,21 @@ export default {
     padding: 5px 0px;
     height: 80px;
     border: 1px solid #cccccc;
-    margin-bottom: 20px;
+    margin-bottom: 200px;
     .box {
         height: 100%;
-        padding: 10px 18px;
+        padding: 10px 12px;
         border-right: 1px solid #dddddd;
         &:last-child {
             border-right: none;
+        }
+
+        .select {
+            margin-top: 10px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
         }
     }
 }

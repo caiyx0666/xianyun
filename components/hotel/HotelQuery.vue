@@ -1,5 +1,5 @@
 <template>
-    <div class="hotelFilter">
+    <div class="hotel-filter">
         <!-- 筛选表单 -->
         <el-row type="flex" class="filters-top" justify="space-between" align="middle" :gutter="10">
             <!-- 切换城市 -->
@@ -14,24 +14,27 @@
             </el-col>
             <el-col :span="7">
                 <!-- 弹出框 -->
-                <el-popover width="300px" placement="top" v-model="visible">
-                    <el-row type="flex" justify="space-between" align="middle" class="tool">
-                        <el-col :span="2">
+                <el-popover :width="310" placement="bottom" v-model="visible" :offset="35">
+                    <el-row type="flex" align="middle" class="tool" :gutter="10">
+                        <el-col :span="10">
                             <span>每间</span>
                         </el-col>
                         <!-- 成人 -->
-                        <el-col :span="5">
-                            <el-select v-model="value" size="mini" placeholder="" class="adult">
-                                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                        <el-col :span="7" class="adult">
+                            <el-select v-model="adultValue" size="mini" placeholder="">
+                                <el-option v-for="item in 7" :key="item" :label="item" :value="item">
                                 </el-option>
                             </el-select>
-                            <el-select v-model="value" size="mini" placeholder="" class="kid">
-                                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                        </el-col>
+                        <!-- 儿童 -->
+                        <el-col :span="7">
+                            <el-select v-model="kidValue" size="mini" placeholder="" class="kid">
+                                <el-option v-for="item in 4 " :key="item" :label="item" :value="item">
                                 </el-option>
                             </el-select>
                         </el-col>
                     </el-row>
-                    <div style="text-align: right; padding-top: 10px;border-top:1px solid #eee;">
+                    <div style="text-align: right; padding-top: 10px;border-top:1px solid #eee;margin-top:10px">
                         <el-button type="primary" size="mini" @click="visible = false">确定</el-button>
                     </div>
                     <el-input v-model="form.cityName" slot="reference" placeholder="人数未定" suffix-icon="el-icon-user"></el-input>
@@ -54,8 +57,10 @@ export default {
                 cityName: '',
             },
             options: [{
+                // 实际传值
                 value: '选项1',
-                label: 1
+                // 选项标签：给用户看的
+                label: 1 + '成人'
             }, {
                 value: '选项2',
                 label: 2
@@ -69,20 +74,37 @@ export default {
                 value: '选项5',
                 label: 5
             }],
-            value: ''
+            adultValue: '',
+            kidValue: ''
         }
     }
 }
 </script>
 
 <style lang="less" scoped>
-.hotelFilter {
-    margin-bottom: 20px;
-    .tool {
-        .button {
-            margin-top: 10px;
-            border-top: 1px solid #666;
-        }
+.adult {
+    position: relative;
+    &::after {
+        content: "成人";
+        position: absolute;
+        top: 5px;
+        font-size: 12px;
+        color: #666;
+        right: 35px;
     }
+}
+.kid {
+    position: relative;
+    &::after {
+        content: "儿童";
+        position: absolute;
+        top: 5px;
+        font-size: 12px;
+        color: #666;
+        right: 35px;
+    }
+}
+.hotel-filter {
+    margin-bottom: 20px;
 }
 </style>
