@@ -85,6 +85,7 @@ export default {
         // https://axios.nuxtjs.org/setup
         '@nuxtjs/axios'
     ],
+    components: true,
 
     /*
      ** Axios module configuration
