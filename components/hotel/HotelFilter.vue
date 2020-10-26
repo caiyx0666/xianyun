@@ -134,11 +134,11 @@ export default {
         // 这里统一处理筛选发生变化发送请求
         getHotelList(){
             const hotelOption = {
-                'price_in': this.priceScope,
-                'hotelleval': this.levelsIndex,
-                'hoteltype': this.typesIndex,
-                'hotelasset': this.assetsIndex,
-                'hotelbrand': this.brandsIndex
+                'price_lt': this.priceScope,
+                'hotellevel_in': this.levelsIndex,
+                'hoteltype_in': this.typesIndex,
+                'hotelasset_in': this.assetsIndex,
+                'hotelbrand_in': this.brandsIndex
             }
             this.$emit('getHotelList',hotelOption)
         },
