@@ -129,7 +129,7 @@ export default {
     },
 
     editorPage() {
-      this.$router.push("/post/create");
+      this.$router.push("/post/article");
     },
   },
 };
