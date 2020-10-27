@@ -7,7 +7,7 @@
             </el-breadcrumb>
 
             <!-- 表单查询 -->
-            <HotelQuery />
+            <HotelQuery @getHotelList="getHotelList" />
 
             <!-- 区域均价 -->
             <el-row type="flex" class="sights" style="height:260px">
@@ -132,40 +132,65 @@ export default {
             this.$router.push('/')
         }
         this.getHotelList()
-
-        // 获取城市区域景点
-        this.$axios({
-            url:`/cities?name=${this.$route.query.cityName}`
-        }).then(res =>{
-            // console.log(res.data.data[0].scenics);
-            this.cities = res.data.data[0].scenics
-        })
+        this.getScenice()
     },
     methods:{
+        // 获取景点
+        getScenice(){
+            // 获取城市区域景点
+            this.$axios({
+                url:`/cities?name=${this.urlCityName}`
+            }).then(res =>{
+                // console.log(res.data.data[0].scenics);
+                this.cities = res.data.data[0].scenics
+            })
+        },
+
         // 获取酒店列表
         async getHotelList(hotelOption){
             this.loading = true
+            // 用于地址栏显示
             let str = "";
-            if(hotelOption){
-                // 将获取过来的数据进行拼接
-                var keys = Object.keys(hotelOption); // ["city", "price_lt", "hotellevel", "hoteltype"]
+                if(hotelOption){
+                    console.log(hotelOption);
+                    // 将获取过来的数据进行拼接
+                    var keys = Object.keys(hotelOption); // ["city", "price_lt", "hotellevel", "hoteltype"]
+
                 keys.forEach(Option => {
+                    // 数据的格式是否为数组
                     if(Array.isArray(hotelOption[Option])){
-                        // hotelOption[Option] => [1,2]
                         hotelOption[Option].forEach(item => {
-                            str += `${Option}=${item}&`;
+                            str += `${Option}=${item}&`
                         })
                     }else{
-                        str += `${Option}=${hotelOption[Option]}&`;
+                        // 判断传递过来的数值中有没有城市名字和城市id
+                        if(Option == 'cityName'){
+                            this.urlCityName = hotelOption[Option]
+
+                            // 修改原有参数,而不跳转页面
+                            this.$router.push({
+                                path: this.$route.path,
+                                query: Object.assign({}, this.$route.query, {cityName: this.urlCityName})
+                            })
+
+                            // 重新获取景点信息
+                            this.getScenice()
+                        }else if(Option == 'city'){
+                            this.cityId = hotelOption[Option]
+                        }else {
+                            str += `${Option}=${hotelOption[Option]}&`;
+                        }
+                        
                     }
                 })
-
                 // 定位到第一页显示
                 this.currentPage = 1
             }
-            str += `_limit=${this.limit}&city=${this.cityId}`
-            console.log(str)
-            
+            // str += `_limit=${this.limit}`
+            str += `city=${this.cityId}&_limit=${this.limit}`
+
+            console.log(str);
+            // 发送请求获取数据
             const HotelList = await this.$axios({
                 url: `/hotels?${str}`,
             })
