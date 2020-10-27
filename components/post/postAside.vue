@@ -1,19 +1,23 @@
 <template>
   <div class="aside">
     <!-- 顶部tab栏部分 -->
-    <div class="asideTop">
+    <div class="asideTop" @mouseleave="mouseleave()">
       <!-- 标题 -->
       <div
         class="title"
         v-for="(title, index) in titleList"
         :key="index"
-        @mouseover="mouseover(index)"
-        @mouseleave="mouseleave()"
+        @mouseenter="mouseenter(index)"
       >
         {{ title.type }} <span class="el-icon-arrow-right"></span>
       </div>
       <div class="right" v-if="currentIndex != -1">
-        <div class="content" v-for="(city, index) in cityList" :key="index">
+        <div
+          class="content"
+          v-for="(city, index) in cityList"
+          :key="index"
+          @click="$router.push(`/post?city=${city.city}`)"
+        >
           <span class="num">{{ index + 1 }}</span>
           <span class="city">{{ city.city }}</span>
           <span class="dec">{{ city.desc }} </span>
@@ -26,15 +30,36 @@
     <div class="asideBottom">
       <div class="hot">推荐城市</div>
       <div class="hotCity">
-        轮播图
-        <img src="#" alt="" />
+        <template>
+          <el-carousel
+            :interval="2000"
+            height="174px"
+            indicator-position="none"
+          >
+            <el-carousel-item v-for="(item, index) in valueList" :key="index">
+              <img
+                :src="item.images[0]"
+                alt=""
+                v-if="item.images[0]"
+                @click="$router.push(`/post?city=${item.cityName}`)"
+              />
+              <img
+                src="https://upload-images.jianshu.io/upload_images/816806-da5e35d7d249d75c.jpg?imageMogr2/auto-orient/strip|imageView2/2/format/webp"
+                alt=""
+                @click="$router.push('/post?city=北京')"
+              />
+            </el-carousel-item>
+          </el-carousel>
+        </template>
       </div>
     </div>
   </div>
 </template>
+  
 
 <script>
 export default {
+  props: ["valueList"],
   data() {
     return {
       titleList: [],
@@ -52,7 +77,7 @@ export default {
     });
   },
   methods: {
-    mouseover(index) {
+    mouseenter(index) {
       this.cityList = this.titleList[index].children;
       // console.log(this.cityList);
       this.currentIndex = index;
@@ -95,38 +120,57 @@ export default {
       top: 0;
       width: 300px;
       .content {
+        padding: 0 10px;
         height: 40px;
         font-size: 14px;
         line-height: 40px;
         background-color: #fff;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        cursor: pointer;
         .num {
           font-style: italic;
           color: orange;
           font-size: 20px;
         }
+
         .city {
           color: orange;
           margin: 0 10px;
         }
+        .city:hover {
+          text-decoration: underline;
+        }
         .dec {
           color: #bbb;
+        }
+        .dec:hover {
+          text-decoration: underline;
         }
       }
     }
   }
   .asideBottom {
-    margin-top: 10px;
+    margin-top: 20px;
     .hot {
       line-height: 30px;
       height: 30px;
       border-bottom: 1px solid #ccc;
-      margin-bottom: 10px;
+      margin: 10px 0;
     }
 
     .hotCity {
       width: 260px;
       height: 174px;
-      background-color: #ccc;
+
+      img {
+        height: 100%;
+        width: 100%;
+        cursor: pointer;
+      }
     }
   }
 }

@@ -15,7 +15,8 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_1168872_ehvuah8v57g.css' } // 新增全局字体样式
+      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_1168872_ehvuah8v57g.css' }, // 新增全局字体样式
+      { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_2159499_ea5e670svpw.css' },
     ]
   },
 
@@ -55,8 +56,6 @@ export default {
     }
   ],
 
-  components: true,
-
   /*
    ** Nuxt.js modules
    */
@@ -64,6 +63,7 @@ export default {
     // https://axios.nuxtjs.org/setup
     '@nuxtjs/axios'
   ],
+  components: true,
 
   /*
    ** Axios module configuration
@@ -84,5 +84,5 @@ export default {
      ** You can extend webpack config here
      */
     extend(config, ctx) { }
-  }
+  },
 }

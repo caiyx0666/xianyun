@@ -3,10 +3,13 @@
         <!-- 幻灯片 -->
         <el-carousel :interval="5000" arrow="always">
             <el-carousel-item v-for="(item, index) in banners" :key="index">
-                <div class="banner-image" :style="`
+                <div
+                    class="banner-image"
+                    :style="`
                 background:url(${$axios.defaults.baseURL}${item.url}) center center no-repeat;
                 background-size:contain contain;
-                `"></div>
+                `"
+                ></div>
             </el-carousel-item>
         </el-carousel>
 
@@ -15,14 +18,23 @@
             <div class="search-bar">
                 <!-- tab栏 -->
                 <el-row type="flex" class="search-tab">
-                    <span v-for="(item, index) in options" :key="index" :class="{ active: index === currentOption }" @click="handleOption(index)">
+                    <span
+                        v-for="(item, index) in options"
+                        :key="index"
+                        :class="{ active: index === currentOption }"
+                        @click="handleOption(index)"
+                    >
                         <i>{{ item.name }}</i>
                     </span>
                 </el-row>
 
                 <!-- 输入框 -->
                 <el-row type="flex" align="middle" class="search-input">
-                    <input v-model="searchValue" @keyup.enter="handleSearch" :placeholder="options[currentOption].placeholder" />
+                    <input
+                        v-model="searchValue"
+                        @keyup.enter="handleSearch"
+                        :placeholder="options[currentOption].placeholder"
+                    />
                     <i class="el-icon-search" @click="handleSearch"></i>
                 </el-row>
             </div>
@@ -45,23 +57,24 @@ export default {
         return {
             banners: [],
             currentOption: 0,
+            isLoading: false,
             // 搜索内容
-            searchValue: '',
+            searchValue: "",
             options: [
                 {
                     name: "攻略",
-                    placeholder: '搜索攻略',
-                    pageUrl: '/post?city='
+                    placeholder: "搜索攻略",
+                    pageUrl: "/post?city=",
                 },
                 {
                     name: "酒店",
-                    placeholder: '输入城市筛选酒店',
-                    pageUrl: '/hotel?cityName='
+                    placeholder: "输入城市筛选酒店",
+                    pageUrl: "/hotel?cityName=",
                 },
                 {
                     name: "机票",
-                    placeholder: '搜索机票',
-                    pageUrl: '/air'
+                    placeholder: "搜索机票",
+                    pageUrl: "/air",
                 },
             ],
         };
@@ -70,43 +83,51 @@ export default {
         handleOption(index) {
             // 如果点击的机票, 不需要显示输入框而是直接跳转即可
             if (index == 2) {
-                this.$router.push(this.options[2].pageUrl)
+                this.$router.push(this.options[2].pageUrl);
             } else {
-                this.currentOption = index
+                this.currentOption = index;
             }
         },
         handleSearch() {
+            // 防止多次点击 判断开门还是关门  true => return 关门   false => 继续执行 开门
+            if (this.isLoading) return;
+
             // tab栏切换，定位到具体对象的
-            const optionItem = this.options[this.currentOption]
+            const optionItem = this.options[this.currentOption];
 
             // 判断搜索为空或有空格时
-            if (this.searchValue.replace(/[ ]/g, "").length == 0) return
+            if (this.searchValue.replace(/[ ]/g, "").length == 0) return;
+
+            this.isLoading = true;
 
             // 发送请求检验输入的城市是否合法
-            setTimeout(() => {
-                this.$axios({
-                    url: '/cities?name=' + this.searchValue
-                }).then(res => {
-                    if (res.data.data.length == 0) {
-                        Message.error('您输入的城市不存在')
+            this.$axios({
+                url: "/cities?name=" + this.searchValue,
+            }).then((res) => {
+                // 查询结果的数组长度为0
+                if (res.data.data.length == 0) {
+                    Message.error("您输入的城市不存在");
+                    setTimeout(() => {
+                        this.isLoading = false;
+                    }, 1500);
+                } else {
+                    // 判断输入的字段是否带有'市'字
+                    if (this.searchValue.indexOf("市") > -1) {
+                        // 跳转 带上搜索内容
+                        // 存在'市'，要去掉之后再跳转
+                        this.$router.push(
+                            optionItem.pageUrl +
+                                this.searchValue.replace("市", "")
+                        );
+                    } else {
+                        // 不存在市就不用去掉，直接跳转
+                        this.$router.push(
+                            optionItem.pageUrl + this.searchValue
+                        );
                     }
-                    return
-                })
-            }, 5000)
-
-            // 判断输入的字段是否带有'市'字
-            if (this.searchValue.indexOf('市') > -1) {
-                // 跳转 带上搜索内容
-                // 存在'市'，要去掉之后再跳转
-                this.$router.push(optionItem.pageUrl + this.searchValue.replace('市',''))
-            } else {
-                // 不存在市就不用去掉，直接跳转
-                this.$router.push(optionItem.pageUrl + this.searchValue)
-            }
+                }
+            });
         },
-        sendRequest() {
-
-        }
     },
 };
 </script>
