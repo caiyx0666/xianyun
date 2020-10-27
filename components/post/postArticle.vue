@@ -28,13 +28,13 @@
               by
               <span class="userImg">
                 <img
-                  :src="$axios.defaults.baseURL + userInfo.user.defaultAvatar"
+                  :src="$axios.defaults.baseURL + data.account.defaultAvatar"
                   alt=""
                 />
               </span>
 
               <span class="username">
-                {{ userInfo.user.nickname }}
+                {{ data.account.nickname }}
               </span>
             </div>
             <div class="viwer">
@@ -76,13 +76,13 @@
             by
             <span class="userImg">
               <img
-                :src="$axios.defaults.baseURL + userInfo.user.defaultAvatar"
+                :src="$axios.defaults.baseURL + data.account.defaultAvatar"
                 alt=""
               />
             </span>
 
             <span class="username">
-              {{ userInfo.user.nickname }}
+              {{ data.account.nickname }}
             </span>
           </div>
           <div class="viwer">
@@ -124,12 +124,12 @@
             by
             <span class="userImg">
               <img
-                :src="$axios.defaults.baseURL + userInfo.user.defaultAvatar"
+                :src="$axios.defaults.baseURL + data.account.defaultAvatar"
                 alt=""
               />
             </span>
 
-            <span class="username"> {{ userInfo.user.nickname }}</span>
+            <span class="username"> {{ data.account.nickname }}</span>
           </div>
           <div class="viwer">
             <span class="el-icon-view"></span> {{ data.watch }}
@@ -164,19 +164,19 @@
             by
             <span class="userImg">
               <img
-                :src="$axios.defaults.baseURL + userInfo.user.defaultAvatar"
+                :src="$axios.defaults.baseURL + data.account.defaultAvatar"
                 alt=""
               />
             </span>
 
-            <span class="username"> {{ userInfo.user.nickname }}</span>
+            <span class="username"> {{ data.account.nickname }}</span>
           </div>
           <div class="viwer">
             <span class="el-icon-view"></span> {{ data.watch }}
           </div>
         </div>
         <div class="dianzan" @click="handleClickLike(data.id)">
-          {{ data.like }} 赞
+          {{ data.like == null ? 0 : data.like }} 赞
         </div>
       </div>
     </div>
@@ -190,11 +190,7 @@ export default {
   data() {
     return {};
   },
-  mounted() {
-    if (this.data.like == null) {
-      this.data.like = 0;
-    }
-  },
+
   computed: {
     userInfo() {
       return this.$store.state.user.userInfo;
