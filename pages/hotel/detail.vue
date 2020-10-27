@@ -83,12 +83,17 @@
     <!-- <Nav></Nav> -->
     <div class="nav" ref="nav">
       <div :class="{ fixed: isFixed }">
-        <ul>
-          <li @click="bookingJump">预定</li>
-          <li @click="mapJump">位置</li>
+        <ul id="liAll">
+          <li @click="bookingJump" ref="liBook">预定</li>
+          <li @click="mapJump" ref="liMap">位置</li>
           <li @click="infoJump">基本信息</li>
           <li @click="evaluateJump">点评</li>
         </ul>
+        <div class="cang">
+          <span class="shou"></span>
+          <span class="shouTwo"></span>
+          <span>收藏</span>
+        </div>
       </div>
     </div>
     <div class="container">
@@ -129,6 +134,7 @@ export default {
   data() {
     return {
       show: false,
+      showStart: false,
       dialogTableVisible: false,
       hotelList: {},
       baseSrc: require("~/assets/images/1.jpeg"),
@@ -153,6 +159,7 @@ export default {
         },
       ],
       isFixed: false,
+      isNoTrackScroll: false,
     };
   },
   computed: {},
@@ -167,11 +174,27 @@ export default {
         this.isFixed = true;
       } else {
         this.isFixed = false;
+
+        if (!this.isNoTrackScroll) {
+          var liall = document.querySelectorAll("#liAll>li");
+
+          for (var i = 0; i < liall.length; i++) {
+            liall[i].classList.remove("active");
+          }
+        }
       }
     };
   },
 
   methods: {
+    getToggle(num) {
+      var liall = document.querySelectorAll("#liAll>li");
+
+      for (var i = 0; i < liall.length; i++) {
+        liall[i].classList.remove("active");
+      }
+      liall[num].classList.add("active");
+    },
     getPageOffsetTop(elm) {
       let offset = 0;
       while (true) {
@@ -183,6 +206,7 @@ export default {
       }
     },
     scrollToElement(elm) {
+      this.isNoTrackScroll = true;
       var t = elm.offsetTop - 60;
 
       let offset = window.pageYOffset;
@@ -190,11 +214,13 @@ export default {
       if (timer) {
         clearInterval(timer);
       }
+
       timer = setInterval(() => {
         window.scrollTo(0, offset);
         offset += offset - t < 0 ? 12 : -12;
         if (Math.abs(offset - t) < 12) {
           window.scrollTo(0, t);
+          this.isNoTrackScroll = false;
           clearInterval(timer);
         }
       }, 8);
@@ -217,18 +243,56 @@ export default {
     mapJump() {
       var map = this.$refs.map.$el;
       this.scrollToElement(map);
+      // var litwo = this.$refs.liMap;
+      // map.classList.add("active");
+      // console.log(litwo);
+      // litwo.classList.add("active");
+      // var litwo = document.querySelectorAll("#ulAll li");
+      // console.log(litwo);
+      // var lione = this.$refs.liAll;
+      // console.log(lione);
+      // var liall = document.querySelectorAll("#liAll>li");
+
+      // for (var i = 0; i < liall.length; i++) {
+      //   liall[i].classList.remove("active");
+      // }
+      // liall[1].classList.add("active");
+      this.getToggle(1);
     },
     bookingJump() {
       var book = this.$refs.book.$el;
       this.scrollToElement(book);
+      var lione = this.$refs.liBook;
+
+      // var liall = document.querySelectorAll("#liAll>li");
+
+      // for (var i = 0; i < liall.length; i++) {
+      //   liall[i].classList.remove("active");
+      // }
+      // liall[0].classList.add("active");
+      this.getToggle(0);
     },
     infoJump() {
       var info = this.$refs.info.$el;
       this.scrollToElement(info);
+      // var liall = document.querySelectorAll("#liAll>li");
+
+      // for (var i = 0; i < liall.length; i++) {
+      //   liall[i].classList.remove("active");
+      // }
+      // liall[2].classList.add("active");
+      this.getToggle(2);
     },
     evaluateJump() {
       var evaluate = this.$refs.evaluate.$el;
       this.scrollToElement(evaluate);
+      // var liall = document.querySelectorAll("#liAll>li");
+
+      // for (var i = 0; i < liall.length; i++) {
+      //   liall[i].classList.remove("active");
+      // }
+      // liall[3].classList.add("active");
+      this.getToggle(3);
     },
     handleClick() {
       this.$router.push("/hotel");
@@ -295,6 +359,7 @@ export default {
   cursor: pointer;
   width: 100vw;
   height: 50px;
+  position: relative;
   & > div {
     width: 100vw;
     height: 50px;
@@ -313,16 +378,50 @@ export default {
       z-index: 10;
       li {
         padding: 0 50px;
+
+        // &:hover {
+        //   border-bottom: 3px #f90 solid;
+        //   color: #f90;
+        // }
+      }
+      .active {
+        border-bottom: 3px #f90 solid;
+        color: #f90;
+      }
+    }
+
+    .cang {
+      font-size: 14px;
+      position: absolute;
+      left: 1032px;
+      top: 18px;
+      align-items: center;
+      display: flex;
+      .shou {
+        width: 25px;
+        height: 25px;
+        display: block;
+        background: url("../../assets/images/hotel-detail-icon9@2x.png")
+          no-repeat -100px 0px ~"/" 400px 300px;
+        padding: 0 5px 0 0;
+      }
+      .shouTwo {
+        width: 25px;
+        height: 25px;
+        display: block;
+        background: url("../../assets/images/hotel-detail-icon9@2x.png")
+          no-repeat -100px -30px ~"/" 400px 300px;
+        padding: 0 5px 0 0;
       }
     }
   }
 }
 
+.el-dialog__wrapper {
+  background-color: rgba(0, 0, 0, 0.1);
+}
 .fixed {
   position: fixed;
   z-index: 999;
-}
-.el-dialog__wrapper {
-  background-color: rgba(0, 0, 0, 0.1);
 }
 </style>
