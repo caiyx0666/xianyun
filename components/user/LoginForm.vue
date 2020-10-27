@@ -100,6 +100,7 @@
                         // this.$store.dispatch() 两个参数, action 的地址, 第二是数据
                         this.$store.dispatch('user/login', this.form).then(res=>{
                             this.$message.success('登录成功')
+                            this.$emit("logins");
                             console.log(res);
                         })
                     }

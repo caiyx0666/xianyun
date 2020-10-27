@@ -1,5 +1,7 @@
 <template>
     <div class="content">
+        <!-- 遮罩层 -->
+        <div id="cover1"></div>
         <!-- 头部标题 -->
         <div class="right">
             <h2>发表新攻略</h2>
@@ -141,19 +143,38 @@ export default {
         save() {
             this.$store.commit("draft/addArticle", { ...this.form });
             this.$message.success("保存草稿成功");
+            this.form.title = "";
+            this.form.content = "";
+            this.form.choiceCity = "";
         },
         // 删除
         deletes(index) {
-            this.$store.commit("draft/removeArticle", index);
-            this.$message.success("删除成功");
+            this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+            })
+                .then(() => {
+                    this.$message({
+                        type: "success",
+                        message: "删除成功!",
+                    });
+                    this.$store.commit("draft/removeArticle", index);
+                })
+                .catch(() => {
+                    this.$message({
+                        type: "info",
+                        message: "已取消删除",
+                    });
+                });
         },
         // 编辑
         compile(item) {
-            console.log("数据呢", item);
+            // console.log("数据呢", item);
             this.form = {
                 ...item,
             };
-            this.$message.success("编辑");
+            this.$message("编辑!");
         },
         handleChangeTab(index) {
             this.currentTab = index;
@@ -230,7 +251,8 @@ export default {
             //判断 是否登录
             if (this.$store.state.user.userInfo.token) {
                 this.login = false;
-                console.log(this.form);
+                // console.log(this.form);
+                document.getElementById("cover1").classList.remove("cover");
                 this.$axios({
                     method: "post",
                     url: "/posts",
@@ -254,6 +276,7 @@ export default {
                 });
             } else {
                 this.$message.warning("未登录,请登录");
+                document.getElementById("cover1").classList.add("cover");
                 this.login = true;
             }
         },
@@ -320,6 +343,7 @@ export default {
         position: fixed;
         top: 50%;
         margin-top: -100px;
+        z-index: 201;
         .main {
             width: 1000px;
             height: 100%;
@@ -363,14 +387,14 @@ export default {
         overflow: auto;
         background: #eeeeee;
     }
-}
-.cover {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 200;
+    .cover {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 200;
+    }
 }
 </style>
