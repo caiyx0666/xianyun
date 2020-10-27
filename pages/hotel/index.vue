@@ -17,41 +17,27 @@
                         <el-col :span="3">区域:</el-col>
                         <el-col :span="19" class="cities">
                             <el-tag class="citie" v-for="citie in cities" :hit="true" :key="citie.id" effect="plain">{{ citie.name }}</el-tag>
-                            
+
                         </el-col>
                     </el-row>
                     <el-row class="price">
                         <el-col :span="3">均价:</el-col>
- 
-                        <el-popover
-                          placement="top"
-                          width="200"
-                          trigger="click"
-                          >
-                              <div class="popbox">等级评定是针对房价，设施和服务等各方面水平的综合评估</div>
+
+                        <el-popover placement="top" width="200" trigger="click">
+                            <div class="popbox">等级评定是针对房价，设施和服务等各方面水平的综合评估</div>
                             <el-col slot="reference" :span="30" class="dishini"> <i class="iconfont icon-dishini-" v-for="(item,index) in 3" :key="index"></i>¥332 </el-col>
                         </el-popover>
 
-                        <el-popover
-                          placement="top"
-                          width="200"
-                          trigger="click"
-                          >
-                              <div class="popbox">等级评定是针对房价，设施和服务等各方面水平的综合评估</div>
+                        <el-popover placement="top" width="200" trigger="click">
+                            <div class="popbox">等级评定是针对房价，设施和服务等各方面水平的综合评估</div>
                             <el-col slot="reference" :span="30" class="dishini"> <i class="iconfont icon-dishini-" v-for="(item,index) in 4" :key="index"></i>¥521 </el-col>
                         </el-popover>
 
-                        <el-popover
-                          placement="top"
-                          width="200"
-                          trigger="click"
-                          >
-                              <div class="popbox">等级评定是针对房价，设施和服务等各方面水平的综合评估</div>
+                        <el-popover placement="top" width="200" trigger="click">
+                            <div class="popbox">等级评定是针对房价，设施和服务等各方面水平的综合评估</div>
                             <el-col slot="reference" :span="30" class="dishini"> <i class="iconfont icon-dishini-" v-for="(item,index) in 5" :key="index"></i>¥768 </el-col>
                         </el-popover>
 
-                        
-                        
                     </el-row>
                 </el-col>
 
@@ -62,19 +48,14 @@
             </el-row>
 
             <!-- 条件筛选 -->
-            <HotelFilter @getHotelList="getHotelList"/>
+            <HotelFilter @getHotelList="getHotelList" />
 
             <!-- 酒店列表 -->
-            <el-pagination
-              background
-              layout="prev, pager, next"
-              :total="hotelList.total"
-              @current-change="currentChange"
-              :current-page="currentPage">
-              
+            <el-pagination background layout="prev, pager, next" :total="hotelList.total" @current-change="currentChange" :current-page="currentPage">
+
             </el-pagination>
-            <div v-if="hotelList.data.length != 0" >
-                <HotelList v-loading="loading" :hotel="hotel" v-for="hotel in hotelList.data" :key="hotel.id"/>
+            <div v-if="hotelList.data.length != 0">
+                <HotelList v-loading="loading" :hotel="hotel" v-for="hotel in hotelList.data" :key="hotel.id" />
             </div>
 
             <div v-else>
@@ -86,33 +67,55 @@
 
 <script>
 export default {
-    data(){
-        return{
-            cityId:'',
-            loading:false,
-            hotelList:{
-                data:[]
+    data() {
+        return {
+            cityId: '',
+            loading: false,
+            hotelList: {
+                data: []
             },
-            currentPage:1,
+            currentPage: 1,
             // 获取的条数
-            limit:10,
-            hotelOption:{},
+            limit: 10,
+            hotelOption: {},
             urlCityName: '',
-            cities:[]
+            cities: [],
+            // 当前搜索页城市经纬度
+            location: [],
+            map: {},
+            markers: []
         }
     },
     async mounted() {
-        // 获取url传过来的参数
-        this.urlCityName = this.$route.query.cityName
-
-        // 高德地图
-        window.onLoad = () => {
-            var map = new AMap.Map('container', {
-                zoom: 11, // 放大级别
-                center: [116.397428, 39.90923], // 中心点坐标
-                viewMode: '3D', // 使用3D视图
+        window.onLoad = async () => {
+            var map = new AMap.Map("container", {
+                zoom: 20, // 级别
+                center: [113.428072, 23.129259], // 中心点坐标
+                viewMode: "3D", // 使用3D视图
             });
-        }
+            this.map = map;
+
+            // 获取城市名
+            this.urlCityName = this.$route.query.cityName
+
+            // 获取城市id
+            await this.$axios({
+                url: '/cities?name=' + this.$route.query.cityName
+            }).then(res => {
+                // console.log(res.data.data[0].id);
+                this.cityId = res.data.data[0].id
+            })
+
+            // 页面进来渲染数据
+            this.getHotelList()
+
+            // 获取城市区域景点
+            this.$axios({
+                url: `/cities?name=${this.$route.query.cityName}`
+            }).then(res => {
+                this.cities = res.data.data[0].scenics
+            })
+        };
         var key = "d5192dea5a16faf3b3afdd0fb562d794"; // 你的key
         var url = `https://webapi.amap.com/maps?v=1.4.15&key=${key}&callback=onLoad`;
         var jsapi = document.createElement('script');
@@ -120,69 +123,79 @@ export default {
         jsapi.src = url;
         document.head.appendChild(jsapi);
 
-        if(this.$route.query.cityName){
-            // 获取传递过来的城市的id
-            await this.$axios({
-                url:'/cities?name='+this.$route.query.cityName
-            }).then(res =>{
-                // console.log(res.data.data[0].id);
-                this.cityId = res.data.data[0].id
-            })
-        }else{
-            this.$router.push('/')
-        }
-        this.getHotelList()
 
-        // 获取城市区域景点
-        this.$axios({
-            url:`/cities?name=${this.$route.query.cityName}`
-        }).then(res =>{
-            // console.log(res.data.data[0].scenics);
-            this.cities = res.data.data[0].scenics
-        })
     },
-    methods:{
-        // 获取酒店列表
-        async getHotelList(hotelOption){
+    methods: {
+        async getHotelList(hotelOption) {
             this.loading = true
             let str = "";
-            if(hotelOption){
-                // 将获取过来的数据进行拼接
+
+            if (hotelOption) {
+                // 将获取过来的筛选数据进行拼接
                 var keys = Object.keys(hotelOption); // ["city", "price_lt", "hotellevel", "hoteltype"]
                 keys.forEach(Option => {
-                    if(Array.isArray(hotelOption[Option])){
+                    if (Array.isArray(hotelOption[Option])) {
                         // hotelOption[Option] => [1,2]
                         hotelOption[Option].forEach(item => {
                             str += `${Option}=${item}&`;
                         })
-                    }else{
+                    } else {
                         str += `${Option}=${hotelOption[Option]}&`;
                     }
                 })
 
-                // 定位到第一页显示
+                // 默认第一页显示
                 this.currentPage = 1
             }
+
+            // 拼接参数
             str += `_limit=${this.limit}&city=${this.cityId}`
-            console.log(str)
-            
+
+            // 获取酒店详情
             const HotelList = await this.$axios({
                 url: `/hotels?${str}`,
             })
-            console.log(HotelList);
-            HotelList.data.data = HotelList.data.data.slice((this.currentPage-1)*10,(this.currentPage)*10)
+
+            HotelList.data.data = HotelList.data.data.slice((this.currentPage - 1) * 10, (this.currentPage) * 10)
             this.hotelList = HotelList.data
             this.loading = false
+
+            // 获取地图经纬度
+            HotelList.data.data.forEach(item => {
+                this.location.push({
+                    x: item.location.latitude,
+                    y: item.location.longitude,
+                })
+            })
+
+            // 加载地图
+            this.mapLoad()
+
         },
 
         // 当前页发生变化
-        currentChange(newCurrent){
+        currentChange(newCurrent) {
             // console.log(newCurrent);
             // 先根据页数获取酒店的条数
             this.currentPage = newCurrent
             this.limit = newCurrent * 10
             this.getHotelList()
         },
+
+        // 高德地图
+        mapLoad() {
+            let markers = []
+            // 遍历-创建点实例
+            this.location.forEach(item => {
+                var maker = new AMap.Marker({
+                    position: [item.y, item.x],
+                })
+                markers.push(maker)
+            })
+            this.markers = markers;
+            // 添加点
+            this.map.add(markers)
+        }
     }
 };
 </script>
@@ -206,19 +219,19 @@ export default {
             &::-webkit-scrollbar {
                 position: absolute;
                 width: 10px;
-                padding-right: -20px;  
+                padding-right: -20px;
                 right: -20px;
                 /*height: 4px;*/
             }
 
             &::-webkit-scrollbar-thumb {
                 border-radius: 10px;
-                background: rgba(0,0,0,0.2);
+                background: rgba(0, 0, 0, 0.2);
             }
 
             &::-webkit-scrollbar-track {
                 border-radius: 0;
-                background: rgba(0,0,0,0.1);
+                background: rgba(0, 0, 0, 0.1);
             }
 
             .citie {
@@ -241,7 +254,7 @@ export default {
 .filter-list {
     margin-bottom: 10px !important;
 }
-.popbox{
+.popbox {
     font-size: 12px;
 }
 </style>
