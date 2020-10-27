@@ -52,29 +52,31 @@ export default {
 
 <style lang="less" scoped>
 .articles {
-  display: flex;
   cursor: pointer;
-  padding: 20px 0;
-  border-bottom: 1px solid #e4e4e4;
-  .left {
-    margin-right: 10px;
-    img {
-      object-fit: cover;
-      width: 80px;
-      height: 80px;
-    }
-  }
-  .right {
+  .box {
     display: flex;
-    height: 80px;
-    flex-direction: column;
-    justify-content: space-between;
-    .head {
-      font-size: 16px;
+    padding: 20px 0;
+    border-bottom: 1px solid #e4e4e4;
+    .left {
+      margin-right: 10px;
+      img {
+        object-fit: cover;
+        width: 80px;
+        height: 80px;
+      }
     }
-    .foot {
-      font-size: 12px;
-      color: #888;
+    .right {
+      display: flex;
+      height: 80px;
+      flex-direction: column;
+      justify-content: space-between;
+      .head {
+        font-size: 16px;
+      }
+      .foot {
+        font-size: 12px;
+        color: #888;
+      }
     }
   }
 }
