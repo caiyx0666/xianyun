@@ -84,10 +84,26 @@
     <div class="nav" ref="nav">
       <div :class="{ fixed: isFixed }">
         <ul id="liAll">
-          <li @click="bookingJump" ref="liBook">预定</li>
-          <li @click="mapJump" ref="liMap">位置</li>
-          <li @click="infoJump">基本信息</li>
-          <li @click="evaluateJump">点评</li>
+          <li
+            @click="bookingJump"
+            ref="liBook"
+            :class="{ active: activeIndex == 1 }"
+          >
+            预定
+          </li>
+          <li
+            @click="mapJump"
+            ref="liMap"
+            :class="{ active: activeIndex == 2 }"
+          >
+            位置
+          </li>
+          <li @click="infoJump" :class="{ active: activeIndex == 3 }">
+            基本信息
+          </li>
+          <li @click="evaluateJump" :class="{ active: activeIndex == 4 }">
+            点评
+          </li>
         </ul>
         <div class="cang">
           <span class="shou"></span>
@@ -160,6 +176,7 @@ export default {
       ],
       isFixed: false,
       isNoTrackScroll: false,
+      activeIndex: 1,
     };
   },
   computed: {},
@@ -174,13 +191,8 @@ export default {
         this.isFixed = true;
       } else {
         this.isFixed = false;
-
         if (!this.isNoTrackScroll) {
-          var liall = document.querySelectorAll("#liAll>li");
-
-          for (var i = 0; i < liall.length; i++) {
-            liall[i].classList.remove("active");
-          }
+          this.activeIndex = 0;
         }
       }
     };
@@ -188,12 +200,7 @@ export default {
 
   methods: {
     getToggle(num) {
-      var liall = document.querySelectorAll("#liAll>li");
-
-      for (var i = 0; i < liall.length; i++) {
-        liall[i].classList.remove("active");
-      }
-      liall[num].classList.add("active");
+      this.activeIndex = num;
     },
     getPageOffsetTop(elm) {
       let offset = 0;
@@ -257,7 +264,7 @@ export default {
       //   liall[i].classList.remove("active");
       // }
       // liall[1].classList.add("active");
-      this.getToggle(1);
+      this.getToggle(2);
     },
     bookingJump() {
       var book = this.$refs.book.$el;
@@ -270,7 +277,7 @@ export default {
       //   liall[i].classList.remove("active");
       // }
       // liall[0].classList.add("active");
-      this.getToggle(0);
+      this.getToggle(1);
     },
     infoJump() {
       var info = this.$refs.info.$el;
@@ -281,7 +288,7 @@ export default {
       //   liall[i].classList.remove("active");
       // }
       // liall[2].classList.add("active");
-      this.getToggle(2);
+      this.getToggle(3);
     },
     evaluateJump() {
       var evaluate = this.$refs.evaluate.$el;
@@ -292,7 +299,7 @@ export default {
       //   liall[i].classList.remove("active");
       // }
       // liall[3].classList.add("active");
-      this.getToggle(3);
+      this.getToggle(4);
     },
     handleClick() {
       this.$router.push("/hotel");
