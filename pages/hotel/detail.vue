@@ -28,7 +28,39 @@
         <el-row type="flex" justify="space-between">
           <el-col :span="16">
             <div class="photoleft">
-              <img :src="baseSrc" alt="" />
+              <img
+                :src="baseSrc"
+                alt=""
+                @click="(show = true), (dialogTableVisible = true)"
+              />
+              <div v-if="show == true">
+                <el-dialog
+                  :visible.sync="dialogTableVisible"
+                  width="800px"
+                  height="400px"
+                >
+                  <div class="block">
+                    <el-carousel
+                      trigger="click"
+                      height="400px"
+                      :autoplay="false"
+                    >
+                      <el-carousel-item
+                        v-for="(item, index) in imgData"
+                        :key="index"
+                      >
+                        <img
+                          :src="item.address"
+                          alt=""
+                          class="testImg"
+                          width="800px"
+                          height="400px"
+                        />
+                      </el-carousel-item>
+                    </el-carousel>
+                  </div>
+                </el-dialog>
+              </div>
             </div>
           </el-col>
 
@@ -65,22 +97,10 @@
       <Evaluate ref="evaluate" :hotelList="hotelList"></Evaluate>
       <!-- 评论部分 -->
       <comment></comment>
-
-      <!-- <template>
-        <el-backtop
-          target=".first_head"
-          :visibility-height="200"
-          :right="40"
-          :bottom="40"
-        ></el-backtop></template -->
-      >　
     </div>
   </div>
 </template>
-    </div>
-  </div>
-</template>
-
+  
 <script>
 import Booking from "../../components/hotel/Booking";
 import Map from "../../components/hotel/Map";
@@ -92,6 +112,8 @@ import loginVue from "../user/login.vue";
 export default {
   data() {
     return {
+      show: false,
+      dialogTableVisible: false,
       hotelList: {},
       baseSrc: require("~/assets/images/1.jpeg"),
       imgData: [
@@ -132,6 +154,7 @@ export default {
       }
     };
   },
+
   methods: {
     getPageOffsetTop(elm) {
       let offset = 0;
@@ -162,7 +185,10 @@ export default {
     },
     logpage() {
       this.$axios({
-        url: "/hotels?id=95",
+        url: "/hotels",
+        params: {
+          id: this.$route.query.id,
+        },
       }).then((res) => {
         // console.log(res.data);
         this.hotelList = res.data.data[0];
