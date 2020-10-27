@@ -3,7 +3,12 @@
     <!-- 顶部搜索部分 -->
     <div class="search">
       <div class="big">
-        <el-input placeholder="请输入内容" class="sousuo" v-model="value">
+        <el-input
+          placeholder="请输入内容"
+          class="sousuo"
+          v-model="value"
+          @keyup.enter.native="searchClick"
+        >
         </el-input>
         <span class="el-icon-search" @click="searchClick"></span>
       </div>
