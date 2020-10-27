@@ -67,7 +67,12 @@
           <el-col :span="8">
             <div class="photoright">
               <div class="div" v-for="(item, index) in imgData" :key="index">
-                <img :src="item.address" alt="" @click="handleClick(item)" />
+                <img
+                  :src="item.address"
+                  alt=""
+                  @click="(show = true), (dialogTableVisible = true)"
+                />
+                <!-- <img :src="item.address" alt="" @click="handleClick(item)" /> -->
               </div>
             </div>
           </el-col>
@@ -96,19 +101,30 @@
       <!-- 评价部分 -->
       <Evaluate ref="evaluate" :hotelList="hotelList"></Evaluate>
       <!-- 评论部分 -->
-      <comment></comment>
+      <Evaluate1></Evaluate1>
     </div>
+
+    <el-backtop :bottom="100">
+      <div
+        style="
+           {
+            height: 100%;
+            width: 100%;
+            background-color: #f2f5f6;
+            box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
+            text-align: center;
+            line-height: 40px;
+            color: #1989fa;
+          }
+        "
+      >
+        UP
+      </div>
+    </el-backtop>
   </div>
 </template>
   
 <script>
-import Booking from "../../components/hotel/Booking";
-import Map from "../../components/hotel/Map";
-import Info from "../../components/hotel/Info";
-import Evaluate from "../../components/hotel/Evaluate";
-import loginVue from "../user/login.vue";
-// import Nav from "../../components/hotel/Nav";
-
 export default {
   data() {
     return {
@@ -195,9 +211,9 @@ export default {
         console.log(this.hotelList);
       });
     },
-    handleClick(item) {
-      this.baseSrc = item.address;
-    },
+    // handleClick(item) {
+    //   this.baseSrc = item.address;
+    // },
     mapJump() {
       var map = this.$refs.map.$el;
       this.scrollToElement(map);
@@ -305,5 +321,8 @@ export default {
 .fixed {
   position: fixed;
   z-index: 999;
+}
+.el-dialog__wrapper {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 </style>
