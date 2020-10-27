@@ -1,5 +1,6 @@
 <template>
   <div class="first_head">
+    <div class="row" v-if="show" @click="show = false"></div>
     <div class="container">
       <!-- 面包屑导航栏 -->
       <el-row>
@@ -28,38 +29,25 @@
         <el-row type="flex" justify="space-between">
           <el-col :span="16">
             <div class="photoleft">
-              <img
-                :src="baseSrc"
-                alt=""
-                @click="(show = true), (dialogTableVisible = true)"
-              />
-              <div v-if="show == true">
-                <el-dialog
-                  :visible.sync="dialogTableVisible"
-                  width="800px"
-                  height="400px"
-                >
-                  <div class="block">
-                    <el-carousel
-                      trigger="click"
-                      height="400px"
-                      :autoplay="false"
-                    >
-                      <el-carousel-item
-                        v-for="(item, index) in imgData"
-                        :key="index"
-                      >
-                        <img
-                          :src="item.address"
-                          alt=""
-                          class="testImg"
-                          width="800px"
-                          height="400px"
-                        />
-                      </el-carousel-item>
-                    </el-carousel>
-                  </div>
-                </el-dialog>
+              <img :src="baseSrc" alt="" @click="show = true" />
+
+              <!-- 轮播图 -->
+              <div class="block" v-if="show == true">
+                <el-carousel height="470px" :autoplay="false">
+                  <el-carousel-item
+                    v-for="(item, index) in imgData"
+                    :key="index"
+                  >
+                    <img
+                      :src="item.address"
+                      alt=""
+                      class="testImg"
+                      width="500px"
+                      height="470px"
+                    />
+                  </el-carousel-item>
+                </el-carousel>
+                <div class="close" @click="show = false">X</div>
               </div>
             </div>
           </el-col>
@@ -333,6 +321,7 @@ export default {
   margin-bottom: 10px;
   flex-direction: column;
   color: #666;
+  position: relative;
   h4 {
     color: #333;
     font-weight: 400;
@@ -435,5 +424,39 @@ export default {
 .fixed {
   position: fixed;
   z-index: 999;
+}
+.row {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+}
+.el-carousel {
+  width: 680px;
+  .el-carousel-item {
+    .testImg {
+      object-fit: cover;
+    }
+  }
+}
+.block {
+  position: absolute;
+  top: -120px;
+  left: 0;
+  z-index: 999;
+
+  .close {
+    width: 50px;
+    height: 50px;
+    background-color: rgb(224, 220, 214);
+    text-align: center;
+    line-height: 50px;
+    position: absolute;
+    top: -50px;
+    right: 0px;
+  }
 }
 </style>
