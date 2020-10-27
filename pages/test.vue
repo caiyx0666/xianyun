@@ -1,37 +1,28 @@
 <template>
-  <el-carousel
-    type="card"
-    height="150px"
-    direction="vertical"
-     indicator-position="outside"
-  >
-    <el-carousel-item v-for="item in 6" :key="item">
-      <h3 class="medium">{{ item }}</h3>
-    </el-carousel-item>
-  </el-carousel>
+  <el-button type="text" @click="open">1</el-button>
 </template>
 
 <script>
-export default {};
+export default {
+  methods: {
+    open() {
+      this.$confirm("真的要取消收藏吗？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "取消成功!",
+          });
+        })
+        .catch(() => {
+          
+        });
+    },
+  },
+};
 </script>
-
 <style scoped lang="less">
-.el-carousel__item h3 {
-  color: #475669;
-  font-size: 14px;
-  opacity: 0.75;
-  line-height: 200px;
-  margin: 0;
-}
-
-.el-carousel__item:nth-child(2n) {
-  background-color: #99a9bf;
-}
-
-.el-carousel__item:nth-child(2n + 1) {
-  background-color: #d3dce6;
-}
-.el-carousel {
-  width: 400px;
-}
 </style>
