@@ -13,8 +13,8 @@
       <el-row>
         <el-col :span="4">酒店服务</el-col>
         <el-col :span="20" v-if="hotelList.hotelassets">
-          <span v-if="hotelList.hotelassets.length == 0">
-            <i class="facility">暂无数据</i>
+          <span v-if="(hotelList.hotelassets.type == '酒店服务') == 0">
+            <i class="facility">暂无数据😰</i>
           </span>
           <span v-else>
             <span v-for="(item, index) in hotelList.hotelassets" :key="index">
@@ -30,30 +30,36 @@
         <el-col :span="4">主要设施</el-col>
         <el-col :span="20" v-if="hotelList.hotelassets">
           <span v-if="hotelList.hotelassets.length == 0">
-            <i class="facility">暂无数据</i>
+            <i class="facility">暂无数据😰</i>
           </span>
           <span v-else>
             <span v-for="(item, index) in hotelList.hotelassets" :key="index">
-              <i v-if="item.type == '主要设施'" class="facility">{{
-                item.name
-              }}</i>
+              <i
+                v-if="item.type == '主要设施' || item.type == '房间设施'"
+                class="facility"
+                >{{ item.name }}</i
+              >
             </span>
           </span>
         </el-col>
       </el-row>
 
       <el-row>
-        <el-col :span="4">房间设施</el-col>
-        <el-col :span="20" v-if="hotelList.hotelassets">
-          <span v-if="hotelList.hotelassets.length == 0">
-            <i class="facility">暂无数据</i>
-          </span>
-          <span v-else>
-            <span v-for="(item, index) in hotelList.hotelassets" :key="index">
-              <i v-if="item.type == '房间设施'" class="facility">{{
+        <el-col :span="4">品牌信息</el-col>
+        <el-col :span="20" v-if="hotelList.hotelbrand == null">
+          <span class="facility"> 暂无数据😰 </span>
+        </el-col>
+        <!-- <span v-if="hotelList.hotelbrand.name"> -->
+        <!-- <span v-for="(item, index) in hotelList.hotelassets" :key="index"> -->
+        <!-- <i v-if="item.type == '房间设施'" class="facility">{{
                 item.name
-              }}</i>
-            </span>
+              }}</i> -->
+        <!-- <i class="facility"> {{ hotelList.hotelbrand.name }}</i> -->
+        <!-- </span> -->
+        <!-- </span> -->
+        <el-col :span="20" v-else>
+          <span class="facility">
+            {{ hotelList.hotelbrand.name }}
           </span>
         </el-col>
       </el-row>
@@ -86,8 +92,5 @@ export default {
   font-size: 14px;
   text-align: center;
   border-radius: 7px;
-}
-.kong {
-  padding: 10px 0;
 }
 </style>

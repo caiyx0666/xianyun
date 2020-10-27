@@ -32,7 +32,7 @@
       <div class="hotCity">
         <template>
           <el-carousel
-            :interval="7000"
+            :interval="2000"
             height="174px"
             indicator-position="none"
           >
@@ -46,6 +46,7 @@
               <img
                 src="https://upload-images.jianshu.io/upload_images/816806-da5e35d7d249d75c.jpg?imageMogr2/auto-orient/strip|imageView2/2/format/webp"
                 alt=""
+                @click="$router.push('/post?city=北京')"
               />
             </el-carousel-item>
           </el-carousel>
@@ -114,9 +115,9 @@ export default {
     .right {
       position: absolute;
       z-index: 99;
-      left: 259px;
+      left: 258px;
       border: 1px solid #ccc;
-      top: 0;
+      top: -1px;
       width: 300px;
       .content {
         padding: 0 10px;
@@ -168,6 +169,7 @@ export default {
       img {
         height: 100%;
         width: 100%;
+        object-fit: cover;
         cursor: pointer;
       }
     }

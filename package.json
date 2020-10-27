@@ -20,5 +20,10 @@
     "vue2-editor": "^2.10.2",
     "vuex-persistedstate": "^4.0.0-beta.1"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "config": {
+    "nuxt": {
+      "host": "0.0.0.0"
+    }
+  }
 }

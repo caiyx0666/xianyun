@@ -1,13 +1,13 @@
 <template>
   <div class="container">
-    <h4>288条真是用户评论</h4>
+    <h4>😍真实用户评价😍</h4>
     <div class="grade">
       <el-row :gutter="20" type="flex" align="middle">
         <el-col :span="4">
           <div class="evaluate">
-            总评数：148 <br />
-            好评数: 43 <br />
-            差评数：5 <br />
+            😎总评数：148 <br />
+            😘好评数: 43 <br />
+            😭差评数：5 <br />
           </div>
         </el-col>
 
@@ -225,9 +225,15 @@ h4 {
     left: 65px;
     font-size: 16px;
     color: #f90;
+
+    .textLeft {
+      // margin: 0 6px;
+
+      text-align: center;
+    }
   }
-  .textLeft {
-    margin: 0 6px;
-  }
+}
+.gradeLeft .centerText[data-v-5635ceaf] {
+  text-align: center;
 }
 </style>

@@ -6,10 +6,10 @@
           <div class="commentImg">
             <img src="../../assets/images/4.jpeg" alt="" />
           </div>
-          <div class="commentTitle">地球发动机</div>
+          <div class="commentTitle">气球发动机</div>
+          <div class="commentgrade">Lv8</div>
+          <div class="commentDate">2020-10-25</div>
         </div>
-        <div class="commentgrade">Lv8</div>
-        <div class="commentDate">2020-10-25</div>
       </el-col>
       <el-col :span="20">
         <div class="oldComment"></div>
@@ -36,15 +36,22 @@ export default {
     return {
       textarea: "",
       active: false,
+      hotel: "",
+      hotelComment: "",
     };
   },
-  // created() {
-  //   this.$axios({
-  //     url: "/hotels/comments?id=266",
-  //   }).then((res) => {
-  //     console.log(res.data);
-  //   });
-  // },
+  created() {
+    this.$axios({
+      url: "/hotels/comments",
+      params: {
+        hotel: this.$route.query.id,
+      },
+    }).then((res) => {
+      // console.log(res.data.data);
+      this.hotelComment = res.data.data;
+      console.log(this.hotelComment);
+    });
+  },
   methods: {
     hide() {
       setTimeout(() => {
@@ -52,7 +59,7 @@ export default {
       }, 150);
     },
     handleClick() {
-      console.log(1);
+      this.$axios();
     },
   },
 };
@@ -62,12 +69,15 @@ export default {
 .commentInfo {
   height: 60px;
   display: flex;
+  flex-wrap: wrap;
+  border: 1px solid #000;
   .commentImg {
     width: 50px;
     height: 50px;
     border-radius: 50%;
     border: 3px solid #f90;
-    margin: 0 10px 0 0;
+    margin: 0 10px 0 20px;
+
     img {
       width: 100%;
       height: 100%;
@@ -75,19 +85,23 @@ export default {
     }
   }
   .commentTitle {
-    font-size: 16px;
+    font-size: 12px;
     color: #f90;
     padding-top: 16px;
     height: 30px;
+    border: 1px solid #000;
+    margin: 8px;
   }
-}
-.commentgrade {
-  font-size: 12px;
-  color: red;
-}
-.commentDate {
-  font-size: 14px;
-  color: gray;
+  .commentgrade {
+    font-size: 12px;
+    color: red;
+    border: 1px solid #000;
+  }
+  .commentDate {
+    font-size: 12px;
+    color: gray;
+    border: 1px solid #000;
+  }
 }
 
 /deep/.el-textarea__inner {

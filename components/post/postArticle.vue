@@ -28,13 +28,13 @@
               by
               <span class="userImg">
                 <img
-                  :src="$axios.defaults.baseURL + userInfo.user.defaultAvatar"
+                  :src="$axios.defaults.baseURL + data.account.defaultAvatar"
                   alt=""
                 />
               </span>
 
               <span class="username">
-                {{ userInfo.user.nickname }}
+                {{ data.account.nickname }}
               </span>
             </div>
             <div class="viwer">
@@ -42,7 +42,7 @@
             </div>
           </div>
           <div class="dianzan" @click="handleClickLike(data.id)">
-            {{ data.like }} 赞
+            {{ data.like == null ? 0 : data.like }} 赞
           </div>
         </div>
       </div>
@@ -76,13 +76,13 @@
             by
             <span class="userImg">
               <img
-                :src="$axios.defaults.baseURL + userInfo.user.defaultAvatar"
+                :src="$axios.defaults.baseURL + data.account.defaultAvatar"
                 alt=""
               />
             </span>
 
             <span class="username">
-              {{ userInfo.user.nickname }}
+              {{ data.account.nickname }}
             </span>
           </div>
           <div class="viwer">
@@ -90,7 +90,7 @@
           </div>
         </div>
         <div class="dianzan" @click="handleClickLike(data.id)">
-          {{ data.like }} 赞
+          {{ data.like == null ? 0 : data.like }} 赞
         </div>
       </div>
     </div>
@@ -124,19 +124,19 @@
             by
             <span class="userImg">
               <img
-                :src="$axios.defaults.baseURL + userInfo.user.defaultAvatar"
+                :src="$axios.defaults.baseURL + data.account.defaultAvatar"
                 alt=""
               />
             </span>
 
-            <span class="username"> {{ userInfo.user.nickname }}</span>
+            <span class="username"> {{ data.account.nickname }}</span>
           </div>
           <div class="viwer">
             <span class="el-icon-view"></span> {{ data.watch }}
           </div>
         </div>
         <div class="dianzan" @click="handleClickLike(data.id)">
-          {{ data.like }} 赞
+          {{ data.like == null ? 0 : data.like }} 赞
         </div>
       </div>
     </div>
@@ -164,19 +164,19 @@
             by
             <span class="userImg">
               <img
-                :src="$axios.defaults.baseURL + userInfo.user.defaultAvatar"
+                :src="$axios.defaults.baseURL + data.account.defaultAvatar"
                 alt=""
               />
             </span>
 
-            <span class="username"> {{ userInfo.user.nickname }}</span>
+            <span class="username"> {{ data.account.nickname }}</span>
           </div>
           <div class="viwer">
             <span class="el-icon-view"></span> {{ data.watch }}
           </div>
         </div>
         <div class="dianzan" @click="handleClickLike(data.id)">
-          {{ data.like }} 赞
+          {{ data.like == null ? 0 : data.like }} 赞
         </div>
       </div>
     </div>
@@ -190,11 +190,7 @@ export default {
   data() {
     return {};
   },
-  mounted() {
-    if (this.data.like == null) {
-      this.data.like = 0;
-    }
-  },
+
   computed: {
     userInfo() {
       return this.$store.state.user.userInfo;
@@ -210,6 +206,11 @@ export default {
       this.$router.push("/post/detail?id=" + id);
     },
     handleClickLike(id) {
+      if (!this.$store.state.user.userInfo.token) {
+        this.$message.error("请先登录哦");
+        this.$router.push("/user/login");
+        return;
+      }
       console.log(id);
       this.$axios({
         url: "/posts/like",
