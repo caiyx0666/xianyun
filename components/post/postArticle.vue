@@ -207,6 +207,7 @@ export default {
     },
     handleClickLike(id) {
       if (!this.$store.state.user.userInfo.token) {
+        this.$message.error("请先登录哦");
         this.$router.push("/user/login");
         return;
       }
