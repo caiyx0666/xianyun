@@ -3,7 +3,12 @@
     <!-- 顶部搜索部分 -->
     <div class="search">
       <div class="big">
-        <el-input placeholder="请输入内容" class="sousuo" v-model="value">
+        <el-input
+          placeholder="请输入内容"
+          class="sousuo"
+          v-model="value"
+          @keyup.enter.native="searchClick"
+        >
         </el-input>
         <span class="el-icon-search" @click="searchClick"></span>
       </div>
@@ -64,7 +69,7 @@ export default {
       // 默认在第一页
       pageIndex: 1,
 
-      // 默认显示十条
+      // 默认显示五条
       pageSize: 5,
       start: 0,
       value: "",

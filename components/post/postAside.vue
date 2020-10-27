@@ -115,9 +115,9 @@ export default {
     .right {
       position: absolute;
       z-index: 99;
-      left: 259px;
+      left: 258px;
       border: 1px solid #ccc;
-      top: 0;
+      top: -1px;
       width: 300px;
       .content {
         padding: 0 10px;
@@ -169,6 +169,7 @@ export default {
       img {
         height: 100%;
         width: 100%;
+        object-fit: cover;
         cursor: pointer;
       }
     }

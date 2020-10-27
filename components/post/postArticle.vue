@@ -42,7 +42,7 @@
             </div>
           </div>
           <div class="dianzan" @click="handleClickLike(data.id)">
-            {{ data.like }} 赞
+            {{ data.like == null ? 0 : data.like }} 赞
           </div>
         </div>
       </div>
@@ -90,7 +90,7 @@
           </div>
         </div>
         <div class="dianzan" @click="handleClickLike(data.id)">
-          {{ data.like }} 赞
+          {{ data.like == null ? 0 : data.like }} 赞
         </div>
       </div>
     </div>
@@ -136,7 +136,7 @@
           </div>
         </div>
         <div class="dianzan" @click="handleClickLike(data.id)">
-          {{ data.like }} 赞
+          {{ data.like == null ? 0 : data.like }} 赞
         </div>
       </div>
     </div>
@@ -206,6 +206,11 @@ export default {
       this.$router.push("/post/detail?id=" + id);
     },
     handleClickLike(id) {
+      if (!this.$store.state.user.userInfo.token) {
+        this.$message.error("请先登录哦");
+        this.$router.push("/user/login");
+        return;
+      }
       console.log(id);
       this.$axios({
         url: "/posts/like",

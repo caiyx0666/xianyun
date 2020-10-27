@@ -28,14 +28,51 @@
         <el-row type="flex" justify="space-between">
           <el-col :span="16">
             <div class="photoleft">
-              <img :src="baseSrc" alt="" />
+              <img
+                :src="baseSrc"
+                alt=""
+                @click="(show = true), (dialogTableVisible = true)"
+              />
+              <div v-if="show == true">
+                <el-dialog
+                  :visible.sync="dialogTableVisible"
+                  width="800px"
+                  height="400px"
+                >
+                  <div class="block">
+                    <el-carousel
+                      trigger="click"
+                      height="400px"
+                      :autoplay="false"
+                    >
+                      <el-carousel-item
+                        v-for="(item, index) in imgData"
+                        :key="index"
+                      >
+                        <img
+                          :src="item.address"
+                          alt=""
+                          class="testImg"
+                          width="800px"
+                          height="400px"
+                        />
+                      </el-carousel-item>
+                    </el-carousel>
+                  </div>
+                </el-dialog>
+              </div>
             </div>
           </el-col>
 
           <el-col :span="8">
             <div class="photoright">
               <div class="div" v-for="(item, index) in imgData" :key="index">
-                <img :src="item.address" alt="" @click="handleClick(item)" />
+                <img
+                  :src="item.address"
+                  alt=""
+                  @click="(show = true), (dialogTableVisible = true)"
+                />
+                <!-- <img :src="item.address" alt="" @click="handleClick(item)" /> -->
               </div>
             </div>
           </el-col>
@@ -64,34 +101,35 @@
       <!-- 评价部分 -->
       <Evaluate ref="evaluate" :hotelList="hotelList"></Evaluate>
       <!-- 评论部分 -->
-      <comment></comment>
-
-      <!-- <template>
-        <el-backtop
-          target=".first_head"
-          :visibility-height="200"
-          :right="40"
-          :bottom="40"
-        ></el-backtop></template -->
-      >　
+      <Evaluate1></Evaluate1>
     </div>
+
+    <el-backtop :bottom="100">
+      <div
+        style="
+           {
+            height: 100%;
+            width: 100%;
+            background-color: #f2f5f6;
+            box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
+            text-align: center;
+            line-height: 40px;
+            color: #1989fa;
+          }
+        "
+      >
+        UP
+      </div>
+    </el-backtop>
   </div>
 </template>
-    </div>
-  </div>
-</template>
-
+  
 <script>
-import Booking from "../../components/hotel/Booking";
-import Map from "../../components/hotel/Map";
-import Info from "../../components/hotel/Info";
-import Evaluate from "../../components/hotel/Evaluate";
-import loginVue from "../user/login.vue";
-// import Nav from "../../components/hotel/Nav";
-
 export default {
   data() {
     return {
+      show: false,
+      dialogTableVisible: false,
       hotelList: {},
       baseSrc: require("~/assets/images/1.jpeg"),
       imgData: [
@@ -132,6 +170,7 @@ export default {
       }
     };
   },
+
   methods: {
     getPageOffsetTop(elm) {
       let offset = 0;
@@ -162,16 +201,19 @@ export default {
     },
     logpage() {
       this.$axios({
-        url: "/hotels?id=95",
+        url: "/hotels",
+        params: {
+          id: this.$route.query.id,
+        },
       }).then((res) => {
         // console.log(res.data);
         this.hotelList = res.data.data[0];
         console.log(this.hotelList);
       });
     },
-    handleClick(item) {
-      this.baseSrc = item.address;
-    },
+    // handleClick(item) {
+    //   this.baseSrc = item.address;
+    // },
     mapJump() {
       var map = this.$refs.map.$el;
       this.scrollToElement(map);
@@ -279,5 +321,8 @@ export default {
 .fixed {
   position: fixed;
   z-index: 999;
+}
+.el-dialog__wrapper {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 </style>

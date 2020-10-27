@@ -44,12 +44,16 @@ export default {
     return {
       eye: false,
       textarea: "",
+      hotel: "",
       datas: {},
     };
   },
   mounted() {
     this.$axios({
       url: "/hotels/comments",
+      params: {
+        hotel: this.$route.query.id,
+      },
     }).then((res) => {
       console.log(res);
       this.datas = res.data.data;
