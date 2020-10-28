@@ -49,6 +49,13 @@
         <!-- 草稿箱 -->
         <div class="left">
             <h3>草稿箱（{{ $store.state.draft.draftArticle.length }}）</h3>
+            <div
+                class="photo_kong"
+                v-if="$store.state.draft.draftArticle.length == 0"
+            >
+                <span class="iconfont icon-kongzhuangtai1"></span>
+                <span>空空如也!</span>
+            </div>
             <ul
                 :class="{
                     isShow:
@@ -141,6 +148,10 @@ export default {
         },
         //保存
         save() {
+            if (this.form.title.trim() == "") {
+                this.$message.closeAll();
+                return this.$message.warning("标题不能为空");
+            }
             this.$store.commit("draft/addArticle", { ...this.form });
             this.$message.success("保存草稿成功");
             this.form.title = "";
@@ -174,7 +185,8 @@ export default {
             this.form = {
                 ...item,
             };
-            this.$message("编辑!");
+            this.$message.closeAll();
+            this.$message.success("编辑!");
         },
         handleChangeTab(index) {
             this.currentTab = index;
@@ -240,12 +252,15 @@ export default {
         // 发布 文章
         Issued() {
             if (this.form.title.trim() == "") {
+                this.$message.closeAll();
                 return this.$message.warning("标题不能为空");
             }
             if (this.form.content.trim() == "") {
+                this.$message.closeAll();
                 return this.$message.warning("内容不能为空");
             }
             if (this.form.choiceCity.trim() == "") {
+                this.$message.closeAll();
                 return this.$message.warning("城市不能为空");
             }
             //判断 是否登录
@@ -326,6 +341,35 @@ export default {
         margin-top: 20px;
         margin-left: 25px;
         padding: 10px;
+        .photo_kong {
+            width: 100%;
+            height: 250px;
+            line-height: 250px;
+            text-align: center;
+            font-size: 40px;
+            font-weight: 700;
+            span {
+                display: block;
+                font-size: 25px;
+                font-weight: 400;
+                color: #ccc;
+                margin-top: -60px;
+            }
+            span:nth-child(1) {
+                font-size: 40px;
+                font-weight: 400;
+                color: #ccc;
+            }
+            span:nth-child(2) {
+                font-weight: 400;
+                color: #ccc;
+                margin-top: -180px;
+            }
+        }
+        .icon-kongzhuangtai1:before {
+            color: #ccc;
+        }
+
         li {
             margin: 10px 0;
             background-color: #faf7f7;

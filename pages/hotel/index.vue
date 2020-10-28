@@ -43,7 +43,7 @@
 
                 <!-- 高德地图 -->
                 <el-col :span="10" style="background:#eee">
-                    <div id="container" style="height:260px;width:420px"></div>
+                    <div v-loading="isMap" id="container" style="height:260px;width:420px"></div>
                 </el-col>
             </el-row>
 
@@ -51,15 +51,15 @@
             <HotelFilter @getHotelList="getHotelList" />
 
             <!-- 酒店列表 -->
-            <el-pagination background layout="prev, pager, next" :total="hotelList.total" @current-change="currentChange" :current-page="currentPage">
-
-            </el-pagination>
-            <div v-if="hotelList.data.length != 0">
+            <div v-if="hotelList.data.length">
                 <HotelList v-loading="loading" :hotel="hotel" v-for="hotel in hotelList.data" :key="hotel.id" />
             </div>
 
-            <div v-else>
-                找不到符合要求的酒店了😥
+            <!-- 酒店列表分页组件 -->
+            <el-pagination background layout="prev, pager, next" :total="hotelList.total" @current-change="currentChange" :current-page="currentPage" />
+
+            <div class="hotelBox" v-loading="loading" v-if="isBox">
+                <p v-if="!hotelList.data.length && isGo">找不到符合要求的酒店了😥</p>
             </div>
         </section>
     </div>
@@ -69,6 +69,9 @@
 export default {
     data() {
         return {
+            isBox: true,
+            isGo: false,
+            isMap: true,
             cityId: '',
             loading: false,
             hotelList: {
@@ -86,87 +89,103 @@ export default {
             markers: []
         }
     },
+    created() {
+        this.loading = true
+        this.isMap = true
+    },
+
     async mounted() {
         window.onLoad = async () => {
             var map = new AMap.Map("container", {
-                zoom: 10, // 级别
+                zoom: 7, // 级别
                 center: [113.428072, 23.129259], // 中心点坐标
                 viewMode: "3D", // 使用3D视图
+                autoFitView: true, // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
             });
             this.map = map;
-            if(!this.$route.query.cityName){
+            if (!this.$route.query.cityName) {
                 await this.getInfoCity()
-            }else{
+            } else {
                 // 获取城市名
                 this.urlCityName = this.$route.query.cityName
-    
+
                 // 获取城市id
                 await this.$axios({
                     url: '/cities?name=' + this.$route.query.cityName
                 }).then(res => {
+                    if (!res.data.data.length) {
+                        this.$message({
+                            showClose: true,
+                            message: `搜索不到当前城市`,
+                            type: 'error'
+                        });
+                        return
+                    }
                     // console.log(res.data.data[0].id);
                     this.cityId = res.data.data[0].id
                 })
-    
+
                 this.getHotelList()
                 this.getScenice()
             }
 
         };
+
         var key = "d5192dea5a16faf3b3afdd0fb562d794"; // 你的key
         var url = `https://webapi.amap.com/maps?v=1.4.15&key=${key}&callback=onLoad`;
         var jsapi = document.createElement('script');
         jsapi.charset = 'utf-8';
         jsapi.src = url;
-        document.head.appendChild(jsapi);    
+        document.head.appendChild(jsapi);
     },
-    methods:{
+    methods: {
         // 获取景点
-        getScenice(){
+        getScenice() {
             // 获取城市区域景点
             this.$axios({
-                url:`/cities?name=${this.urlCityName}`
-            }).then(res =>{
+                url: `/cities?name=${this.urlCityName}`
+            }).then(res => {
                 // console.log(res.data.data[0].scenics);
                 this.cities = res.data.data[0].scenics
             })
         },
 
         // 获取酒店列表
-        async getHotelList(hotelOption){
+        async getHotelList(hotelOption) {
+            this.isBox = true
             this.loading = true
             // 用于地址栏显示
             let str = "";
-                if(hotelOption){
-                    console.log(hotelOption);
-                    // 将获取过来的数据进行拼接
-                    var keys = Object.keys(hotelOption); // ["city", "price_lt", "hotellevel", "hoteltype"]
+            if (hotelOption) {
+                console.log(hotelOption);
+                // 将获取过来的数据进行拼接
+                var keys = Object.keys(hotelOption); // ["city", "price_lt", "hotellevel", "hoteltype"]
 
                 keys.forEach(Option => {
                     // 数据的格式是否为数组
-                    if(Array.isArray(hotelOption[Option])){
+                    if (Array.isArray(hotelOption[Option])) {
                         hotelOption[Option].forEach(item => {
                             str += `${Option}=${item}&`
                         })
-                    }else{
+                    } else {
                         // 判断传递过来的数值中有没有城市名字和城市id
-                        if(Option == 'cityName'){
+                        if (Option == 'cityName') {
                             this.urlCityName = hotelOption[Option]
 
                             // 修改原有参数,而不跳转页面
                             this.$router.push({
                                 path: this.$route.path,
-                                query: Object.assign({}, this.$route.query, {cityName: this.urlCityName})
+                                query: Object.assign({}, this.$route.query, { cityName: this.urlCityName })
                             })
 
                             // 重新获取景点信息
                             this.getScenice()
-                        }else if(Option == 'city'){
+                        } else if (Option == 'city') {
                             this.cityId = hotelOption[Option]
-                        }else {
+                        } else {
                             str += `${Option}=${hotelOption[Option]}&`;
                         }
-                        
+
                     }
                 })
                 // 定位到第一页显示
@@ -184,8 +203,14 @@ export default {
             HotelList.data.data = HotelList.data.data.slice((this.currentPage - 1) * 10, (this.currentPage) * 10)
             this.hotelList = HotelList.data
             this.loading = false
+            if (!this.hotelList.data.length) {
+                this.isGo = true
+            } else {
+                this.isBox = false
+            }
 
             // 获取地图经纬度
+            this.location = [];
             HotelList.data.data.forEach(item => {
                 this.location.push({
                     x: item.location.latitude,
@@ -208,30 +233,38 @@ export default {
 
         // 高德地图
         mapLoad() {
-            let markers = []
-            this.markers = []
+            this.map.remove(this.markers);
+            this.markers = [];
+
             // 遍历-创建点实例
-            this.location.forEach((item,index) => {
-                if(index == 1){
-                    let lng = item.y 
-                    let lat = item.x 
-                    this.map.setCenter([lng, lat]); //设置地图中心点
-                }
+            this.location.forEach((item, index) => {
+                var markerContent =
+                    ""
+                    +
+                    '<div class="custom-content-marker">'
+                    +
+                    '<img src="https://webapi.amap.com/theme/v1.3/markers/b/mark_bs.png">'
+                    +
+                    `<div class="close-btn" onclick="clearMarker()">${index + 1}</div>`
+                    +
+                    '</div>';
+                // console.log('markerContent', markerContent);
                 var maker = new AMap.Marker({
+                    content: markerContent,
                     position: [item.y, item.x],
                 })
-                markers.push(maker)
+                this.markers.push(maker)
             })
-            this.markers = markers;
-            this.map.remove(this.markers);
+            this.map.panTo([this.location[0].y, this.location[0].x])
             // 添加点
             this.map.add(this.markers)
+            this.isMap = false
         },
 
         // 获取地图当前行政区
-        async getInfoCity(){
+        async getInfoCity() {
             // 获取用户当前定位城市
-            await this.map.getCity(async (info) =>{
+            await this.map.getCity(async (info) => {
                 // console.log(info);
                 // 修改原有参数,而不跳转页面
                 this.urlCityName = info.city
@@ -240,20 +273,29 @@ export default {
                 await this.$axios({
                     url: '/cities?name=' + this.urlCityName
                 }).then(res => {
+                    console.log(res);
+                    if (!res.data.data.length) {
+                        this.$message({
+                            showClose: true,
+                            message: `搜索不到当前城市`,
+                            type: 'error'
+                        });
+                        return
+                    }
                     // console.log(res.data.data[0].id);
                     this.cityId = res.data.data[0].id
                 })
 
                 this.$router.push({
                     path: this.$route.path,
-                    query: Object.assign({}, this.$route.query, {cityName: this.urlCityName})
+                    query: Object.assign({}, this.$route.query, { cityName: this.urlCityName })
                 })
                 this.getHotelList()
                 this.getScenice()
                 this.$message({
-                  showClose: true,
-                  message: `当前定位城市 ${info.city}`,
-                  type: 'success'
+                    showClose: true,
+                    message: `当前定位城市 ${info.city}`,
+                    type: 'success'
                 });
             });
         }
@@ -317,5 +359,37 @@ export default {
 }
 .popbox {
     font-size: 12px;
+}
+/deep/.custom-content-marker {
+    position: relative;
+    width: 25px;
+    height: 34px;
+    // opacity: 0;
+}
+/deep/.custom-content-marker img {
+    width: 100%;
+    height: 100%;
+}
+/deep/.custom-content-marker .close-btn {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    width: 15px;
+    height: 15px;
+    font-size: 12px;
+    background: #318ff4;
+    border-radius: 50%;
+    color: #fff;
+    text-align: center;
+    line-height: 15px;
+    // box-shadow: -1px 1px 1px rgba(10, 10, 10, 0.2);
+}
+.hotelBox {
+    text-align: center;
+    height: 200px;
+}
+.el-pagination {
+    margin: 20px 0;
+    text-align: center;
 }
 </style>
