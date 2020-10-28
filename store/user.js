@@ -1,6 +1,7 @@
 export const state = () => ({
     userInfo: {},
-    main_id: ''
+    main_id: null,
+    nick: ''
 })
 
 export const mutations = {
@@ -22,8 +23,10 @@ export const mutations = {
 
     },
     mainId(state, data) {
-        state.main_id = data
-    }
+        state.main_id = data,
+            state.nick = data
+    },
+
 
 }
 

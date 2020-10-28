@@ -24,12 +24,12 @@
 
         <!-- 功能图标 -->
         <div class="icon">
-          <div>
-            <i class="el-icon-edit-outline"></i>
-            评论(4)
+          <div class="outline" @click="clickOutline">
+            <span class="el-icon-edit-outline"></span>
+            评论({{pageList.total}})
           </div>
-          <div>
-            <i class="el-icon-share"></i>
+          <div class="share" @click="clickShare">
+            <span class="el-icon-share"></span>
             分享
           </div>
         </div>
@@ -78,6 +78,7 @@
             <Main :comment="comment" v-for="comment in commentList" :key="comment.id" />
           </div>
 
+          <!-- 分页 -->
           <div class="block">
             <el-pagination
               @size-change="handleSizeChange"
@@ -225,6 +226,20 @@ export default {
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+    },
+    // 点击评论文章,清除回复id
+    clickOutline() {
+      // 就让输入框高亮,输入框绑定 ref="input" 属性拿到输入框
+      this.$refs.input.focus();
+      if (this.$store.state.user.main_id) {
+        this.$store.commit("user/mainId", "");
+      }
+    },
+    // 点击分享
+    clickShare() {
+      // 防止弹出多个提示框
+      this.$message.closeAll();
+      this.$message("暂未开放此功能");
     }
   },
   watch: {
@@ -237,7 +252,7 @@ export default {
         this.$refs.input.focus();
       }
     },
-    // 监听路由地址id的变化
+    // 监听路由地址 id 的变化
     "$route.query.id"() {
       console.log("id变了");
       // 获取文章数据;
@@ -296,12 +311,16 @@ export default {
         justify-content: center;
         padding: 50px 0 30px;
         text-align: center;
-        .el-icon-edit-outline,
-        .el-icon-share {
-          display: flex;
-          padding: 0 20px;
-          color: #ffa500;
-          font-size: 50px;
+        .outline,
+        .share {
+          cursor: pointer;
+          .el-icon-edit-outline,
+          .el-icon-share {
+            display: flex;
+            padding: 0 20px;
+            color: #ffa500;
+            font-size: 50px;
+          }
         }
       }
       // 评论区

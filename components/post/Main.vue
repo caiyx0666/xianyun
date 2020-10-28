@@ -27,7 +27,7 @@
         />
       </div>
       <div class="mainReply">
-        <el-button size="small" type="text" @click="handleReply" v-show="isshow">回复</el-button>
+        <el-button size="small" type="text" @click="handleReply(comment.id)" v-show="isshow">回复</el-button>
       </div>
     </div>
   </div>
@@ -49,10 +49,10 @@ export default {
     }
   },
   methods: {
-    handleReply() {
-      console.log("点击了回复", this.comment.id);
+    handleReply(id) {
+      console.log("点击了回复", id);
       // 点击回复评论时将回复的id存到store里面,
-      this.$store.commit("user/mainId", this.comment.id);
+      this.$store.commit("user/mainId", id);
     }
   }
 };
