@@ -29,7 +29,8 @@ export const mutations = {
 
     },
     setReplyName(state, data) {
-        state.reply.replyName = data
+        state.reply.replyName = data;
+        state.focus = !state.focus;
     },
     setFollow(state, data) {
         state.reply.follow = data

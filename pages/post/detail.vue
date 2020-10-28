@@ -37,8 +37,8 @@
         <!-- 评论区 -->
         <div class="comment">
           <div class="pinglun">评论</div>
-          <div v-if="$store.state.user.reply.replyName">
-            回复@{{$store.state.user.reply.replyName}}
+          <div class="replyname" v-if="$store.state.user.reply.replyName">
+            回复 @{{$store.state.user.reply.replyName}}
             <span @click="closeReply">X</span>
           </div>
           <!-- 评论框 -->
@@ -257,7 +257,7 @@ export default {
   },
   watch: {
     // 监听 store 里面 reply.follow 数据的变化
-    "$store.state.user.reply.follow"() {
+    "$store.state.user.focus"() {
       console.log("进来了");
       // 就让输入框高亮,输入框绑定 ref="input" 属性拿到输入框
       this.$refs.input.focus();
@@ -338,6 +338,21 @@ export default {
         .pinglun {
           font-weight: 500;
           margin-bottom: 20px;
+        }
+        .replyname {
+          background-color: #e4e4e4;
+          width: 140px;
+          font-size: 12px;
+          padding: 5px 10px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          margin-bottom: 10px;
+          span {
+            cursor: pointer;
+            margin-left: 10px;
+            border: 1px solid #ccc;
+            padding: 0 5px;
+          }
         }
         .text-box {
           margin-bottom: 20px;
