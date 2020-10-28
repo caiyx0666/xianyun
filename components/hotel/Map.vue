@@ -49,8 +49,10 @@ export default {
   watch: {
     activeName() {
       // console.log(this.map);
+      //  this.placeSearch.clear();清楚搜索结果
       this.placeSearch.clear();
       this.hotelList = [];
+      // 设置搜素时候的type属性
       this.placeSearch.setType(this.activeName == "交通" ? "交通" : "风景");
       this.logActive();
     },
@@ -94,11 +96,15 @@ export default {
   methods: {
     logMap() {
       this.$nextTick(() => {
+        //this.$nextTick强行执行一次
         window.onLoad = () => {
+          // 创建一个实例
           var map = new AMap.Map("container", {
             zoom: 50,
+            // 中心点是每次获取酒店列表的location
             center: [this.hotelList1.longitude, this.hotelList1.latitude],
           });
+          // 因为想要再其他地方调用map，所以要把map存进去data里面，这样子全局就可以调用了
           this.map = map;
           AMap.service(["AMap.PlaceSearch"], () => {
             //构造地点查询类
@@ -110,11 +116,14 @@ export default {
               map: map, // 展现结果的地图实例
               autoFitView: true, // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
             });
+            // 和全局调用map同理
             this.placeSearch = placeSearch;
-
+            // 调用函数
             this.logActive();
           });
         };
+        // 引入js文件，一定要引入地图js文件，不然地图无法显示
+
         var url =
           "https://webapi.amap.com/maps?v=1.4.15&key=d5192dea5a16faf3b3afdd0fb562d794&callback=onLoad";
         var jsapi = document.createElement("script");
@@ -135,9 +144,10 @@ export default {
     logActive() {
       var cpoint = [this.hotelList1.longitude, this.hotelList1.latitude]; //中心点坐 标
       this.placeSearch.searchNearBy("", cpoint, 2000, (status, result) => {
+        // 直接调用高德的方法，result返回一个结果
         // console.log(result);
         // console.log(result.poiList.pois);
-
+        //  遍历出我想要的东西，return出去
         this.hotelList = result.poiList.pois.map((hotel) => {
           var marker = new AMap.Marker({
             title: hotel.name,

@@ -336,7 +336,7 @@ export default {
 
       timer = setInterval(() => {
         window.scrollTo(0, offset);
-        // 每次步进12
+        // 每次步进12 每次位移的越多 速度越快
         // 如果距离小于12就直接等于目标
         // 不然可能一直在目标两边反复横跳都去不到目标
         offset += offset - t < 0 ? 12 : -12;
