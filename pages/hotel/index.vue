@@ -89,7 +89,7 @@ export default {
     async mounted() {
         window.onLoad = async () => {
             var map = new AMap.Map("container", {
-                zoom: 15, // 级别
+                zoom: 7, // 级别
                 center: [113.428072, 23.129259], // 中心点坐标
                 viewMode: "3D", // 使用3D视图
             });
@@ -212,22 +212,27 @@ export default {
             this.map.remove(this.markers);
             this.markers = [];
 
-
             // 遍历-创建点实例
             this.location.forEach((item, index) => {
-                if (index == 1) {
-                    let lng = item.y
-                    let lat = item.x
-                    this.map.setCenter([lng - 0.1, lat - 0.1]); // 设置地图中心点
-                }
-
+                var markerContent =
+                    ""
+                    +
+                    '<div class="custom-content-marker">'
+                    +
+                    '<img src="https://webapi.amap.com/theme/v1.3/markers/b/mark_bs.png">'
+                    +
+                    `<div class="close-btn" onclick="clearMarker()">${index + 1}</div>`
+                    +
+                    '</div>';
+                console.log('markerContent', markerContent);
                 var maker = new AMap.Marker({
+                    content: markerContent,
                     position: [item.y, item.x],
                 })
                 this.markers.push(maker)
             })
-            AMap.event.addDomListener()
-            // 添加点
+            this.map.panTo([this.location[0].y, this.location[0].x])
+            // 添加点s
             this.map.add(this.markers)
         },
 
@@ -320,5 +325,29 @@ export default {
 }
 .popbox {
     font-size: 12px;
+}
+/deep/.custom-content-marker {
+    position: relative;
+    width: 25px;
+    height: 34px;
+    // opacity: 0;
+}
+/deep/.custom-content-marker img {
+    width: 100%;
+    height: 100%;
+}
+/deep/.custom-content-marker .close-btn {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    width: 15px;
+    height: 15px;
+    font-size: 12px;
+    background: #318ff4;
+    border-radius: 50%;
+    color: #fff;
+    text-align: center;
+    line-height: 15px;
+    // box-shadow: -1px 1px 1px rgba(10, 10, 10, 0.2);
 }
 </style>
