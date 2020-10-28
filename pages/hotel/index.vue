@@ -115,6 +115,14 @@ export default {
                 await this.$axios({
                     url: '/cities?name=' + this.$route.query.cityName
                 }).then(res => {
+                    if(!res.data.data.length){
+                        this.$message({
+                            showClose: true,
+                            message: `搜索不到当前城市`,
+                            type: 'error'
+                        });
+                        return
+                    }
                     // console.log(res.data.data[0].id);
                     this.cityId = res.data.data[0].id
                 })
@@ -261,6 +269,15 @@ export default {
                 await this.$axios({
                     url: '/cities?name=' + this.urlCityName
                 }).then(res => {
+                    console.log(res);
+                    if(!res.data.data.length){
+                        this.$message({
+                            showClose: true,
+                            message: `搜索不到当前城市`,
+                            type: 'error'
+                        });
+                        return
+                    }
                     // console.log(res.data.data[0].id);
                     this.cityId = res.data.data[0].id
                 })
