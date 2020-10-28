@@ -1,5 +1,6 @@
 <template>
-  <div class="first_head">
+  <div class="first_head" v-if="hotelList">
+    <div class="row" v-if="show" @click="show = false"></div>
     <div class="container">
       <!-- 面包屑导航栏 -->
       <el-row>
@@ -14,11 +15,37 @@
 
       <!-- 酒店详情 -->
       <el-row type="flex">
-        <el-col :span="24">
+        <el-col :span="20">
           <div class="hotel">
             <h4>{{ hotelList.name }}</h4>
             <div class="info">{{ hotelList.alias }}</div>
-            <div class="address el-icon-location">{{ hotelList.address }}</div>
+            <div class="address el-icon-location">
+              {{ hotelList.address }}
+            </div>
+          </div>
+        </el-col>
+        <el-col :span="4">
+          <div class="hotelScore">
+            <!-- 左 -->
+            <div class="fen">
+              <span>{{ hotelList.stars }}</span
+              >分
+            </div>
+            <!-- 中 -->
+            <div class="xian"><i></i></div>
+            <div class="you">
+              <!-- 右上 -->
+              <div v-if="hotelList.stars < 3" class="good">一般</div>
+              <div
+                v-if="hotelList.stars >= 3 && hotelList.stars < 5"
+                class="good"
+              >
+                推荐
+              </div>
+              <div v-if="hotelList.stars > 5" class="good">非常推荐</div>
+              <!-- 右下 -->
+              <div class="youxia el-icon-chat-dot-round">200评论</div>
+            </div>
           </div>
         </el-col>
       </el-row>
@@ -28,38 +55,25 @@
         <el-row type="flex" justify="space-between">
           <el-col :span="16">
             <div class="photoleft">
-              <img
-                :src="baseSrc"
-                alt=""
-                @click="(show = true), (dialogTableVisible = true)"
-              />
-              <div v-if="show == true">
-                <el-dialog
-                  :visible.sync="dialogTableVisible"
-                  width="800px"
-                  height="400px"
-                >
-                  <div class="block">
-                    <el-carousel
-                      trigger="click"
-                      height="400px"
-                      :autoplay="false"
-                    >
-                      <el-carousel-item
-                        v-for="(item, index) in imgData"
-                        :key="index"
-                      >
-                        <img
-                          :src="item.address"
-                          alt=""
-                          class="testImg"
-                          width="800px"
-                          height="400px"
-                        />
-                      </el-carousel-item>
-                    </el-carousel>
-                  </div>
-                </el-dialog>
+              <img :src="baseSrc" alt="" @click="show = true" />
+
+              <!-- 轮播图 -->
+              <div class="block" v-if="show == true">
+                <el-carousel height="470px" :autoplay="false">
+                  <el-carousel-item
+                    v-for="(item, index) in imgData"
+                    :key="index"
+                  >
+                    <img
+                      :src="item.address"
+                      alt=""
+                      class="testImg"
+                      width="800px"
+                      height="470px"
+                    />
+                  </el-carousel-item>
+                </el-carousel>
+                <div class="close el-icon-close" @click="show = false"></div>
               </div>
             </div>
           </el-col>
@@ -83,12 +97,65 @@
     <!-- <Nav></Nav> -->
     <div class="nav" ref="nav">
       <div :class="{ fixed: isFixed }">
-        <ul>
-          <li @click="bookingJump">预定</li>
-          <li @click="mapJump">位置</li>
-          <li @click="infoJump">基本信息</li>
-          <li @click="evaluateJump">点评</li>
+        <ul id="liAll">
+          <li
+            @click="bookingJump"
+            ref="liBook"
+            :class="{ active: activeIndex == 1 }"
+          >
+            预定
+          </li>
+          <li
+            @click="mapJump"
+            ref="liMap"
+            :class="{ active: activeIndex == 2 }"
+          >
+            位置
+          </li>
+          <li @click="infoJump" :class="{ active: activeIndex == 3 }">
+            基本信息
+          </li>
+          <li @click="evaluateJump" :class="{ active: activeIndex == 4 }">
+            点评
+          </li>
         </ul>
+
+        <div class="cangOne" @click="isShowStart" v-if="!showPrice">
+          <span class="shou el-icon-star-off" v-if="showStart"></span>
+          <span
+            class="shouTwo el-icon-star-on"
+            v-if="!showStart"
+            @click="open"
+          ></span>
+          <el-button type="text" @click="open" v-if="!showStart"></el-button>
+          <span>收藏</span>
+        </div>
+
+        <div class="cang" @click="isShowStart" v-else>
+          <span class="shou el-icon-star-off" v-if="showStart"></span>
+          <span
+            class="shouTwo el-icon-star-on"
+            v-if="!showStart"
+            @click="open"
+          ></span>
+          <el-button type="text" @click="open" v-if="!showStart"></el-button>
+          <span>收藏</span>
+        </div>
+
+        <div
+          class="price"
+          v-if="(hotelList.products, showPrice)"
+          :class="{ showprice: showPrice }"
+        >
+          每晚<span>¥{{ hotelList.products[0].price }}</span>
+        </div>
+        <div
+          class="navBooking"
+          :class="{ showprice: showPrice }"
+          v-if="showPrice"
+        >
+          预定
+        </div>
       </div>
     </div>
     <div class="container">
@@ -129,6 +196,8 @@ export default {
   data() {
     return {
       show: false,
+      showStart: true,
+      showPrice: false,
       dialogTableVisible: false,
       hotelList: {},
       baseSrc: require("~/assets/images/1.jpeg"),
@@ -153,6 +222,9 @@ export default {
         },
       ],
       isFixed: false,
+      isNoTrackScroll: false,
+      activeIndex: 1,
+      msgBox: null,
     };
   },
   computed: {},
@@ -165,13 +237,52 @@ export default {
 
       if (offset < window.pageYOffset) {
         this.isFixed = true;
+        // nav导航栏固定显示预定&价钱
+        this.showPrice = true;
       } else {
         this.isFixed = false;
+        this.showPrice = false;
+        if (!this.isNoTrackScroll) {
+          this.activeIndex = 0;
+        }
       }
     };
   },
 
   methods: {
+    open() {
+      this.$confirm("真的要取消收藏吗？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "取消成功!",
+          });
+        })
+        .catch(() => {});
+    },
+    isShowStart() {
+      // 防止重复点击不停弹出新的提示框
+      this.showStart = !this.showStart;
+      if (this.showStart) {
+        return;
+      }
+      if (!this.showStart) {
+        if (this.msgBox) {
+          this.msgBox.close();
+        }
+
+        this.msgBox = this.$message.success("已经收藏啦！");
+        console.log(this.msgBox);
+        return;
+      }
+    },
+    getToggle(num) {
+      this.activeIndex = num;
+    },
     getPageOffsetTop(elm) {
       let offset = 0;
       while (true) {
@@ -183,6 +294,8 @@ export default {
       }
     },
     scrollToElement(elm) {
+      this.isNoTrackScroll = true;
+
       var t = elm.offsetTop - 60;
 
       let offset = window.pageYOffset;
@@ -190,11 +303,14 @@ export default {
       if (timer) {
         clearInterval(timer);
       }
+
       timer = setInterval(() => {
         window.scrollTo(0, offset);
         offset += offset - t < 0 ? 12 : -12;
         if (Math.abs(offset - t) < 12) {
           window.scrollTo(0, t);
+          this.isNoTrackScroll = false;
+
           clearInterval(timer);
         }
       }, 8);
@@ -217,18 +333,56 @@ export default {
     mapJump() {
       var map = this.$refs.map.$el;
       this.scrollToElement(map);
+      // var litwo = this.$refs.liMap;
+      // map.classList.add("active");
+      // console.log(litwo);
+      // litwo.classList.add("active");
+      // var litwo = document.querySelectorAll("#ulAll li");
+      // console.log(litwo);
+      // var lione = this.$refs.liAll;
+      // console.log(lione);
+      // var liall = document.querySelectorAll("#liAll>li");
+
+      // for (var i = 0; i < liall.length; i++) {
+      //   liall[i].classList.remove("active");
+      // }
+      // liall[1].classList.add("active");
+      this.getToggle(2);
     },
     bookingJump() {
       var book = this.$refs.book.$el;
       this.scrollToElement(book);
+      // var lione = this.$refs.liBook;
+
+      // var liall = document.querySelectorAll("#liAll>li");
+
+      // for (var i = 0; i < liall.length; i++) {
+      //   liall[i].classList.remove("active");
+      // }
+      // liall[0].classList.add("active");
+      this.getToggle(1);
     },
     infoJump() {
       var info = this.$refs.info.$el;
       this.scrollToElement(info);
+      // var liall = document.querySelectorAll("#liAll>li");
+
+      // for (var i = 0; i < liall.length; i++) {
+      //   liall[i].classList.remove("active");
+      // }
+      // liall[2].classList.add("active");
+      this.getToggle(3);
     },
     evaluateJump() {
       var evaluate = this.$refs.evaluate.$el;
       this.scrollToElement(evaluate);
+      // var liall = document.querySelectorAll("#liAll>li");
+
+      // for (var i = 0; i < liall.length; i++) {
+      //   liall[i].classList.remove("active");
+      // }
+      // liall[3].classList.add("active");
+      this.getToggle(4);
     },
     handleClick() {
       this.$router.push("/hotel");
@@ -258,11 +412,15 @@ export default {
   margin-bottom: 10px;
   flex-direction: column;
   color: #666;
+  position: relative;
   h4 {
     color: #333;
     font-weight: 400;
     font-size: x-large;
   }
+}
+.address {
+  margin-top: 7px;
 }
 .photo {
   margin: 30px 0;
@@ -275,6 +433,7 @@ export default {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      border-radius: 4px;
     }
   }
   .photoright {
@@ -287,6 +446,7 @@ export default {
       margin-bottom: 11px;
       width: 160px;
       height: 110px;
+      border-radius: 4px;
       object-fit: cover;
     }
   }
@@ -295,6 +455,7 @@ export default {
   cursor: pointer;
   width: 100vw;
   height: 50px;
+  position: relative;
   & > div {
     width: 100vw;
     height: 50px;
@@ -313,16 +474,172 @@ export default {
       z-index: 10;
       li {
         padding: 0 50px;
+
+        // &:hover {
+        //   border-bottom: 3px #f90 solid;
+        //   color: #f90;
+        // }
+      }
+      .active {
+        border-bottom: 3px #f90 solid;
+        color: #f90;
       }
     }
+
+    .cang {
+      font-size: 14px;
+      position: absolute;
+      left: 980px;
+      top: 17px;
+      align-items: center;
+      display: flex;
+    }
+    .cangOne {
+      font-size: 14px;
+      position: absolute;
+      left: 1174px;
+      top: 17px;
+      align-items: center;
+      display: flex;
+    }
+    .shou {
+      // width: 25px;
+      // height: 25px;
+      // display: block;
+      // background: url("../../assets/images/hotel-detail-icon9@2x.png") no-repeat -100px
+      //   0px ~"/" 400px 300px;
+      padding: 0 5px 0 0;
+      font-size: 22px;
+      color: #f90;
+    }
+    .shouTwo {
+      // width: 25px;
+      // height: 25px;
+      // display: block;
+      // background: url("../../assets/images/hotel-detail-icon9@2x.png") no-repeat -100px -30px
+      //   ~"/" 400px 300px;
+      padding: 0 5px 0 0;
+      font-size: 22px;
+      color: #f90;
+    }
+    .price {
+      position: absolute;
+      left: 1085px;
+      top: 18px;
+      font-size: 14px;
+      span {
+        margin-left: 5px;
+        color: #f90;
+        font-size: 16px;
+        font-weight: 700;
+      }
+    }
+    .navBooking {
+      position: absolute;
+      left: 1174px;
+      top: 18px;
+      width: 48px;
+      height: 24px;
+      line-height: 24px;
+      border-radius: 6px;
+      background-color: #f90;
+      font-size: 14px;
+      text-align: center;
+
+      color: #fff;
+    }
   }
+}
+
+.el-dialog__wrapper {
+  background-color: rgba(115, 115, 115, 0.1);
 }
 
 .fixed {
   position: fixed;
   z-index: 999;
 }
-.el-dialog__wrapper {
-  background-color: rgba(0, 0, 0, 0.1);
+.row {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 200;
+}
+.el-carousel {
+  width: 800px;
+  .el-carousel-item {
+    .testImg {
+      object-fit: cover;
+    }
+  }
+}
+.block {
+  position: absolute;
+  top: -120px;
+  left: 80px;
+  z-index: 999;
+
+  .close {
+    width: 50px;
+    height: 50px;
+    // background-color: rgb(224, 220, 214);
+    text-align: center;
+    line-height: 50px;
+    position: absolute;
+    top: -44px;
+    right: -62px;
+    font-size: 58px;
+    color: #fff;
+  }
+}
+.hotelScore {
+  margin-top: 25px;
+  font-size: 14px;
+  display: flex;
+  width: 170px;
+  height: 50px;
+  // border: 1px solid #000;
+  color: #6e7478;
+  .fen {
+    margin-top: 4px;
+    width: 70px;
+    height: 100%;
+    line-height: 50px;
+    text-align: center;
+    font-size: 30px;
+    color: #ff8a00;
+    // border: 1px solid rgb(134, 63, 63);
+  }
+  .xian {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    width: 5px;
+    height: 50px;
+    padding: 0 10px;
+    // border: 1px solid rgb(177, 40, 40);
+    i {
+      display: inline-block;
+      width: 2px;
+      height: 45px;
+      background-color: #cccccc;
+    }
+  }
+  .good {
+    width: 75px;
+    font-size: 18px;
+    height: 28px;
+    line-height: 28px;
+    color: #6e7478;
+    // border: 1px solid #000;
+  }
+  .youxia {
+    width: 75px;
+    font-size: 14px;
+    color: #666666;
+  }
 }
 </style>

@@ -44,6 +44,7 @@ export default {
 .yellow {
   color: #f90;
   padding: 0 5px;
+  font-size: 18px;
 }
 .yellow1 {
   padding: 0 1px;

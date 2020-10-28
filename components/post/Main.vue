@@ -7,7 +7,7 @@
         :src="$axios.defaults.baseURL+comment.account.defaultAvatar"
         alt
       />
-      <span>{{comment.account.username}}</span>
+      <span>{{comment.account.nickname}}</span>
       <div class="detail_date">{{comment.created_at | setTime}}</div>
     </div>
 
@@ -52,7 +52,8 @@ export default {
     handleReply() {
       console.log("点击了回复", this.comment.id);
       // 点击回复评论时将回复的id存到store里面,
-      this.$store.commit("user/mainId", this.comment.id);
+      this.$store.commit("user/setFollow", this.comment.id);
+      this.$store.commit("user/setReplyName", this.comment.account.nickname);
     }
   }
 };

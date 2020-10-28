@@ -2,17 +2,37 @@
     <div class="hotel-filter">
         <!-- 筛选表单 -->
         <el-row type="flex" class="filters-top" justify="space-between" align="middle" :gutter="10">
-            <!-- 切换城市 -->
-            <el-col :span="7">
-                <el-input v-model="form.cityName" placeholder="出发目的地"></el-input>
+
+            <!-- 出发城市 -->
+            <el-col :span="6">
+                <el-autocomplete
+                  v-model="formCityName"
+                  :Lhighlight-first-item="true"
+                  :fetch-suggestions="querySearchAsync"
+                  placeholder="切换城市"
+                  @select="SelectCity"
+                  :trigger-on-focus="false"
+                  :select-when-unmatched="true"
+                ></el-autocomplete>
             </el-col>
-            <el-col :span="5">
-                <el-date-picker type="date" placeholder="入住日期" style="width: 100%;"></el-date-picker>
+
+            <!-- 日期选择器 -->
+            <el-col :span="10">
+                <div class="block">
+                  <el-date-picker
+                    v-model="arrDate"
+                    type="daterange"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    value-format="yyyy-MM-dd"
+                    :picker-options="pickerOptions">
+                  </el-date-picker>
+                </div>
             </el-col>
-            <el-col :span="5">
-                <el-date-picker type="date" placeholder="离店日期" style="width: 100%;"></el-date-picker>
-            </el-col>
-            <el-col :span="7">
+
+            <!--  -->
+            <el-col :span="8">
                 <!-- 弹出框 -->
                 <el-popover :width="310" placement="bottom" v-model="visible" :offset="35">
                     <el-row type="flex" align="middle" class="tool" :gutter="10">
@@ -35,14 +55,14 @@
                         </el-col>
                     </el-row>
                     <div style="text-align: right; padding-top: 10px;border-top:1px solid #eee;margin-top:10px">
-                        <el-button type="primary" size="mini" @click="visible = false">确定</el-button>
+                        <el-button type="primary" size="mini" @click="headleClick">确定</el-button>
                     </div>
-                    <el-input v-model="form.cityName" slot="reference" placeholder="人数未定" suffix-icon="el-icon-user"></el-input>
+                    <el-input v-model="peopleNumber" slot="reference" placeholder="人数未定" suffix-icon="el-icon-user"></el-input>
                 </el-popover>
             </el-col>
             <!-- 搜索按钮 -->
-            <el-col :span="1.5">
-                <el-button type="primary" icon="el-icon-search"></el-button>
+            <el-col :span="3">
+                <el-button type="primary" icon="el-icon-search">查看价格</el-button>
             </el-col>
         </el-row>
     </div>
@@ -53,29 +73,87 @@ export default {
     data() {
         return {
             visible: false,
-            form: {
-                cityName: '',
-            },
-            options: [{
-                // 实际传值
-                value: '选项1',
-                // 选项标签：给用户看的
-                label: 1 + '成人'
-            }, {
-                value: '选项2',
-                label: 2
-            }, {
-                value: '选项3',
-                label: 3
-            }, {
-                value: '选项4',
-                label: 4
-            }, {
-                value: '选项5',
-                label: 5
-            }],
+            // 出发地
+            formCityName:'',
+            // 出发时间
+            arrDate:[],
+            // 人数
+            peopleNumber:'',
+            // 成人数
             adultValue: '',
-            kidValue: ''
+            // 儿童数
+            kidValue: '',
+            pickerOptions:{
+                // 禁用日期
+                disabledDate(disDate){
+                    return disDate.getTime() <= (Date.now()-86400000)
+                },
+            }
+
+        }
+    },
+    methods:{
+        // 选中搜索建议回调函数
+        SelectCity(item){
+            // 选中时可以拿到选中的那个数据对象
+            if(!item){
+                let item = new Object()
+                item.name = this.formCityName
+                // const item = {'name': this.formCityName}
+            }
+            this.$axios({
+                url:'/cities?name=' + this.formCityName
+            }).then(res => {
+                const city = res.data.data[0].id
+                let item = {}
+                item.name = this.formCityName
+                this.$emit('getHotelList',{city,'cityName': item.name})
+            })
+            
+            
+        },
+
+        // 显示建议列表函数，在输入框中输入时触发 
+        querySearchAsync(queryString , showList){
+            // 判断是否存在数据
+            if (!queryString) {
+                showList([
+                    {
+                        value: "请输入关键字",
+                    },
+                ]);
+                return;
+            }
+            // 远程服务器获取城市列表
+            this.$axios({
+                url: "/airs/city",
+                params: {
+                    name: queryString,
+                },
+            }).then((res) => {
+                // console.log(res.data);
+                const data = res.data.data.map((city) => {
+                    // 之前这里是直接获取数据, value 是以 name 作为基础
+                    // 用来显示建议列表, 只需要在赋值 value 的时候,将 市字去掉即可
+                    return {
+                        ...city,
+                        value: city.name,
+                    };
+                });
+                showList(data);
+            });
+        },
+        // 确认按钮点击事件
+        headleClick(){
+            this.peopleNumber = `${this.adultValue}成人 ${this.kidValue}儿童`
+            this.visible = false
+        }
+    },
+    watch:{
+        arrDate(){
+            // 将入住和离店时间的数组进行解构赋值
+            const [enterTime,leftTime] = this.arrDate
+            this.$emit('getHotelList',{enterTime,leftTime})
         }
     }
 }
