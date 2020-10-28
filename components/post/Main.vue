@@ -7,7 +7,7 @@
         :src="$axios.defaults.baseURL+comment.account.defaultAvatar"
         alt
       />
-      <span>{{comment.account.username}}</span>
+      <span>{{comment.account.nickname}}</span>
       <div class="detail_date">{{comment.created_at | setTime}}</div>
     </div>
 
@@ -27,7 +27,7 @@
         />
       </div>
       <div class="mainReply">
-        <el-button size="small" type="text" @click="handleReply(comment.id)" v-show="isshow">回复</el-button>
+        <el-button size="small" type="text" @click="handleReply" v-show="isshow">回复</el-button>
       </div>
     </div>
   </div>
@@ -49,10 +49,11 @@ export default {
     }
   },
   methods: {
-    handleReply(id) {
-      console.log("点击了回复", id);
+    handleReply() {
+      console.log("点击了回复", this.comment.id);
       // 点击回复评论时将回复的id存到store里面,
-      this.$store.commit("user/mainId", id);
+      this.$store.commit("user/setFollow", this.comment.id);
+      this.$store.commit("user/setReplyName", this.comment.account.nickname);
     }
   }
 };

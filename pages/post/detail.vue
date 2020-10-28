@@ -37,6 +37,10 @@
         <!-- 评论区 -->
         <div class="comment">
           <div class="pinglun">评论</div>
+          <div class="replyname" v-if="$store.state.user.reply.replyName">
+            回复 @{{$store.state.user.reply.replyName}}
+            <span @click="closeReply">X</span>
+          </div>
           <!-- 评论框 -->
           <div class="text-box">
             <el-input
@@ -114,7 +118,16 @@ export default {
       pics: [],
       img: [],
       // 文章数据
-      details: [],
+      details: {
+        // 账号信息
+        account: {},
+        // 回复id
+        id: "",
+        // 用户名
+        nickname: "",
+        // 时间戳
+        created_at: ""
+      },
       // 上传图片
       dialogImageUrl: "",
       dialogVisible: false,
@@ -155,7 +168,7 @@ export default {
       this.$axios({
         url: "/posts?id=" + this.$route.query.id
       }).then(res => {
-        console.log(res.data.data);
+        console.log("文章数据", res.data.data);
         // 修改获取到的文章数据里的 created_at 时间戳，转换为需要渲染的数据格式，再存到 details
         res.data.data[0].created_at = moment(
           res.data.data[0].created_at
@@ -192,9 +205,9 @@ export default {
         post: this.$route.query.id,
         pics: this.pics
       };
-      // 判断 main_id 有数据,就将回复id的参数 follow 添加到 data 对象里面
-      if (this.$store.state.user.main_id) {
-        data.follow = this.$store.state.user.main_id;
+      // 判断 reply.follow 有数据,就将回复id的参数 follow 添加到 data 对象里面
+      if (this.$store.state.user.reply.follow) {
+        data.follow = this.$store.state.user.reply.follow;
       }
       console.log(data);
 
@@ -209,7 +222,7 @@ export default {
         }
       }).then(res => {
         console.log(res);
-        if (this.$store.state.user.main_id) {
+        if (this.$store.state.user.reply.follow) {
           this.$store.commit("user/mainId", "");
         }
         this.textarea = "";
@@ -229,28 +242,25 @@ export default {
     },
     // 点击评论文章,清除回复id
     clickOutline() {
-      // 就让输入框高亮,输入框绑定 ref="input" 属性拿到输入框
-      this.$refs.input.focus();
-      if (this.$store.state.user.main_id) {
-        this.$store.commit("user/mainId", "");
-      }
+      this.closeReply();
     },
     // 点击分享
     clickShare() {
       // 防止弹出多个提示框
       this.$message.closeAll();
       this.$message("暂未开放此功能");
+    },
+    // 清理回复评论数据
+    closeReply() {
+      this.$store.commit("user/clearReply");
     }
   },
   watch: {
-    // 监听 store 里面 main_id 数据的变化
-    "$store.state.user.main_id"() {
+    // 监听 store 里面 reply.follow 数据的变化
+    "$store.state.user.focus"() {
       console.log("进来了");
-      // 判断 main_id 有数据
-      if (this.$store.state.user.main_id) {
-        // 就让输入框高亮,输入框绑定 ref="input" 属性拿到输入框
-        this.$refs.input.focus();
-      }
+      // 就让输入框高亮,输入框绑定 ref="input" 属性拿到输入框
+      this.$refs.input.focus();
     },
     // 监听路由地址 id 的变化
     "$route.query.id"() {
@@ -328,6 +338,21 @@ export default {
         .pinglun {
           font-weight: 500;
           margin-bottom: 20px;
+        }
+        .replyname {
+          background-color: #e4e4e4;
+          width: 140px;
+          font-size: 12px;
+          padding: 5px 10px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          margin-bottom: 10px;
+          span {
+            cursor: pointer;
+            margin-left: 10px;
+            border: 1px solid #ccc;
+            padding: 0 5px;
+          }
         }
         .text-box {
           margin-bottom: 20px;

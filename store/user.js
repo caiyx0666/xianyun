@@ -1,7 +1,13 @@
 export const state = () => ({
     userInfo: {},
-    main_id: null,
-    nick: ''
+    reply: {
+        content: '',
+        pics: [],
+        post: '',
+        follow: '',
+        replyName: ''
+    },
+    focus: false
 })
 
 export const mutations = {
@@ -22,10 +28,18 @@ export const mutations = {
         // } )
 
     },
-    mainId(state, data) {
-        state.main_id = data,
-            state.nick = data
+    setReplyName(state, data) {
+        state.reply.replyName = data;
+        state.focus = !state.focus;
     },
+    setFollow(state, data) {
+        state.reply.follow = data
+    },
+    clearReply(state) {
+        state.reply.follow = ''
+        state.reply.replyName = ''
+
+    }
 
 
 }

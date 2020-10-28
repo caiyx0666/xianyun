@@ -3,7 +3,7 @@
     <div class="main_parent">
       <div class="parentTop">
         <!-- 用户名 -->
-        <span>{{parentData.account.username}}</span>
+        <span>{{parentData.account.nickname}}</span>
         <!-- 日期 -->
         <div class="parentDate">{{parentData.created_at | setTime}}</div>
       </div>
@@ -26,7 +26,7 @@
 
         <!-- 回复按钮 -->
         <div class="parentReply">
-          <el-button size="small" type="text" @click="handleReply(parentData.id)" v-show="isshow">回复</el-button>
+          <el-button size="small" type="text" @click="handleReply" v-show="isshow">回复</el-button>
         </div>
       </div>
     </div>
@@ -46,13 +46,15 @@ export default {
   name: "parent",
   props: ["parentData"],
   methods: {
-    handleReply(id) {
-      console.log("点击了回复");
+    handleReply() {
+      console.log("点击了回复", this.parentData);
       // 点击回复评论时将回复的id存到store里面,
-      console.log(this.parentData);
-      if (id) {
-        this.$store.commit("user/mainId", id);
-        console.log(id);
+      if (this.parentData.id) {
+        this.$store.commit("user/setFollow", this.parentData.id);
+        this.$store.commit(
+          "user/setReplyName",
+          this.parentData.account.nickname
+        );
       }
     }
   },
