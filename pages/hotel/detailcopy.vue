@@ -23,7 +23,7 @@
           </div>
         </el-col>
 
-        <el-col :span="4">
+        <!-- <el-col :span="4">
           <div class="hotelScore">
             <div>
               <span>{{ hotelList.stars }}</span
@@ -40,7 +40,7 @@
             </div>
             <div v-if="hotelList.stars > 5" class="good">非常推荐</div>
           </div>
-        </el-col>
+        </el-col> -->
       </el-row>
 
       <!-- 图片部分 -->
@@ -588,23 +588,22 @@ export default {
     color: #fff;
   }
 }
-.hotelScore {
-  font-size: 14px;
-  display: flex;
-  // align-items: center;
-  // box-sizing: border-box;
-  color: #6e7478;
-  span {
-    font-size: 26px;
-    color: #f90;
-  }
-  i {
-    font-size: 32px;
-    color: #cccccc;
-  }
-  .good {
-    font-size: 18px;
-    color: #6e7478;
-  }
-}
+// .hotelScore {
+//   font-size: 14px;
+//   display: flex;
+
+//   color: #6e7478;
+//   span {
+//     font-size: 26px;
+//     color: #f90;
+//   }
+//   i {
+//     font-size: 32px;
+//     color: #cccccc;
+//   }
+//   .good {
+//     font-size: 18px;
+//     color: #6e7478;
+//   }
+// }
 </style>
