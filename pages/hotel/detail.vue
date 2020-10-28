@@ -249,8 +249,9 @@ export default {
     console.log(this.hotelList.address);
 
     window.onscroll = () => {
+      // 拿到nav距离页面可视窗口的距离
       let offset = this.getPageOffsetTop(this.$refs.nav);
-
+      //  如果nav的距离小于页面滚动的距离那么nav就固定
       if (offset < window.pageYOffset) {
         this.isFixed = true;
         // nav导航栏固定显示预定&价钱
@@ -261,6 +262,8 @@ export default {
         this.showPrice = false;
         this.isShowDian = false;
         if (!this.isNoTrackScroll) {
+          // 上面加了动态class，如果再nav不固定的时候，isNoTrackScroll=false就给activeIndex=0
+          // 这样子不固定的时候nav就不会有下划线
           this.activeIndex = 0;
         }
       }
@@ -299,24 +302,33 @@ export default {
       }
     },
     getToggle(num) {
+      // 调用函数让activeIndex=传入的num的时候，自动添加active的动态class类名
       this.activeIndex = num;
     },
     getPageOffsetTop(elm) {
+      // offset就是距离
+      // 获取元素距离页面顶部的距离
       let offset = 0;
       while (true) {
         if (elm == document.body) {
           return offset;
         }
+        // offsetTop：元素到上一个offsetParent顶部的距离
+        // 如果元素有多个爸爸，就要累加offsetTop
         offset += elm.offsetTop;
+        // 距离元素最近的一个有定位的爸爸，如果爸爸都不符合条件，offsetParent为body
         elm = elm.offsetParent;
       }
     },
     scrollToElement(elm) {
+      // 给nav导航加一个旗帜，来到了这里就是true
+      // 就是滚动的时候，让下划线一直是true的状态
       this.isNoTrackScroll = true;
-
+      // 因为顶部有60px的头部，所以要-60，不然会挡住
       var t = elm.offsetTop - 60;
-
+      // window.pageYOffset当前滚动的距离
       let offset = window.pageYOffset;
+      // 先清空定时器
       let timer = null;
       if (timer) {
         clearInterval(timer);
@@ -324,9 +336,13 @@ export default {
 
       timer = setInterval(() => {
         window.scrollTo(0, offset);
+        // 每次步进12
+        // 如果距离小于12就直接等于目标
+        // 不然可能一直在目标两边反复横跳都去不到目标
         offset += offset - t < 0 ? 12 : -12;
         if (Math.abs(offset - t) < 12) {
           window.scrollTo(0, t);
+          // 旗帜在这里结束变为false
           this.isNoTrackScroll = false;
 
           clearInterval(timer);
