@@ -393,4 +393,10 @@ export default {
     margin: 20px 0;
     text-align: center;
 }
+.el-tag--plain.is-hit {
+    border-color: #f8efd4;
+}
+.el-tag--plain {
+    color: #f5a25d;
+}
 </style>
