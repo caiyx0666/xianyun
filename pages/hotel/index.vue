@@ -49,14 +49,16 @@
 
             <!-- 条件筛选 -->
             <HotelFilter @getHotelList="getHotelList" />
-
+            
+            
             <!-- 酒店列表 -->
-            <el-pagination background layout="prev, pager, next" :total="hotelList.total" @current-change="currentChange" :current-page="currentPage">
-
-            </el-pagination>
             <div v-if="hotelList.data.length">
                 <HotelList v-loading="loading" :hotel="hotel" v-for="hotel in hotelList.data" :key="hotel.id" />
             </div>
+
+            <!-- 酒店列表分页组件 -->
+            <el-pagination background layout="prev, pager, next" :total="hotelList.total" @current-change="currentChange" :current-page="currentPage" />
+
 
             <div class="hotelBox" v-loading="loading" v-if="isBox">
                 <p v-if="!hotelList.data.length && isGo">找不到符合要求的酒店了😥</p>
@@ -340,5 +342,9 @@ export default {
 .hotelBox {
     text-align: center;
     height: 200px;
+}
+.el-pagination {
+    margin: 20px 0;
+    text-align: center;
 }
 </style>
