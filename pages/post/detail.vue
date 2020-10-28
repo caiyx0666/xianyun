@@ -243,6 +243,9 @@ export default {
     // 图片移出
     handleRemove(file, fileList) {
       console.log(file, fileList);
+      this.pics = fileList.map(item => {
+        return item.response[0];
+      });
     },
     // 图片放大预览
     handlePictureCardPreview(file) {
