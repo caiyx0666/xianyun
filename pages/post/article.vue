@@ -185,6 +185,7 @@ export default {
             this.form = {
                 ...item,
             };
+            this.$message.closeAll();
             this.$message.success("编辑!");
         },
         handleChangeTab(index) {

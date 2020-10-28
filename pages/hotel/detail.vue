@@ -19,28 +19,35 @@
           <div class="hotel">
             <h4>{{ hotelList.name }}</h4>
             <div class="info">{{ hotelList.alias }}</div>
-            <div class="address el-icon-location">{{ hotelList.address }}</div>
+            <div class="address el-icon-location">
+              {{ hotelList.address }}
+            </div>
           </div>
         </el-col>
-
-        <!-- <el-col :span="4">
+        <el-col :span="4">
           <div class="hotelScore">
-            <div>
+            <!-- 左 -->
+            <div class="fen">
               <span>{{ hotelList.stars }}</span
               >分
             </div>
-            <i>|</i>
-
-            <div v-if="hotelList.stars < 3" class="good">一般</div>
-            <div
-              v-if="hotelList.stars >= 3 && hotelList.stars < 5"
-              class="good"
-            >
-              推荐
+            <!-- 中 -->
+            <div class="xian"><i></i></div>
+            <div class="you">
+              <!-- 右上 -->
+              <div v-if="hotelList.stars < 3" class="good">一般</div>
+              <div
+                v-if="hotelList.stars >= 3 && hotelList.stars < 5"
+                class="good"
+              >
+                推荐
+              </div>
+              <div v-if="hotelList.stars > 5" class="good">非常推荐</div>
+              <!-- 右下 -->
+              <div class="youxia el-icon-chat-dot-round">200评论</div>
             </div>
-            <div v-if="hotelList.stars > 5" class="good">非常推荐</div>
           </div>
-        </el-col> -->
+        </el-col>
       </el-row>
 
       <!-- 图片部分 -->
@@ -588,22 +595,51 @@ export default {
     color: #fff;
   }
 }
-// .hotelScore {
-//   font-size: 14px;
-//   display: flex;
-
-//   color: #6e7478;
-//   span {
-//     font-size: 26px;
-//     color: #f90;
-//   }
-//   i {
-//     font-size: 32px;
-//     color: #cccccc;
-//   }
-//   .good {
-//     font-size: 18px;
-//     color: #6e7478;
-//   }
-// }
+.hotelScore {
+  margin-top: 25px;
+  font-size: 14px;
+  display: flex;
+  width: 170px;
+  height: 50px;
+  // border: 1px solid #000;
+  color: #6e7478;
+  .fen {
+    margin-top: 4px;
+    width: 70px;
+    height: 100%;
+    line-height: 50px;
+    text-align: center;
+    font-size: 30px;
+    color: #ff8a00;
+    // border: 1px solid rgb(134, 63, 63);
+  }
+  .xian {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    width: 5px;
+    height: 50px;
+    padding: 0 10px;
+    // border: 1px solid rgb(177, 40, 40);
+    i {
+      display: inline-block;
+      width: 2px;
+      height: 45px;
+      background-color: #cccccc;
+    }
+  }
+  .good {
+    width: 75px;
+    font-size: 18px;
+    height: 28px;
+    line-height: 28px;
+    color: #6e7478;
+    // border: 1px solid #000;
+  }
+  .youxia {
+    width: 75px;
+    font-size: 14px;
+    color: #666666;
+  }
+}
 </style>

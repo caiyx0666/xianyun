@@ -35,16 +35,19 @@
             :interval="2000"
             height="174px"
             indicator-position="none"
+            arrow="never"
           >
             <el-carousel-item v-for="(item, index) in valueList" :key="index">
               <img
+                v-if="item.images.length != 0"
                 :src="item.images[0]"
                 alt=""
-                v-if="item.images[0]"
                 @click="$router.push(`/post?city=${item.cityName}`)"
               />
+
+              <!-- <img :src="valueList[0].images[0]" alt="" /> -->
               <img
-                src="https://upload-images.jianshu.io/upload_images/816806-da5e35d7d249d75c.jpg?imageMogr2/auto-orient/strip|imageView2/2/format/webp"
+                src="http://p4-q.mafengwo.net/s13/M00/02/39/wKgEaVzMTgKALFi5AAaKsyezLBE34.jpeg?imageMogr2%2Fthumbnail%2F1360x%2Fstrip%2Fquality%2F90"
                 alt=""
                 @click="$router.push('/post?city=北京')"
               />
@@ -69,6 +72,7 @@ export default {
   },
 
   created() {
+    // console.log(this.valueList[0].images[0]);
     this.$axios({
       url: "/posts/cities",
     }).then((res) => {
