@@ -89,17 +89,17 @@ export default {
     async mounted() {
         window.onLoad = async () => {
             var map = new AMap.Map("container", {
-                zoom: 10, // 级别
+                zoom: 15, // 级别
                 center: [113.428072, 23.129259], // 中心点坐标
                 viewMode: "3D", // 使用3D视图
             });
             this.map = map;
-            if(!this.$route.query.cityName){
+            if (!this.$route.query.cityName) {
                 await this.getInfoCity()
-            }else{
+            } else {
                 // 获取城市名
                 this.urlCityName = this.$route.query.cityName
-    
+
                 // 获取城市id
                 await this.$axios({
                     url: '/cities?name=' + this.$route.query.cityName
@@ -107,7 +107,7 @@ export default {
                     // console.log(res.data.data[0].id);
                     this.cityId = res.data.data[0].id
                 })
-    
+
                 this.getHotelList()
                 this.getScenice()
             }
@@ -118,55 +118,55 @@ export default {
         var jsapi = document.createElement('script');
         jsapi.charset = 'utf-8';
         jsapi.src = url;
-        document.head.appendChild(jsapi);    
+        document.head.appendChild(jsapi);
     },
-    methods:{
+    methods: {
         // 获取景点
-        getScenice(){
+        getScenice() {
             // 获取城市区域景点
             this.$axios({
-                url:`/cities?name=${this.urlCityName}`
-            }).then(res =>{
+                url: `/cities?name=${this.urlCityName}`
+            }).then(res => {
                 // console.log(res.data.data[0].scenics);
                 this.cities = res.data.data[0].scenics
             })
         },
 
         // 获取酒店列表
-        async getHotelList(hotelOption){
+        async getHotelList(hotelOption) {
             this.loading = true
             // 用于地址栏显示
             let str = "";
-                if(hotelOption){
-                    console.log(hotelOption);
-                    // 将获取过来的数据进行拼接
-                    var keys = Object.keys(hotelOption); // ["city", "price_lt", "hotellevel", "hoteltype"]
+            if (hotelOption) {
+                console.log(hotelOption);
+                // 将获取过来的数据进行拼接
+                var keys = Object.keys(hotelOption); // ["city", "price_lt", "hotellevel", "hoteltype"]
 
                 keys.forEach(Option => {
                     // 数据的格式是否为数组
-                    if(Array.isArray(hotelOption[Option])){
+                    if (Array.isArray(hotelOption[Option])) {
                         hotelOption[Option].forEach(item => {
                             str += `${Option}=${item}&`
                         })
-                    }else{
+                    } else {
                         // 判断传递过来的数值中有没有城市名字和城市id
-                        if(Option == 'cityName'){
+                        if (Option == 'cityName') {
                             this.urlCityName = hotelOption[Option]
 
                             // 修改原有参数,而不跳转页面
                             this.$router.push({
                                 path: this.$route.path,
-                                query: Object.assign({}, this.$route.query, {cityName: this.urlCityName})
+                                query: Object.assign({}, this.$route.query, { cityName: this.urlCityName })
                             })
 
                             // 重新获取景点信息
                             this.getScenice()
-                        }else if(Option == 'city'){
+                        } else if (Option == 'city') {
                             this.cityId = hotelOption[Option]
-                        }else {
+                        } else {
                             str += `${Option}=${hotelOption[Option]}&`;
                         }
-                        
+
                     }
                 })
                 // 定位到第一页显示
@@ -186,6 +186,7 @@ export default {
             this.loading = false
 
             // 获取地图经纬度
+            this.location = [];
             HotelList.data.data.forEach(item => {
                 this.location.push({
                     x: item.location.latitude,
@@ -208,30 +209,32 @@ export default {
 
         // 高德地图
         mapLoad() {
-            let markers = []
-            this.markers = []
+            this.map.remove(this.markers);
+            this.markers = [];
+
+
             // 遍历-创建点实例
-            this.location.forEach((item,index) => {
-                if(index == 1){
-                    let lng = item.y 
-                    let lat = item.x 
-                    this.map.setCenter([lng, lat]); //设置地图中心点
+            this.location.forEach((item, index) => {
+                if (index == 1) {
+                    let lng = item.y
+                    let lat = item.x
+                    this.map.setCenter([lng - 0.1, lat - 0.1]); // 设置地图中心点
                 }
+
                 var maker = new AMap.Marker({
                     position: [item.y, item.x],
                 })
-                markers.push(maker)
+                this.markers.push(maker)
             })
-            this.markers = markers;
-            this.map.remove(this.markers);
+            AMap.event.addDomListener()
             // 添加点
             this.map.add(this.markers)
         },
 
         // 获取地图当前行政区
-        async getInfoCity(){
+        async getInfoCity() {
             // 获取用户当前定位城市
-            await this.map.getCity(async (info) =>{
+            await this.map.getCity(async (info) => {
                 // console.log(info);
                 // 修改原有参数,而不跳转页面
                 this.urlCityName = info.city
@@ -246,14 +249,14 @@ export default {
 
                 this.$router.push({
                     path: this.$route.path,
-                    query: Object.assign({}, this.$route.query, {cityName: this.urlCityName})
+                    query: Object.assign({}, this.$route.query, { cityName: this.urlCityName })
                 })
                 this.getHotelList()
                 this.getScenice()
                 this.$message({
-                  showClose: true,
-                  message: `当前定位城市 ${info.city}`,
-                  type: 'success'
+                    showClose: true,
+                    message: `当前定位城市 ${info.city}`,
+                    type: 'success'
                 });
             });
         }
