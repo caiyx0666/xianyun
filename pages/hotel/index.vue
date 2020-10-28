@@ -248,7 +248,7 @@ export default {
                     `<div class="close-btn" onclick="clearMarker()">${index + 1}</div>`
                     +
                     '</div>';
-                console.log('markerContent', markerContent);
+                // console.log('markerContent', markerContent);
                 var maker = new AMap.Marker({
                     content: markerContent,
                     position: [item.y, item.x],
@@ -256,7 +256,7 @@ export default {
                 this.markers.push(maker)
             })
             this.map.panTo([this.location[0].y, this.location[0].x])
-            // 添加点s
+            // 添加点
             this.map.add(this.markers)
             this.isMap = false
         },
