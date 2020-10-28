@@ -240,7 +240,6 @@ export default {
 
             // 遍历-创建点实例
             this.location.forEach((item, index) => {
-<<<<<<< HEAD
                 var markerContent =
                     ""
                     +
@@ -251,28 +250,15 @@ export default {
                     `<div class="close-btn" onclick="clearMarker()">${index + 1}</div>`
                     +
                     '</div>';
-                console.log('markerContent', markerContent);
-=======
-                if (index == 1) {
-                    let lng = item.y
-                    let lat = item.x
-                    this.map.setCenter([lng, lat]); // 设置地图中心点
-                }
-
->>>>>>> 7d2d6399e73b8671629fcfe4b3282746f7b5b71d
+                // console.log('markerContent', markerContent);
                 var maker = new AMap.Marker({
                     content: markerContent,
                     position: [item.y, item.x],
                 })
                 this.markers.push(maker)
             })
-<<<<<<< HEAD
             this.map.panTo([this.location[0].y, this.location[0].x])
-            // 添加点s
-=======
             // 添加点
-            // setTimeout
->>>>>>> 7d2d6399e73b8671629fcfe4b3282746f7b5b71d
             this.map.add(this.markers)
             this.isMap = false
         },
@@ -376,7 +362,6 @@ export default {
 .popbox {
     font-size: 12px;
 }
-<<<<<<< HEAD
 /deep/.custom-content-marker {
     position: relative;
     width: 25px;
@@ -400,14 +385,12 @@ export default {
     text-align: center;
     line-height: 15px;
     // box-shadow: -1px 1px 1px rgba(10, 10, 10, 0.2);
-=======
-.hotelBox {
+}.hotelBox {
     text-align: center;
     height: 200px;
 }
 .el-pagination {
     margin: 20px 0;
     text-align: center;
->>>>>>> 7d2d6399e73b8671629fcfe4b3282746f7b5b71d
 }
 </style>
