@@ -14,7 +14,7 @@
         <el-col :span="4">酒店服务</el-col>
         <el-col :span="20" v-if="hotelList.hotelassets">
           <span v-if="(hotelList.hotelassets.type == '酒店服务') == 0">
-            <i class="facility">暂无数据😰</i>
+            <i class="facility">暂无数据</i>
           </span>
           <span v-else>
             <span v-for="(item, index) in hotelList.hotelassets" :key="index">
@@ -30,7 +30,7 @@
         <el-col :span="4">主要设施</el-col>
         <el-col :span="20" v-if="hotelList.hotelassets">
           <span v-if="hotelList.hotelassets.length == 0">
-            <i class="facility">暂无数据😰</i>
+            <i class="facility">暂无数据</i>
           </span>
           <span v-else>
             <span v-for="(item, index) in hotelList.hotelassets" :key="index">
@@ -47,7 +47,7 @@
       <el-row>
         <el-col :span="4">品牌信息</el-col>
         <el-col :span="20" v-if="hotelList.hotelbrand == null">
-          <span class="facility"> 暂无数据😰 </span>
+          <span class="facility"> 暂无数据 </span>
         </el-col>
         <!-- <span v-if="hotelList.hotelbrand.name"> -->
         <!-- <span v-for="(item, index) in hotelList.hotelassets" :key="index"> -->

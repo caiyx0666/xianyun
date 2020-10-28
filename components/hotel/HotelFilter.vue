@@ -125,7 +125,7 @@ export default {
         this.$axios({
             url:'/hotels/options'
         }).then(res =>{
-            console.log(res.data.data);
+            // console.log(res.data.data);
             this.hotelOption = res.data.data
         })
     },
