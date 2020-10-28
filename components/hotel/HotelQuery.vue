@@ -104,10 +104,20 @@ export default {
             this.$axios({
                 url:'/cities?name=' + this.formCityName
             }).then(res => {
+                if(!res.data.data.length){
+                    this.$message({
+                        showClose: true,
+                        message: `搜索不到当前城市`,
+                        type: 'error'
+                    });
+                    return
+                }
                 const city = res.data.data[0].id
                 let item = {}
                 item.name = this.formCityName
                 this.$emit('getHotelList',{city,'cityName': item.name})
+            }).catch(err => {
+                console.log(err);
             })
             
             

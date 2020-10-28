@@ -43,7 +43,7 @@
 
                 <!-- 高德地图 -->
                 <el-col :span="10" style="background:#eee">
-                    <div id="container" style="height:260px;width:420px"></div>
+                    <div v-loading="isMap" id="container" style="height:260px;width:420px"></div>
                 </el-col>
             </el-row>
 
@@ -51,15 +51,15 @@
             <HotelFilter @getHotelList="getHotelList" />
 
             <!-- 酒店列表 -->
-            <el-pagination background layout="prev, pager, next" :total="hotelList.total" @current-change="currentChange" :current-page="currentPage">
-
-            </el-pagination>
-            <div v-if="hotelList.data.length != 0">
+            <div v-if="hotelList.data.length">
                 <HotelList v-loading="loading" :hotel="hotel" v-for="hotel in hotelList.data" :key="hotel.id" />
             </div>
 
-            <div v-else>
-                找不到符合要求的酒店了😥
+            <!-- 酒店列表分页组件 -->
+            <el-pagination background layout="prev, pager, next" :total="hotelList.total" @current-change="currentChange" :current-page="currentPage" />
+
+            <div class="hotelBox" v-loading="loading" v-if="isBox">
+                <p v-if="!hotelList.data.length && isGo">找不到符合要求的酒店了😥</p>
             </div>
         </section>
     </div>
@@ -69,6 +69,9 @@
 export default {
     data() {
         return {
+            isBox: true,
+            isGo: false,
+            isMap: true,
             cityId: '',
             loading: false,
             hotelList: {
@@ -86,12 +89,18 @@ export default {
             markers: []
         }
     },
+    created() {
+        this.loading = true
+        this.isMap = true
+    },
+
     async mounted() {
         window.onLoad = async () => {
             var map = new AMap.Map("container", {
-                zoom: 15, // 级别
+                zoom: 7, // 级别
                 center: [113.428072, 23.129259], // 中心点坐标
                 viewMode: "3D", // 使用3D视图
+                autoFitView: true, // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
             });
             this.map = map;
             if (!this.$route.query.cityName) {
@@ -104,6 +113,14 @@ export default {
                 await this.$axios({
                     url: '/cities?name=' + this.$route.query.cityName
                 }).then(res => {
+                    if (!res.data.data.length) {
+                        this.$message({
+                            showClose: true,
+                            message: `搜索不到当前城市`,
+                            type: 'error'
+                        });
+                        return
+                    }
                     // console.log(res.data.data[0].id);
                     this.cityId = res.data.data[0].id
                 })
@@ -113,6 +130,7 @@ export default {
             }
 
         };
+
         var key = "d5192dea5a16faf3b3afdd0fb562d794"; // 你的key
         var url = `https://webapi.amap.com/maps?v=1.4.15&key=${key}&callback=onLoad`;
         var jsapi = document.createElement('script');
@@ -134,6 +152,7 @@ export default {
 
         // 获取酒店列表
         async getHotelList(hotelOption) {
+            this.isBox = true
             this.loading = true
             // 用于地址栏显示
             let str = "";
@@ -184,6 +203,11 @@ export default {
             HotelList.data.data = HotelList.data.data.slice((this.currentPage - 1) * 10, (this.currentPage) * 10)
             this.hotelList = HotelList.data
             this.loading = false
+            if (!this.hotelList.data.length) {
+                this.isGo = true
+            } else {
+                this.isBox = false
+            }
 
             // 获取地图经纬度
             this.location = [];
@@ -212,23 +236,29 @@ export default {
             this.map.remove(this.markers);
             this.markers = [];
 
-
             // 遍历-创建点实例
             this.location.forEach((item, index) => {
-                if (index == 1) {
-                    let lng = item.y
-                    let lat = item.x
-                    this.map.setCenter([lng - 0.1, lat - 0.1]); // 设置地图中心点
-                }
-
+                var markerContent =
+                    ""
+                    +
+                    '<div class="custom-content-marker">'
+                    +
+                    '<img src="https://webapi.amap.com/theme/v1.3/markers/b/mark_bs.png">'
+                    +
+                    `<div class="close-btn" onclick="clearMarker()">${index + 1}</div>`
+                    +
+                    '</div>';
+                // console.log('markerContent', markerContent);
                 var maker = new AMap.Marker({
+                    content: markerContent,
                     position: [item.y, item.x],
                 })
                 this.markers.push(maker)
             })
-            AMap.event.addDomListener()
+            this.map.panTo([this.location[0].y, this.location[0].x])
             // 添加点
             this.map.add(this.markers)
+            this.isMap = false
         },
 
         // 获取地图当前行政区
@@ -243,6 +273,15 @@ export default {
                 await this.$axios({
                     url: '/cities?name=' + this.urlCityName
                 }).then(res => {
+                    console.log(res);
+                    if (!res.data.data.length) {
+                        this.$message({
+                            showClose: true,
+                            message: `搜索不到当前城市`,
+                            type: 'error'
+                        });
+                        return
+                    }
                     // console.log(res.data.data[0].id);
                     this.cityId = res.data.data[0].id
                 })
@@ -320,5 +359,37 @@ export default {
 }
 .popbox {
     font-size: 12px;
+}
+/deep/.custom-content-marker {
+    position: relative;
+    width: 25px;
+    height: 34px;
+    // opacity: 0;
+}
+/deep/.custom-content-marker img {
+    width: 100%;
+    height: 100%;
+}
+/deep/.custom-content-marker .close-btn {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    width: 15px;
+    height: 15px;
+    font-size: 12px;
+    background: #318ff4;
+    border-radius: 50%;
+    color: #fff;
+    text-align: center;
+    line-height: 15px;
+    // box-shadow: -1px 1px 1px rgba(10, 10, 10, 0.2);
+}
+.hotelBox {
+    text-align: center;
+    height: 200px;
+}
+.el-pagination {
+    margin: 20px 0;
+    text-align: center;
 }
 </style>
