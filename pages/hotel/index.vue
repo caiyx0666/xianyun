@@ -89,49 +89,36 @@ export default {
     async mounted() {
         window.onLoad = async () => {
             var map = new AMap.Map("container", {
-                zoom: 20, // 级别
+                zoom: 10, // 级别
                 center: [113.428072, 23.129259], // 中心点坐标
                 viewMode: "3D", // 使用3D视图
             });
             this.map = map;
+            if(!this.$route.query.cityName){
+                await this.getInfoCity()
+            }else{
+                // 获取城市名
+                this.urlCityName = this.$route.query.cityName
+    
+                // 获取城市id
+                await this.$axios({
+                    url: '/cities?name=' + this.$route.query.cityName
+                }).then(res => {
+                    // console.log(res.data.data[0].id);
+                    this.cityId = res.data.data[0].id
+                })
+    
+                this.getHotelList()
+                this.getScenice()
+            }
 
-            // 获取城市名
-            this.urlCityName = this.$route.query.cityName
-
-            // 获取城市id
-            await this.$axios({
-                url: '/cities?name=' + this.$route.query.cityName
-            }).then(res => {
-                // console.log(res.data.data[0].id);
-                this.cityId = res.data.data[0].id
-            })
-
-            // 页面进来渲染数据
-            this.getHotelList()
-
-            // 获取城市区域景点
-            this.getScenice()
         };
         var key = "d5192dea5a16faf3b3afdd0fb562d794"; // 你的key
         var url = `https://webapi.amap.com/maps?v=1.4.15&key=${key}&callback=onLoad`;
         var jsapi = document.createElement('script');
         jsapi.charset = 'utf-8';
         jsapi.src = url;
-        document.head.appendChild(jsapi);
-
-        if(this.$route.query.cityName){
-            // 获取传递过来的城市的id
-            await this.$axios({
-                url:'/cities?name='+this.$route.query.cityName
-            }).then(res =>{
-                // console.log(res.data.data[0].id);
-                this.cityId = res.data.data[0].id
-            })
-        }else{
-            this.$router.push('/')
-        }
-        this.getHotelList()
-        this.getScenice()
+        document.head.appendChild(jsapi);    
     },
     methods:{
         // 获取景点
@@ -208,7 +195,6 @@ export default {
 
             // 加载地图
             this.mapLoad()
-
         },
 
         // 当前页发生变化
@@ -223,6 +209,7 @@ export default {
         // 高德地图
         mapLoad() {
             let markers = []
+            this.markers = []
             // 遍历-创建点实例
             this.location.forEach(item => {
                 var maker = new AMap.Marker({
@@ -231,8 +218,39 @@ export default {
                 markers.push(maker)
             })
             this.markers = markers;
+            this.map.remove(this.markers);
             // 添加点
-            this.map.add(markers)
+            this.map.add(this.markers)
+        },
+
+        // 获取地图当前行政区
+        async getInfoCity(){
+            // 获取用户当前定位城市
+            await this.map.getCity(async (info) =>{
+                // console.log(info);
+                // 修改原有参数,而不跳转页面
+                this.urlCityName = info.city
+
+                // 获取城市id
+                await this.$axios({
+                    url: '/cities?name=' + this.urlCityName
+                }).then(res => {
+                    // console.log(res.data.data[0].id);
+                    this.cityId = res.data.data[0].id
+                })
+
+                this.$router.push({
+                    path: this.$route.path,
+                    query: Object.assign({}, this.$route.query, {cityName: this.urlCityName})
+                })
+                this.getHotelList()
+                this.getScenice()
+                this.$message({
+                  showClose: true,
+                  message: `当前定位城市 ${info.city}`,
+                  type: 'success'
+                });
+            });
         }
     }
 };
