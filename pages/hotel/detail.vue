@@ -1,6 +1,7 @@
 <template>
   <div class="first_head" v-if="hotelList">
     <div class="row" v-if="show" @click="show = false"></div>
+    <div class="rowOne" v-if="showDian" @click="showDian = false"></div>
     <div class="container">
       <!-- 面包屑导航栏 -->
       <el-row>
@@ -120,6 +121,17 @@
           </li>
         </ul>
 
+        <div class="dianOne" @click="showDian = true" v-if="!isShowDian">
+          <span class="shouThree el-icon-document-copy"></span>
+          <el-button type="text"></el-button>
+          <span>点评</span>
+        </div>
+        <div class="dianTwo" @click="showDian = true" v-if="isShowDian">
+          <span class="shouThree el-icon-document-copy"></span>
+          <el-button type="text"></el-button>
+          <span>点评</span>
+        </div>
+
         <div class="cangOne" @click="isShowStart" v-if="!showPrice">
           <span class="shou el-icon-star-off" v-if="showStart"></span>
           <span
@@ -158,6 +170,7 @@
         </div>
       </div>
     </div>
+    <Like v-if="showDian" :hotelList="hotelList"></Like>
     <div class="container">
       <!-- 预定部分 -->
       <Booking :hotelList="hotelList.products" ref="book"></Booking>
@@ -196,8 +209,10 @@ export default {
   data() {
     return {
       show: false,
+      showDian: false,
       showStart: true,
       showPrice: false,
+
       dialogTableVisible: false,
       hotelList: {},
       baseSrc: require("~/assets/images/1.jpeg"),
@@ -225,6 +240,7 @@ export default {
       isNoTrackScroll: false,
       activeIndex: 1,
       msgBox: null,
+      isShowDian: false,
     };
   },
   computed: {},
@@ -239,9 +255,11 @@ export default {
         this.isFixed = true;
         // nav导航栏固定显示预定&价钱
         this.showPrice = true;
+        this.isShowDian = true;
       } else {
         this.isFixed = false;
         this.showPrice = false;
+        this.isShowDian = false;
         if (!this.isNoTrackScroll) {
           this.activeIndex = 0;
         }
@@ -522,6 +540,20 @@ export default {
       font-size: 22px;
       color: #f90;
     }
+    .shouThree {
+      font-size: 22px;
+      color: #f90;
+    }
+    .dianOne {
+      position: absolute;
+      left: 1080px;
+      top: 17px;
+    }
+    .dianTwo {
+      position: absolute;
+      left: 890px;
+      top: 17px;
+    }
     .price {
       position: absolute;
       left: 1085px;
@@ -560,6 +592,15 @@ export default {
   z-index: 999;
 }
 .row {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 200;
+}
+.rowOne {
   position: fixed;
   top: 0;
   left: 0;
