@@ -211,7 +211,12 @@ export default {
             let markers = []
             this.markers = []
             // 遍历-创建点实例
-            this.location.forEach(item => {
+            this.location.forEach((item,index) => {
+                if(index == 1){
+                    let lng = item.y 
+                    let lat = item.x 
+                    this.map.setCenter([lng, lat]); //设置地图中心点
+                }
                 var maker = new AMap.Marker({
                     position: [item.y, item.x],
                 })
