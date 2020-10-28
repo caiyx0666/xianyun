@@ -15,6 +15,7 @@ export default function ({ $axios }) {
         // 3. 弹窗 这里并非组件内部, 无法使用 this 需要单独引入 Message 弹窗组件
         const regexp = /^4\d\d/
         if (regexp.test(statusCode)) {
+            Message.closeAll()
             Message.warning(message)
         }
     })

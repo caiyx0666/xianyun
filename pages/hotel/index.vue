@@ -49,8 +49,7 @@
 
             <!-- 条件筛选 -->
             <HotelFilter @getHotelList="getHotelList" />
-            
-            
+
             <!-- 酒店列表 -->
             <div v-if="hotelList.data.length">
                 <HotelList v-loading="loading" :hotel="hotel" v-for="hotel in hotelList.data" :key="hotel.id" />
@@ -58,7 +57,6 @@
 
             <!-- 酒店列表分页组件 -->
             <el-pagination background layout="prev, pager, next" :total="hotelList.total" @current-change="currentChange" :current-page="currentPage" />
-
 
             <div class="hotelBox" v-loading="loading" v-if="isBox">
                 <p v-if="!hotelList.data.length && isGo">找不到符合要求的酒店了😥</p>
@@ -71,7 +69,7 @@
 export default {
     data() {
         return {
-            isBox:true,
+            isBox: true,
             isGo: false,
             isMap: true,
             cityId: '',
@@ -91,7 +89,7 @@ export default {
             markers: []
         }
     },
-    created(){
+    created() {
         this.loading = true
         this.isMap = true
     },
@@ -99,7 +97,7 @@ export default {
     async mounted() {
         window.onLoad = async () => {
             var map = new AMap.Map("container", {
-                zoom: 15, // 级别
+                zoom: 7, // 级别
                 center: [113.428072, 23.129259], // 中心点坐标
                 viewMode: "3D", // 使用3D视图
                 autoFitView: true, // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
@@ -115,6 +113,14 @@ export default {
                 await this.$axios({
                     url: '/cities?name=' + this.$route.query.cityName
                 }).then(res => {
+                    if (!res.data.data.length) {
+                        this.$message({
+                            showClose: true,
+                            message: `搜索不到当前城市`,
+                            type: 'error'
+                        });
+                        return
+                    }
                     // console.log(res.data.data[0].id);
                     this.cityId = res.data.data[0].id
                 })
@@ -124,7 +130,7 @@ export default {
             }
 
         };
-        
+
         var key = "d5192dea5a16faf3b3afdd0fb562d794"; // 你的key
         var url = `https://webapi.amap.com/maps?v=1.4.15&key=${key}&callback=onLoad`;
         var jsapi = document.createElement('script');
@@ -197,9 +203,9 @@ export default {
             HotelList.data.data = HotelList.data.data.slice((this.currentPage - 1) * 10, (this.currentPage) * 10)
             this.hotelList = HotelList.data
             this.loading = false
-            if(!this.hotelList.data.length){
+            if (!this.hotelList.data.length) {
                 this.isGo = true
-            }else {
+            } else {
                 this.isBox = false
             }
 
@@ -232,19 +238,25 @@ export default {
 
             // 遍历-创建点实例
             this.location.forEach((item, index) => {
-                if (index == 1) {
-                    let lng = item.y
-                    let lat = item.x
-                    this.map.setCenter([lng, lat]); // 设置地图中心点
-                }
-
+                var markerContent =
+                    ""
+                    +
+                    '<div class="custom-content-marker">'
+                    +
+                    '<img src="https://webapi.amap.com/theme/v1.3/markers/b/mark_bs.png">'
+                    +
+                    `<div class="close-btn" onclick="clearMarker()">${index + 1}</div>`
+                    +
+                    '</div>';
+                // console.log('markerContent', markerContent);
                 var maker = new AMap.Marker({
+                    content: markerContent,
                     position: [item.y, item.x],
                 })
                 this.markers.push(maker)
             })
+            this.map.panTo([this.location[0].y, this.location[0].x])
             // 添加点
-            // setTimeout
             this.map.add(this.markers)
             this.isMap = false
         },
@@ -261,6 +273,15 @@ export default {
                 await this.$axios({
                     url: '/cities?name=' + this.urlCityName
                 }).then(res => {
+                    console.log(res);
+                    if (!res.data.data.length) {
+                        this.$message({
+                            showClose: true,
+                            message: `搜索不到当前城市`,
+                            type: 'error'
+                        });
+                        return
+                    }
                     // console.log(res.data.data[0].id);
                     this.cityId = res.data.data[0].id
                 })
@@ -339,6 +360,30 @@ export default {
 .popbox {
     font-size: 12px;
 }
+/deep/.custom-content-marker {
+    position: relative;
+    width: 25px;
+    height: 34px;
+    // opacity: 0;
+}
+/deep/.custom-content-marker img {
+    width: 100%;
+    height: 100%;
+}
+/deep/.custom-content-marker .close-btn {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    width: 15px;
+    height: 15px;
+    font-size: 12px;
+    background: #318ff4;
+    border-radius: 50%;
+    color: #fff;
+    text-align: center;
+    line-height: 15px;
+    // box-shadow: -1px 1px 1px rgba(10, 10, 10, 0.2);
+}
 .hotelBox {
     text-align: center;
     height: 200px;
@@ -346,5 +391,11 @@ export default {
 .el-pagination {
     margin: 20px 0;
     text-align: center;
+}
+.el-tag--plain.is-hit {
+    border-color: #f8efd4;
+}
+.el-tag--plain {
+    color: #f5a25d;
 }
 </style>
