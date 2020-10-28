@@ -199,6 +199,17 @@ export default {
     },
     // 提交评论按钮
     submitReply() {
+      // 判断搜索为空或有空格时
+      if (
+        this.textarea.replace(/[ ]/g, "").length == 0 &&
+        this.pics.length == 0
+      ) {
+        // 防止弹出多个提示框
+        this.$message.closeAll();
+        this.$message.warning("必须要有评论内容或图片才能占领沙发");
+        return;
+      }
+
       // data 是下面发送请求需要的参数,用一个对象打包参数
       let data = {
         content: this.textarea,
@@ -209,7 +220,7 @@ export default {
       if (this.$store.state.user.reply.follow) {
         data.follow = this.$store.state.user.reply.follow;
       }
-      console.log(data);
+      console.log("评论内容：", data);
 
       // 上面data的数据处理是为了点击提交评论的时候，判断是回复评论还是评论文章
       this.$axios({
@@ -222,9 +233,7 @@ export default {
         }
       }).then(res => {
         console.log(res);
-        if (this.$store.state.user.reply.follow) {
-          this.$store.commit("user/mainId", "");
-        }
+        this.$store.commit("user/clearReply");
         this.textarea = "";
         this.pics = [];
         this.img = [];
@@ -253,6 +262,8 @@ export default {
     // 清理回复评论数据
     closeReply() {
       this.$store.commit("user/clearReply");
+      // 就让输入框高亮,输入框绑定 ref="input" 属性拿到输入框
+      this.$refs.input.focus();
     }
   },
   watch: {
@@ -341,7 +352,7 @@ export default {
         }
         .replyname {
           background-color: #e4e4e4;
-          width: 140px;
+          display: inline-block;
           font-size: 12px;
           padding: 5px 10px;
           border: 1px solid #ccc;
