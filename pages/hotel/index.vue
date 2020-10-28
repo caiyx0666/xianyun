@@ -49,8 +49,7 @@
 
             <!-- 条件筛选 -->
             <HotelFilter @getHotelList="getHotelList" />
-            
-            
+
             <!-- 酒店列表 -->
             <div v-if="hotelList.data.length">
                 <HotelList v-loading="loading" :hotel="hotel" v-for="hotel in hotelList.data" :key="hotel.id" />
@@ -58,7 +57,6 @@
 
             <!-- 酒店列表分页组件 -->
             <el-pagination background layout="prev, pager, next" :total="hotelList.total" @current-change="currentChange" :current-page="currentPage" />
-
 
             <div class="hotelBox" v-loading="loading" v-if="isBox">
                 <p v-if="!hotelList.data.length && isGo">找不到符合要求的酒店了😥</p>
@@ -71,7 +69,7 @@
 export default {
     data() {
         return {
-            isBox:true,
+            isBox: true,
             isGo: false,
             isMap: true,
             cityId: '',
@@ -91,7 +89,7 @@ export default {
             markers: []
         }
     },
-    created(){
+    created() {
         this.loading = true
         this.isMap = true
     },
@@ -115,7 +113,7 @@ export default {
                 await this.$axios({
                     url: '/cities?name=' + this.$route.query.cityName
                 }).then(res => {
-                    if(!res.data.data.length){
+                    if (!res.data.data.length) {
                         this.$message({
                             showClose: true,
                             message: `搜索不到当前城市`,
@@ -132,7 +130,7 @@ export default {
             }
 
         };
-        
+
         var key = "d5192dea5a16faf3b3afdd0fb562d794"; // 你的key
         var url = `https://webapi.amap.com/maps?v=1.4.15&key=${key}&callback=onLoad`;
         var jsapi = document.createElement('script');
@@ -205,9 +203,9 @@ export default {
             HotelList.data.data = HotelList.data.data.slice((this.currentPage - 1) * 10, (this.currentPage) * 10)
             this.hotelList = HotelList.data
             this.loading = false
-            if(!this.hotelList.data.length){
+            if (!this.hotelList.data.length) {
                 this.isGo = true
-            }else {
+            } else {
                 this.isBox = false
             }
 
@@ -276,7 +274,7 @@ export default {
                     url: '/cities?name=' + this.urlCityName
                 }).then(res => {
                     console.log(res);
-                    if(!res.data.data.length){
+                    if (!res.data.data.length) {
                         this.$message({
                             showClose: true,
                             message: `搜索不到当前城市`,
@@ -385,7 +383,8 @@ export default {
     text-align: center;
     line-height: 15px;
     // box-shadow: -1px 1px 1px rgba(10, 10, 10, 0.2);
-}.hotelBox {
+}
+.hotelBox {
     text-align: center;
     height: 200px;
 }
