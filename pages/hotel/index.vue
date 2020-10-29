@@ -208,6 +208,7 @@ export default {
             this.loading = false
             if (!this.hotelList.data.length) {
                 this.isGo = true
+                this.isBox = true
             } else {
                 this.isBox = false
             }
@@ -220,9 +221,11 @@ export default {
                     y: item.location.longitude,
                 })
             })
-
+            console.log(this.location);
             // 加载地图
-            this.mapLoad()
+            if(this.location.length){
+                this.mapLoad()
+            }
         },
 
         // 当前页发生变化

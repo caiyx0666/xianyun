@@ -16,7 +16,7 @@
             <span>住宿等级</span>
             <el-popover
               placement="bottom-start"
-              trigger="click"
+              trigger="hover"
               transition="el-zoom-in-top"
               :offset="-20">
                  <el-checkbox-group v-model="levelsIndex" @change="levelsChange">
@@ -34,7 +34,7 @@
             <span>住宿类型</span>
             <el-popover
               placement="bottom-start"
-              trigger="click"
+              trigger="hover"
               transition="el-zoom-in-top"
               :offset="-20">
 
@@ -52,7 +52,7 @@
             <span>酒店设施</span>
             <el-popover
               placement="bottom-start"
-              trigger="click"
+              trigger="hover"
               transition="el-zoom-in-top"
               :offset="-20">
 
@@ -71,7 +71,7 @@
             <span>酒店品牌</span>
             <el-popover
               placement="bottom-start"
-              trigger="click"
+              trigger="hover"
               transition="el-zoom-in-top"
               :offset="-20">
 
