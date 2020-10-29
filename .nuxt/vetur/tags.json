@@ -11,48 +11,6 @@
   "LazyPageHeader": {
     "description": "Auto imported from components/PageHeader.vue"
   },
-  "FlightsAside": {
-    "description": "Auto imported from components/air/FlightsAside.vue"
-  },
-  "LazyFlightsAside": {
-    "description": "Auto imported from components/air/FlightsAside.vue"
-  },
-  "FlightsFilter": {
-    "description": "Auto imported from components/air/FlightsFilter.vue"
-  },
-  "LazyFlightsFilter": {
-    "description": "Auto imported from components/air/FlightsFilter.vue"
-  },
-  "FlightsItem": {
-    "description": "Auto imported from components/air/FlightsItem.vue"
-  },
-  "LazyFlightsItem": {
-    "description": "Auto imported from components/air/FlightsItem.vue"
-  },
-  "FlightsListHead": {
-    "description": "Auto imported from components/air/FlightsListHead.vue"
-  },
-  "LazyFlightsListHead": {
-    "description": "Auto imported from components/air/FlightsListHead.vue"
-  },
-  "OrderAside": {
-    "description": "Auto imported from components/air/OrderAside.vue"
-  },
-  "LazyOrderAside": {
-    "description": "Auto imported from components/air/OrderAside.vue"
-  },
-  "OrderForm": {
-    "description": "Auto imported from components/air/OrderForm.vue"
-  },
-  "LazyOrderForm": {
-    "description": "Auto imported from components/air/OrderForm.vue"
-  },
-  "SearchForm": {
-    "description": "Auto imported from components/air/SearchForm.vue"
-  },
-  "LazySearchForm": {
-    "description": "Auto imported from components/air/SearchForm.vue"
-  },
   "Booking": {
     "description": "Auto imported from components/hotel/Booking.vue"
   },
@@ -118,6 +76,48 @@
   },
   "LazyNav": {
     "description": "Auto imported from components/hotel/Nav.vue"
+  },
+  "FlightsAside": {
+    "description": "Auto imported from components/air/FlightsAside.vue"
+  },
+  "LazyFlightsAside": {
+    "description": "Auto imported from components/air/FlightsAside.vue"
+  },
+  "FlightsFilter": {
+    "description": "Auto imported from components/air/FlightsFilter.vue"
+  },
+  "LazyFlightsFilter": {
+    "description": "Auto imported from components/air/FlightsFilter.vue"
+  },
+  "FlightsItem": {
+    "description": "Auto imported from components/air/FlightsItem.vue"
+  },
+  "LazyFlightsItem": {
+    "description": "Auto imported from components/air/FlightsItem.vue"
+  },
+  "FlightsListHead": {
+    "description": "Auto imported from components/air/FlightsListHead.vue"
+  },
+  "LazyFlightsListHead": {
+    "description": "Auto imported from components/air/FlightsListHead.vue"
+  },
+  "OrderAside": {
+    "description": "Auto imported from components/air/OrderAside.vue"
+  },
+  "LazyOrderAside": {
+    "description": "Auto imported from components/air/OrderAside.vue"
+  },
+  "OrderForm": {
+    "description": "Auto imported from components/air/OrderForm.vue"
+  },
+  "LazyOrderForm": {
+    "description": "Auto imported from components/air/OrderForm.vue"
+  },
+  "SearchForm": {
+    "description": "Auto imported from components/air/SearchForm.vue"
+  },
+  "LazySearchForm": {
+    "description": "Auto imported from components/air/SearchForm.vue"
   },
   "ArticlesList": {
     "description": "Auto imported from components/post/ArticlesList.vue"
