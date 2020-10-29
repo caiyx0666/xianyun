@@ -38,7 +38,8 @@
               </span>
             </div>
             <div class="viwer">
-              <span class="el-icon-view"></span> {{ data.watch }}
+              <span class="el-icon-view"></span>
+              {{ data.watch == null ? 0 : data.watch }}
             </div>
           </div>
           <div class="dianzan" @click="handleClickLike(data.id)">
@@ -86,7 +87,8 @@
             </span>
           </div>
           <div class="viwer">
-            <span class="el-icon-view"></span> {{ data.watch }}
+            <span class="el-icon-view"></span>
+            {{ data.watch == null ? 0 : data.watch }}
           </div>
         </div>
         <div class="dianzan" @click="handleClickLike(data.id)">
@@ -132,7 +134,8 @@
             <span class="username"> {{ data.account.nickname }}</span>
           </div>
           <div class="viwer">
-            <span class="el-icon-view"></span> {{ data.watch }}
+            <span class="el-icon-view"></span>
+            {{ data.watch == null ? 0 : data.watch }}
           </div>
         </div>
         <div class="dianzan" @click="handleClickLike(data.id)">
@@ -172,7 +175,8 @@
             <span class="username"> {{ data.account.nickname }}</span>
           </div>
           <div class="viwer">
-            <span class="el-icon-view"></span> {{ data.watch }}
+            <span class="el-icon-view"></span>
+            {{ data.watch == null ? 0 : data.watch }}
           </div>
         </div>
         <div class="dianzan" @click="handleClickLike(data.id)">
@@ -207,6 +211,7 @@ export default {
     },
     handleClickLike(id) {
       if (!this.$store.state.user.userInfo.token) {
+        this.$message.closeAll();
         this.$message.error("请先登录哦");
         this.$router.push("/user/login");
         return;
@@ -270,6 +275,7 @@ export default {
       cursor: pointer;
     }
     .article {
+      height: 70px;
       font-size: 14px;
       color: #666;
       overflow: hidden;
