@@ -7,11 +7,13 @@
       <el-row>
         <el-col>
           <div class="breadcrumb">
-            您在这里：酒店 >
+            <span style="font-weight: 700">您在这里：</span>
+            酒店 >
             <span @click="handleClick">{{ hotelList.real_city }}</span> >
             {{ hotelList.name }}
           </div>
         </el-col>
+      
       </el-row>
 
       <!-- 酒店详情 -->
@@ -124,12 +126,12 @@
         <div class="dianOne" @click="showDian = true" v-if="!isShowDian">
           <span class="shouThree el-icon-document-copy"></span>
           <el-button type="text"></el-button>
-          <span>点评</span>
+          <span>评分</span>
         </div>
         <div class="dianTwo" @click="showDian = true" v-if="isShowDian">
           <span class="shouThree el-icon-document-copy"></span>
           <el-button type="text"></el-button>
-          <span>点评</span>
+          <span>评分</span>
         </div>
 
         <div class="cangOne" @click="isShowStart" v-if="!showPrice">
@@ -356,9 +358,9 @@ export default {
           id: this.$route.query.id,
         },
       }).then((res) => {
-        // console.log(res.data);
+        console.log(res.data);
         this.hotelList = res.data.data[0];
-        console.log(this.hotelList);
+        // console.log(this.hotelList);
       });
     },
     // handleClick(item) {
@@ -521,7 +523,7 @@ export default {
     }
 
     .cang {
-      font-size: 14px;
+      font-size: 16px;
       position: absolute;
       left: 980px;
       top: 17px;
@@ -532,7 +534,7 @@ export default {
       font-size: 14px;
       position: absolute;
       left: 1174px;
-      top: 17px;
+      top: 19px;
       align-items: center;
       display: flex;
     }
@@ -564,11 +566,13 @@ export default {
       position: absolute;
       left: 1080px;
       top: 17px;
+      font-size: 14px;
     }
     .dianTwo {
       position: absolute;
       left: 890px;
       top: 17px;
+      font-size: 14px;
     }
     .price {
       position: absolute;

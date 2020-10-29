@@ -8,7 +8,7 @@
         <el-row>
           <el-col :span="4" class="zuobian"> <span>*</span>总体评价 </el-col>
           <el-col class="start" :span="20">
-            <el-rate v-model="rateValue" :texts="text" allow-half> </el-rate>
+            <el-rate v-model="rateValue" :colors="colors" allow-half> </el-rate>
             <span class="hongse">点击星星打分</span>
           </el-col>
         </el-row>
@@ -17,7 +17,8 @@
         <el-row>
           <el-col :span="4" class="zuobian"> <span>*</span>位置 </el-col>
           <el-col class="start" :span="20">
-            <el-rate v-model="rateValue1" :texts="text" allow-half> </el-rate>
+            <el-rate v-model="rateValue1" :colors="colors" allow-half>
+            </el-rate>
             <span class="hongse">给位置打分</span>
           </el-col>
         </el-row>
@@ -26,7 +27,8 @@
         <el-row>
           <el-col :span="4" class="zuobian"> <span>*</span>清洁度 </el-col>
           <el-col class="start" :span="20">
-            <el-rate v-model="rateValue2" :texts="text" allow-half> </el-rate>
+            <el-rate v-model="rateValue2" :colors="colors" allow-half>
+            </el-rate>
             <span class="hongse">给清洁度打分</span>
           </el-col>
         </el-row>
@@ -35,7 +37,8 @@
         <el-row>
           <el-col :span="4" class="zuobian"> <span>*</span>设施 </el-col>
           <el-col class="start" :span="20">
-            <el-rate v-model="rateValue3" :texts="text" allow-half> </el-rate>
+            <el-rate v-model="rateValue3" :colors="colors" allow-half>
+            </el-rate>
             <span class="hongse">给设施打分</span>
           </el-col>
         </el-row>
@@ -44,7 +47,8 @@
         <el-row>
           <el-col :span="4" class="zuobian"> <span>*</span>服务 </el-col>
           <el-col class="start" :span="20">
-            <el-rate v-model="rateValue4" :texts="text" allow-half> </el-rate>
+            <el-rate v-model="rateValue4" :colors="colors" allow-half>
+            </el-rate>
             <span class="hongse">给服务打分</span>
           </el-col>
         </el-row>
@@ -53,7 +57,8 @@
         <el-row>
           <el-col :span="4" class="zuobian"> <span>*</span>舒适度 </el-col>
           <el-col class="start" :span="20">
-            <el-rate v-model="rateValue5" :texts="text" allow-half> </el-rate>
+            <el-rate v-model="rateValue5" :colors="colors" allow-half>
+            </el-rate>
             <span class="hongse">给舒适度打分</span>
           </el-col>
         </el-row>
@@ -62,7 +67,8 @@
         <el-row>
           <el-col :span="4" class="zuobian"> <span>*</span>餐饮 </el-col>
           <el-col class="start" :span="20">
-            <el-rate v-model="rateValue6" :texts="text" allow-half> </el-rate>
+            <el-rate v-model="rateValue6" :colors="colors" allow-half>
+            </el-rate>
             <span class="hongse">给餐饮打分</span>
           </el-col>
         </el-row>
@@ -113,6 +119,7 @@ export default {
       rateValue4: null,
       rateValue5: null,
       rateValue6: null,
+      colors: ["#99A9BF", "#F7BA2A", "#FF9900"],
     };
   },
   methods: {
