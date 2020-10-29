@@ -13,7 +13,6 @@
             {{ hotelList.name }}
           </div>
         </el-col>
-      
       </el-row>
 
       <!-- 酒店详情 -->
@@ -172,7 +171,11 @@
         </div>
       </div>
     </div>
-    <Like v-if="showDian" :hotelList="hotelList"></Like>
+    <Like
+      v-if="showDian"
+      :hotelList="hotelList"
+      @showDianOne="showDianOne"
+    ></Like>
     <div class="container">
       <!-- 预定部分 -->
       <Booking :hotelList="hotelList.products" ref="book"></Booking>
@@ -273,6 +276,9 @@ export default {
   },
 
   methods: {
+    showDianOne() {
+      this.showDian = false;
+    },
     open() {
       this.$confirm("真的要取消收藏吗？", "提示", {
         confirmButtonText: "确定",

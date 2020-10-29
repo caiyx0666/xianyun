@@ -146,6 +146,12 @@ export default {
         confirmButtonText: "确定",
         type: "success",
         center: true,
+      }).then(() => {
+        this.$emit("showDianOne");
+        this.$message({
+          type: "success",
+          message: "提交成功",
+        });
       });
     },
   },
