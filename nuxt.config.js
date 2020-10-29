@@ -15,7 +15,8 @@ export default {
         ],
         link: [
             { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-            { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_1168872_ehvuah8v57g.css' } // 新增全局字体样式
+            { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_1168872_ehvuah8v57g.css' }, // 新增全局字体样式
+            { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_2159499_711d8l311d2.css' },
         ]
     },
 
@@ -35,13 +36,16 @@ export default {
     /*
      ** Plugins to load before mounting the App
      */
+    //  所有在 plugins 这里引入的文件
+    //  都会想之前的 main.js 代码一样
+    //  在创建 根实例之前执行
     plugins: [
         '@/plugins/element-ui',
         // '@/plugins/localstorage'
         // 引入插件的时候, 默认是字符串
         // 如果需要额外的配置, 就变成对象
         {
-            src: '@/plugins/localStorage',
+            src: '@/plugins/localstorage',
             // 指定这个插件不可以在服务端执行(只能等到浏览器当中再执行)
             ssr: false
         },
@@ -52,8 +56,6 @@ export default {
         }
     ],
 
-    components: true,
-
     /*
      ** Nuxt.js modules
      */
@@ -61,6 +63,7 @@ export default {
         // https://axios.nuxtjs.org/setup
         '@nuxtjs/axios'
     ],
+    components: true,
 
     /*
      ** Axios module configuration

@@ -2,52 +2,70 @@
     <div class="main">
         <div class="air-column">
             <h2>乘机人</h2>
-            <el-form 
-                class="member-info"
+            <el-form
                 ref="usersForm"
+                class="member-info"
                 :model="{
-                    users:users
-                }">
-                <div class="member-info-item"
-                  v-for="(user,index) in users"
-                  :key="user.uid">
-
-                    <el-form-item 
+                    users: users,
+                }"
+            >
+                <div
+                    class="member-info-item"
+                    v-for="(user, index) in users"
+                    :key="user.uid"
+                >
+                    <!-- 遍历生成的 form-item, 可以直接在表单项上声明规则 -->
+                    <!-- :prop="users[index].username"
+                    prop="users[0].username"
+                    prop="users[1].username"
+                    prop="users[2].username" -->
+                    <el-form-item
                         label="乘机人姓名"
                         :prop="`users[${index}].username`"
                         :rules="[
                             {
                                 required: true,
-                                message: '请输入您的姓名',
-                                trigger: 'blur'
-                            }
-                        ]">
-                        <el-input placeholder="姓名" class="input-with-select" v-model="user.username">
+                                message: '请输入数据',
+                                trigger: 'blur',
+                            },
+                        ]"
+                    >
+                        <el-input
+                            v-model="user.username"
+                            placeholder="姓名"
+                            class="input-with-select"
+                        >
                         </el-input>
                     </el-form-item>
 
-                    <el-form-item 
+                    <el-form-item
                         label="身份证号码"
                         :prop="`users[${index}].id`"
                         :rules="[
                             {
                                 required: true,
-                                message: '请输入您的身份证号码',
-                                trigger: 'blur'
-                            }
-                        ]">
-                        <el-input 
-                            placeholder="证件号码"  
+                                message: '请输入数据',
+                                trigger: 'blur',
+                            },
+                        ]"
+                    >
+                        <el-input
+                            v-model="user.id"
+                            placeholder="证件号码"
                             class="input-with-select"
-                            v-model="user.id">
+                        >
                         </el-input>
                     </el-form-item>
 
-                    <span class="delete-user" @click="handleDeleteUser(index)">-</span>
+                    <span class="delete-user" @click="handleDeleteUser(index)"
+                        >-</span
+                    >
                 </div>
             </el-form>
 
-            <el-button class="add-member" type='primary' @click="handleAddUsers">添加乘机人</el-button>
+            <el-button class="add-member" type="primary" @click="handleAddUsers"
+                >添加乘机人</el-button
+            >
         </div>
 
         <div class="air-column">
@@ -57,17 +75,17 @@
                     <div
                         class="insurance-item"
                         v-for="item in data.insurances"
-                        :key="item.id">
-                       <el-checkbox :label="item.id" border>
+                        :key="item.id"
+                    >
+                        <el-checkbox :label="item.id" border>
                             {{
                                 `${item.type}: ￥${item.price}/份 x ${users.length} 最高赔付 ${item.compensation}`
                             }}
                         </el-checkbox>
                     </div>
                 </el-checkbox-group>
-
             </div>
-             <h2>发票</h2>
+            <h2>发票</h2>
             <div>
                 <el-checkbox v-model="invoice">需要发票</el-checkbox>
             </div>
@@ -76,24 +94,29 @@
         <div class="air-column">
             <h2>联系人</h2>
             <div class="contact">
-               <el-form 
-                label-width="80px" 
-                ref="contactForm"
-                :model="{
-                    contactName,
-                    contactPhone,
-                    captcha
-                }"
-                :rules="contactRules"
+                <el-form
+                    label-width="80px"
+                    :model="{
+                        contactName,
+                        contactPhone,
+                        captcha,
+                    }"
+                    :rules="contactRules"
+                    ref="contactForm"
                 >
                     <el-form-item label="姓名" prop="contactName">
                         <el-input v-model="contactName"></el-input>
                     </el-form-item>
 
                     <el-form-item label="手机" prop="contactPhone">
-                        <el-input placeholder="请输入内容" v-model="contactPhone">
+                        <el-input
+                            placeholder="请输入内容"
+                            v-model="contactPhone"
+                        >
                             <template slot="append">
-                            <el-button @click="handleSendCaptcha" >发送验证码</el-button>
+                                <el-button @click="handleSendCaptcha"
+                                    >发送验证码</el-button
+                                >
                             </template>
                         </el-input>
                     </el-form-item>
@@ -101,7 +124,7 @@
                     <el-form-item label="验证码" prop="captcha">
                         <el-input v-model="captcha"></el-input>
                     </el-form-item>
-                </el-form>   
+                </el-form>
                 <el-button 
                     type="warning" 
                     class="submit" 
@@ -110,7 +133,6 @@
                 >
                     提交订单
                 </el-button>
-
                 <div class="container" v-else>
                     <!-- 主要内容 -->
                     <el-row
@@ -140,140 +162,157 @@
                         </div>
                     </el-row>
                 </div>
-
             </div>
         </div>
         <div style="display: none">
-            {{TotalPrice}}
+            {{ totalPrice }}
         </div>
     </div>
 </template>
 
 <script>
-export default {
-    props:{
-        data:Object
-    },
-    data(){
-        return {
-            currentTab: 0,
-            contactRules: {
-                contactName: [
+    export default {
+        props: {
+            data: Object,
+        },
+        data() {
+            return {
+                currentTab: 0,
+                // memberRules: {
+                //     // 遍历生成的字段这样写规则不靠谱
+                //     'users[0].username': [],
+                //     'users[0].id': [],
+                //     'users[1].username': [],
+                //     'users[1].id': [],
+                //     'users[2].username': [],
+                //     'users[2].id': [],
+                // },
+                contactRules: {
+                    contactName: [
+                        {
+                            required: true,
+                            message: "请输入数据",
+                            trigger: "blur",
+                        },
+                    ],
+                    contactPhone: [
+                        {
+                            required: true,
+                            message: "请输入数据",
+                            trigger: "blur",
+                        },
+                    ],
+                    captcha: [
+                        {
+                            required: true,
+                            message: "请输入数据",
+                            trigger: "blur",
+                        },
+                    ],
+                },
+                users: [
+                    // 这里用来存放所有的乘机人
+                    // 每个对象都是一个乘机人数据对象
                     {
-                        required: true,
-                        message: '请输入数据',
-                        trigger: 'blur'
-                    }
+                        // 用户名
+                        username: "哈哈",
+                        // 身份证号
+                        id: "450433222222222222",
+                        uid: new Date().getTime(),
+                    },
                 ],
-                contactPhone: [
-                    {
-                        required: true,
-                        message: '请输入数据',
-                        trigger: 'blur'
-                    }
-                ],
-                captcha: [
-                    {
-                        required: true,
-                        message: '请输入数据',
-                        trigger: 'blur'
-                    }
-                ]
-            }, 
-            users:[
-                // 这里来存放所有乘机人
-                // 每个对象都是一个乘机人数据对象
-                {
-                    username:'',
-                    id:'',   // 身份证
-                    uid:new Date().getTime()
-                }
-            ],
-            insurances: [],
-             contactName: '嘿嘿',
-                contactPhone: '13847474837',
-                captcha: '000000',
+                insurances: [],
+                contactName: "呵呵",
+                contactPhone: "13847474837",
+                captcha: "000000",
                 invoice: false,
-        }
-    },
-    methods: {
-        // 添加乘机人
-        handleAddUsers(){
-            this.users.push({
-                username:'',
-                id:'',
-                uid:new Date().getTime()
-            })
+            };
         },
-        
-        // 移除乘机人
-        handleDeleteUser(index){
-            this.users.splice(index,1)
+        computed: {
+            totalPrice() {
+                const ticketPrice = this.data.base_price * this.users.length;
+                let insurancePrice = 0;
+
+                // 现在选中的checkList 应该是 this.insurances 格式类似 [1,2]
+                // 遍历里面的每个被选中的id
+                this.insurances.forEach((id) => {
+                    // 遍历到的每个元素都是 id 如 1 或者 2
+                    // 需要在整个保险数据中找出对应id的价格
+                    // 保险对象在 this.data.insurances
+                    // 结构大概是一个数组包裹保险数据对象
+                    // [
+                    //     {
+                    //         id: 1,
+                    //         price: 998
+                    //     }
+                    // ]
+                    // 遍历这个数组, 找出对应 id 的价格
+                    // 可以根据选中保险 id 计算出当前保险应该付多少钱的函数
+                    insurancePrice += this.getInsurancePrice(id);
+                });
+
+                // this.insurances.forEach(element => {
+                //     // [1,2]
+                //     // 遍历选中的保险, 这里选中时的储存都是保险id
+                //     console.log(element);
+                //     // 拿到了id以后应该根据这个id获取保险的价格
+                //     this.data.insurances.forEach(insurance => {
+                //         if (insurance.id == element) {
+                //             // 拿到了当前选中 id 保险的价格,
+                //             // 应该乘以人数, 添加到总价上
+                //             insurancePrice += insurance.price * this.users.length
+                //         }
+                //     });
+                // });
+
+                console.log(insurancePrice);
+                const totalPrice = ticketPrice + insurancePrice;
+                // 得出了总价
+                this.$emit("setTotalPrice", totalPrice);
+                console.log("计算总价" + totalPrice);
+                return totalPrice;
+            },
         },
-        
-        // 发送手机验证码
-        handleSendCaptcha(){
-            if(!this.contactPhone){
-                this.$message.warning('请先输入手机号')
-                return
-            }
 
-            // 订单发送验证码前先进行校验手机号码是否合法
-            const regexp = /^1[3456789]\d{9}$/
-            if(!regexp.test(this.contactPhone)){
-                this.$message.error('手机号不合法')
-                return
-            }
-
-            this.$axios({
-                method:'post',
-                url:'/captchas',
-                data:{
-                    tel:this.contactPhone
-                }
-            }).then(res =>{
-                // console.log(res.data);
-                if(res.data.code){
-                    this.$message.success('发送成功'+res.data.code)
-                }
-            })
-        },
-
-        // 提交订单
-        async handleSubmit(){
+        methods: {
+            handleChangeTab(index) {
+                this.currentTab = index;
+            },
+            getInsurancePrice(id) {
+                // 可以根据选中保险 id 计算出当前保险应该付多少钱的函数
+                let res = 0;
+                this.data.insurances.forEach((element) => {
+                    if (id == element.id) {
+                        res = element.price * this.users.length;
+                    }
+                });
+                return res;
+            },
             // 异步函数写成同步的样子
-            // 发送请求之前先调用饿了么校验方法进行一次总校验
-            // 如果两个表单都要校验，使用回调的形式会形成回调地狱
-            // 先校验乘机人 => 回调中校验联系人 => 成功后在发送请求
-            
-            // const isValidUsers = await this.$refs.usersForm.validate()
-            // const isValidContact = await this.$refs.contactForm.validate()
+            async handleSubmit() {
+                console.log("点击按钮提交");
+                // 像 JSON.parse 一样 Promise 也自带一些方法
+                // 有一个 all 的方法, 可以通过传入一个由 promise 组成的数组
+                // 一起执行, 等到两个都完成以后, 才会返回一个对应传入数组的结果组成的数组
+                // Promise.all([this.$refs.usersForm.validate(),this.$refs.contactForm.validate()]).then(res=>{
+                //     if(res[0] && res[1]) {
+                //         console.log('发送请求');
+                //     }
+                // })
 
-
-            // if(isValidUsers && isValidContact){
-            //     // 两个同时为真才发送请求
-            //     this.sendRequest()   
-            //     console.log('发送请求了');
-            // }
-            let isOk =[]
-            try {
-                isOk = await Promise.all([
-                this.$refs.usersForm.validate(),
-                this.$refs.contactForm.validate()
-            ])
-            } catch (err) {
-                this.$message.warning('请将信息填写完整')
-                return
-            }
-
-            const [validUsers,validContact] = isOk
-
-            if(validUsers && validContact){
-                this.sendRequest()
-            }
-        },
-        sendRequest() {
-            const data = {
+                const [validUsers, validContact] = await Promise.all([
+                    this.$refs.usersForm.validate(),
+                    this.$refs.contactForm.validate(),
+                ]);
+                if (validUsers && validContact) {
+                    this.sendRequest();
+                }
+            },
+            sendRequest() {
+                console.log(this.users);
+                console.log(this.insurances);
+                // 开始拼接数据
+                const data = {
                     users: this.users,
                     insurances: this.insurances,
                     contactName: this.contactName,
@@ -281,76 +320,75 @@ export default {
                     invoice: this.invoice,
                     seat_xid: this.$route.query.seat_xid,
                     air: this.$route.query.id,
-                    captcha: this.captcha
-            }
-            this.$axios({
-                   method: 'post',
-                   url: '/airorders',
-                   headers: {
-                       Authorization: "Bearer " + this.$store.state.user.userInfo.token
-                   },
-                   data
-            }).then(res=>{
-                console.log(res.data);
-                if(res.data.message == "订单提交成功"){
-                    this.$router.push(`/air/pay?id=${res.data.data.id}`)
-                }
-            })
-        }
-        
-    },
-    computed:{
-        TotalPrice(){
-            // 计算总价格
-            // 机票价格 = 人数 * 机票单价
-            // 保险价格 = 人数 * 所有选中的保险单价
-            const ticketPrice = this.data.base_price * this.users.length
-            let insurancePrice = 0
+                    captcha: this.captcha,
+                };
 
-            this.insurances.forEach(element=>{
-                // 遍历选中的保险，这里选中的储存都是保险的id
-                this.data.insurances.forEach(insurance => {
-                    if(insurance.id == element){
-                        // 拿到了当前选中 id 保险的价格
-                        // 应该乘以人数，添加到总价上
-                        insurancePrice += insurance.price * this.users.length
+                this.$axios({
+                    method: "post",
+                    url: "/airorders",
+                    headers: {
+                        Authorization:
+                            "Bearer " + this.$store.state.user.userInfo.token,
+                    },
+                    data,
+                }).then((res) => {
+                    console.log(res.data);
+                    // 下单成功, 跳转到订单页面
+                    if (res.data.message = '订单提交成功') {
+                        this.$router.push('/air/pay?id='+res.data.data.id)
                     }
-                })
-            })
+                });
+            },
+            handleSendCaptcha() {
+                if (!this.contactPhone) {
+                    this.$message.error("请先输入手机号");
+                    return;
+                }
+                // 添加合法校验
+                const regexp = /^1[3456789]\d{9}$/;
+                if (!regexp.test(this.contactPhone)) {
+                    this.$message.error("手机号不合法");
+                    return;
+                }
 
-            console.log(insurancePrice);
-            const totalPrice = ticketPrice + insurancePrice
-            // 得出了总价
-            this.$emit('setTotalPrice', totalPrice)
-            return totalPrice
-        }
-    },
-    // watch: {
-        // users:{
-        //     handler(){
-        //         this.getTotalPrice()
-        //     },
-        //     // 这个属性可以强制 watch 在页面加载完毕马上触发一次
-        //     immediate:true
-        // },
-        // insurances:{
-        //     handler(){
-        //         this.getTotalPrice()
-        //     },
-        //     immediate:true
-        // }
-    // },
-}
+                this.$axios({
+                    method: "post",
+                    url: "/captchas",
+                    data: {
+                        tel: this.contactPhone,
+                    },
+                }).then((res) => {
+                    console.log(res.data);
+                    if (res.data.code) {
+                        this.$message.success("发送成功：" + res.data.code);
+                    }
+                });
+            },
+            handleAddUsers() {
+                this.users.push({
+                    // 用户名
+                    username: "",
+                    // 身份证号
+                    id: "",
+                    uid: new Date().getTime(),
+                });
+            },
+            handleDeleteUser(index) {
+                this.users.splice(index, 1);
+            },
+        },
+    };
 </script>
 
+
 <style scoped lang="less">
-    .air-column{
-        border-bottom:1px #ddd dashed;
-        padding-bottom: 20px;   
+    .air-column {
+        border-bottom: 1px #ddd dashed;
+        padding-bottom: 20px;
         margin-bottom: 20px;
     }
 
-    .air-column h2{
+    .air-column h2 {
         margin-bottom: 20px;
         font-size: 22px;
         font-weight: normal;
@@ -360,70 +398,73 @@ export default {
         width: 130px;
     }
 
-    .input-with-select{
-        width:590px;
+    .input-with-select {
+        width: 590px;
     }
 
-    .input-with-select /deep/  .el-input-group__prepend {
+    .input-with-select /deep/ .el-input-group__prepend {
         background-color: #fff;
     }
+    // .member-info /deep/ .el-form-item {
+    //     margin-bottom: 0;
+    // }
 
-    .member-info-item{
-        border-bottom:1px #eee dashed;
+    .member-info-item {
+        border-bottom: 1px #eee dashed;
         padding-bottom: 20px;
         position: relative;
 
-        &:first-child{
-            .delete-user{
+        &:first-child {
+            .delete-user {
                 display: none;
             }
         }
     }
 
-    .add-member{
-        margin-top:20px;
+    .add-member {
+        margin-top: 20px;
     }
 
-    .delete-user{
+    .delete-user {
         display: block;
-        background:#ddd;
-        width:16px;
-        height:16px;
-        font-size:14px;
+        background: #ddd;
+        width: 16px;
+        height: 16px;
+        font-size: 14px;
         text-align: center;
         line-height: 16px;
-        color:#fff;
+        color: #fff;
         cursor: pointer;
         border-radius: 50px;
-        position:absolute;
-        right:-30px;
-        top:50%;
+        position: absolute;
+        right: -30px;
+        top: 50%;
     }
 
-    .insurance{
-        > div{
-            margin-top:10px;
+    .insurance {
+        > div {
+            margin-top: 10px;
         }
     }
 
-    .insurance-item{
+    .insurance-item {
         margin-bottom: 20px;
     }
 
-    .contact{
-        /deep/ .el-input{
-            width:50%;
+    .contact {
+        /deep/ .el-input {
+            width: 50%;
         }
     }
 
-    .submit{
+    .submit {
         margin: 50px auto;
         display: block;
-        width:250px;
-        height:50px;
+        width: 250px;
+        height: 50px;
     }
 
-     .container {
+    .container {
         .main {
             height: 100%;
             margin: 0 auto;
@@ -433,11 +474,11 @@ export default {
                 width: 400px;
                 margin: 0 auto;
                 background: #fff;
-                box-shadow: 0px 2px 2px 2px rgba(0, 0, 0, 0.1);
+                box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
                 overflow: hidden;
-                
+
                 /deep/ .el-input {
-                    width: 100%;
+                    width: 100% !important;
                 }
 
                 .tabs {

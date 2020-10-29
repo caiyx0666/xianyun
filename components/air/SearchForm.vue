@@ -1,5 +1,5 @@
 <template>
-<div class="search-form">
+    <div class="search-form">
         <!-- 头部tab切换 -->
         <el-row type="flex" class="search-tab">
             <span
@@ -17,24 +17,24 @@
                 <!-- fetch-suggestions 返回输入建议的方法 -->
                 <!-- select 点击选中建议项时触发 -->
                 <el-autocomplete
+                    :trigger-on-focus="false"
+                    :highlight-first-item="true"
+                    v-model="form.departCity"
                     :fetch-suggestions="queryDepartSearch"
                     placeholder="请搜索出发城市"
                     @select="handleDepartSelect"
                     class="el-autocomplete"
-                    v-model="form.departCity"
-                    :trigger-on-focus="false"
-                    :highlight-first-item="true"
                 ></el-autocomplete>
             </el-form-item>
             <el-form-item label="到达城市">
                 <el-autocomplete
+                    :highlight-first-item="true"
+                    :trigger-on-focus="false"
+                    v-model="form.destCity"
                     :fetch-suggestions="queryDestSearch"
                     placeholder="请搜索到达城市"
                     @select="handleDestSelect"
                     class="el-autocomplete"
-                    v-model="form.destCity"
-                    :trigger-on-focus="false"
-                    :highlight-first-item="true"
                 ></el-autocomplete>
             </el-form-item>
 
@@ -60,138 +60,156 @@
                     搜索
                 </el-button>
             </el-form-item>
-
             <div class="reverse">
                 <span @click="handleReverse">换</span>
             </div>
-
         </el-form>
     </div>
 </template>
 
 <script>
-import moment from "moment";
-export default {
-   data(){
-       return{
-           tabs:[
-               {
-                   name:'单程',
-               },{
-                   name:'往返'
-               }
-           ],
-           currentTab:0,
-           // 管理全部数据
-           form: {
-               departCity: '',
-               departCode: '',
-               destCity: '',
-               destCode: '',
-               departDate: ''
-           }
-       }
-   },
-   methods:{
-        // 切换 tab
-        handleSearchTab(index) {
-                // 如果点击的 index == 1
-                // 就是点击了往返，弹出一个提示框即可
-                if(index == 1){
-                    this.$confirm('目前不支持往返，敬请期待','提示',{
-                        confirmButtonText:'知道了',
-                        showCancelButton:false,
-                        type:"warning"
+    import moment from "moment";
+    export default {
+        data() {
+            return {
+                tabs: [
+                    {
+                        name: "单程",
+                    },
+                    {
+                        name: "往返",
+                    },
+                ],
+                currentTab: 0,
+                // 管理全部数据
+                form: {
+                    departCity: "",
+                    departCode: "",
+                    destCity: "",
+                    destCode: "",
+                    departDate: "",
+                },
+            };
+        },
+        methods: {
+            // 切换 tab
+            handleSearchTab(index) {
+                // 只要判断 点击的 index == 1 
+                // 就是点击了往返, 弹出一个提示框即可
+                if (index == 1) {
+                    this.$confirm('目前不支持往返, 敬请期待', '提示', {
+                        confirmButtonText: '知道了',
+                        showCancelButton: false,
+                        type: 'warning'
                     })
                 }
-        },
+            },
 
-        loadCityList(queryString, showList) {
-            // 第一个参数：当前输入的值
-            // 第二个参数：输出列表的回调
-            // 通过服务器获取数据
-            this.$axios({
-                url:'/airs/city',
-                params:{
-                    name:queryString
+            loadCityList(queryString, showList) {
+                if (!queryString) {
+                    showList([
+                        {
+                            value: "请输入关键字",
+                        },
+                    ]);
+                    return;
                 }
-            }).then(res =>{
-                // console.log(res.data);
-                // 获取到的数据缺少 value
-                // 对获取到的数据进行改造
-                const data = res.data.data.filter(city =>{
-                    return city.sort
-                }).map(city =>{
-                    return{
-                        ...city,
-                        // 处理参数，将 '市' 字去掉
-                        value:city.name.replace(/市$/,'')
-                        
-                    }
-                })
-                // console.log(data);
-                showList(data)
-            })
-        },
 
-        // 显示搜索建议
-        queryDepartSearch(queryString,showList) {
-            this.loadCityList(queryString, showList)
-        },
-        queryDestSearch(queryString,showList) {
-           this.loadCityList(queryString, showList)
-        },
-        // 搜索建议选择回调函数
-        handleDepartSelect(item) {
-            // console.log(item);
-            this.form.departCode = item.sort
-        },
-        handleDestSelect(item) {
-            this.form.destCode = item.sort
-        },
-        // 提交搜索
-        handleSubmit() {
-            // 跳转到机票列表页
-            if(!this.form.departDate || !this.form.destCity || !this.form.departCity){
-                this.$message({
-                  message: '请将信息填写完整',
-                  type: 'warning'
+                // 远程服务器获取城市列表
+                this.$axios({
+                    url: "/airs/city",
+                    params: {
+                        name: queryString,
+                    },
+                }).then((res) => {
+                    console.log(res);
+                    // 数据结果缺少了 value 需要自己补上
+                    // let data = res.data.data.filter(city=>{
+                    //     return city.sort
+                    // })
+
+                    // data = data.map((city) => {
+                    //     return {
+                    //         ...city,
+                    //         value: city.name,
+                    //     };
+                    // });
+
+                    const data = res.data.data.filter(city=>{
+                        return city.sort
+                    }).map((city) => {
+                        // 之前这里是直接获取数据, value 是以 name 作为基础
+                        // 用来显示建议列表, 只需要在赋值 value 的时候,将 市字去掉即可
+                        return {
+                            ...city,
+                            value: city.name.replace('市', ''),
+                        };
+                    });
+                    showList(data);
                 });
-                return
+            },
+            // 显示搜索建议
+            queryDepartSearch(queryString, showList) {
+                this.loadCityList(queryString, showList)
+            },
+            queryDestSearch(queryString, showList) {
+                this.loadCityList(queryString, showList)
+            },
+            // 搜索建议选择回调函数
+            handleDepartSelect(item) {
+                // 选中时可以拿到选中的那个数据对象
+                console.log(item);
+                this.form.departCode = item.sort;
+            },
+            handleDestSelect(item) {
+                this.form.destCode = item.sort;
+            },
+            // 提交搜索
+            handleSubmit() {
+                console.log(this.form);
+                // 带上当前的数据跳转到结果页面
+                // this.$router('/air/flights?departCity=xxx')
+                // 拼接会非常麻烦
+
+                // 如果要从 url 上面获取问号参数
+                // this.$route.query 问号参数获取
+                // this.$route.params 动态路由参数
+                // 其实在跳转的时候, 也能用query作为数据进行跳转
+                // 将本来字符串变成对象即可
+
+                // 在跳转搜索之前, 应该将当前的搜索数据
+                // 存放到 vuex 里面作为 历史记录
+                // 调用 mutation
+                this.$store.commit('history/addHistory', this.form)
+
+                this.$router.push({
+                    path: '/air/flights',
+                    query: this.form
+                })
+            },
+
+            // 选择日期
+            handleDate(date) {
+                // 默认可以得到用户选中的日期对象
+                // 可以修改完值之后赋值给 this.form.departDate
+                // 可以日期对象传入 moment 函数里面改造成 moment.js 的对象
+                const dateStr = moment(date).format('YYYY-MM-DD')
+                console.log(dateStr);
+                this.form.departDate = dateStr
+            },
+            handleReverse() {
+                // 在这里应该调换触发和到达城市
+                const oldDestCity = this.form.destCity
+                const oldDestCode = this.form.destCode
+
+                this.form.destCity = this.form.departCity
+                this.form.destCode = this.form.departCode
+
+                this.form.departCity = oldDestCity
+                this.form.departCode = oldDestCode
             }
-            // 在跳转搜索之前, 应该将当前的搜索数据
-            // 存放到 vuex 里面作为 历史记录
-            // 调用 mutation
-            this.$store.commit('history/addHistory', this.form)
-
-            this.$router.push({
-                path: '/air/flights',
-                query:this.form
-            })
         },
-        // 选择日期
-        handleDate(date) {
-            // console.log(date)
-            // 默认可以得到用户选中的日期对象
-            // 可以修改完值之后再赋值给 this.form.departDate
-            // 可以将日期对象传入 moment 函数改造成 moment.js 的对象
-            const dateStr = moment(date).format('YYYY-MM-DD')
-            // console.log(dateStr);
-            this.form.departDate = dateStr
-        },
-        // 交换城市
-        handleReverse(){
-            const oldDepartCity = this.form.departCity
-            const oldDepartCode = this.form.departCode
-
-            this.form.departCity = this.form.destCity
-            this.form.departCode = this.form.destCode
-
-            this.form.destCity = oldDepartCity
-            this.form.destCode = oldDepartCode
-        }
-   }
-}
+    };
 </script>
 
 <style lang="less" scoped>

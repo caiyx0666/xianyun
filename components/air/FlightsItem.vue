@@ -3,7 +3,7 @@
         <div>
             <!-- 显示的机票信息 -->
             <el-row type="flex" align="middle" class="flight-info">
-                <el-col :span="6"> <span>{{data.airline_name}} </span> {{ data.flight_no }} </el-col>
+                <el-col :span="6"> <span>{{data.airline_name}} </span> {{data.flight_no}} </el-col>
                 <el-col :span="12">
                     <el-row
                         type="flex"
@@ -11,129 +11,106 @@
                         class="flight-info-center"
                     >
                         <el-col :span="8" class="flight-airport">
-                            <strong>{{ data.dep_time }}</strong>
-                            <span>{{ data.org_airport_name + data.org_airport_quay }}</span>
+                            <strong>{{data.dep_time}}</strong>
+                            <span>{{data.org_airport_name}}{{data.org_airport_quay}}</span>
                         </el-col>
+                        <!-- 飞行时间在数据中没有需要自己计算 -->
                         <el-col :span="8" class="flight-time">
-                            <span>{{ duration }}</span>
+                            <span>{{duration}}</span>
                         </el-col>
                         <el-col :span="8" class="flight-airport">
-                            <strong>{{ data.arr_time }}</strong>
-                            <span>{{ data.dst_airport_name + data.dst_airport_quay }}</span>
+                            <strong>{{data.arr_time}}</strong>
+                            <span>{{data.dst_airport_name}}{{data.dst_airport_quay}}</span>
                         </el-col>
                     </el-row>
                 </el-col>
                 <el-col :span="6" class="flight-info-right">
-                    ￥<span class="sell-price">{{ bestPrice }}</span>起
+                    ￥<span class="sell-price">{{bestPrice}}</span>起
                 </el-col>
             </el-row>
         </div>
-        
         <el-collapse-transition>
-
-        <div class="flight-recommend" v-show="isShow">
-            <!-- 隐藏的座位信息列表 -->
-            <el-row type="flex" justify="space-between" align="middle">
-                <el-col :span="4">低价推荐</el-col>
-                <el-col :span="20" >
-                    <el-row
-                        type="flex"
-                        justify="space-between"
-                        align="middle"
-                        class="flight-sell"
-                        v-for="info in data.seat_infos" :key="info.ata_id"
-                    >
-                        <el-col :span="16" class="flight-sell-left">
-                            <span>{{ info.group_name }}</span> | {{ info.supplierName }}
-                        </el-col>
-                        <el-col :span="5" class="price"> ￥{{ info.org_settle_price }} </el-col>
-                        <el-col :span="3" class="choose-button">
-                            <el-button type="warning" size="mini" @click.stop="handleSubmit(info.seat_xid)">
-                                选定
-                            </el-button>
-                            <p v-if="info.nums != 'A'">剩余：{{info.nums}}</p>
-                        </el-col>
-                    </el-row>
-                </el-col>
-            </el-row>
-        </div>
-
+            <div class="flight-recommend" v-if="isShow">
+                <!-- 隐藏的座位信息列表 -->
+                <el-row type="flex" justify="space-between" align="middle">
+                    <el-col :span="4">低价推荐</el-col>
+                    <el-col :span="20">
+                        <el-row
+                            type="flex"
+                            justify="space-between"
+                            align="middle"
+                            class="flight-sell"
+                            v-for="(seat, index) in data.seat_infos"
+                            :key="index"
+                        >
+                            <el-col :span="16" class="flight-sell-left">
+                                <span>{{seat.group_name}}</span> | {{seat.supplierName}}
+                            </el-col>
+                            <el-col :span="5" class="price"> ￥{{seat.settle_price}} </el-col>
+                            <el-col :span="3" class="choose-button">
+                                <el-button type="warning" size="mini" @click.stop="handleSubmit(seat.seat_xid)">
+                                    选定
+                                </el-button>
+                                <p v-if="seat.nums != 'A'">剩余：{{seat.nums}}</p>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                </el-row>
+            </div>
         </el-collapse-transition>
-
     </div>
 </template>
 
 <script>
-import moment from 'moment'
-export default {
-    props: {
-        data: {
-            type: Object,
-            // default: {}
-            default() {
-                return {}
+    export default {
+        props: {
+            data: {
+                type: Object,
+                default() {
+                    return {}
+                }
+            },
+            isShow: Boolean
+        },
+        computed: {
+            duration() {
+                // 先将触发和到达时间都变成分钟
+                const depTimeNum = Number(this.data.dep_time.split(":")[0] * 60) + Number(this.data.dep_time.split(":")[1])
+                const arrTimeNum = Number(this.data.arr_time.split(":")[0] * 60) + Number(this.data.arr_time.split(":")[1])
+                let durationNum = arrTimeNum - depTimeNum
+
+                if (durationNum < 0) {
+                    durationNum = durationNum + (24 * 60)
+                }
+                // 相减之后换回小时:分钟的格式
+                return Math.floor(durationNum/60) + '时' + durationNum%60 + "分"
+            },
+            bestPrice() {
+                // 遍历当前航班座位信息
+                // 找出最低价 return 出来
+                let bestPrice = this.data.seat_infos[0].settle_price_child
+                this.data.seat_infos.forEach(seat => {
+                    // 当前座位价格  是 seat.settle_price_child
+                    if (seat.settle_price_child < bestPrice) {
+                        bestPrice = seat.settle_price_child
+                    }
+                });
+                return bestPrice
             }
         },
-        isShow: Boolean
-    },
-    methods:{
-        handleSubmit(seat_xid) {
-            // console.log('hahaha');
-            this.$router.push({
-                path:'/air/order',
-                query:{
-                    id:this.data.id,
-                    seat_xid
-                }
-            })    
-        },
-        // 利用moment第三方包计算航班时间
-        setDate(starttime,endtime){
-             var totalMinute = moment(endtime).diff(starttime) / (1000 * 60),
-              hours = Math.floor(totalMinute / 60),
-              minute = totalMinute % 60,
-              result = '';
-              if(hours > 0){
-                result = result + hours + '小时';
-              }else{
-                  minute>0?result = 24 + hours + '小时' + minute + '分钟':result = 24 + hours + '小时' + (60 + minute) + '分钟'
-              }
-              if(minute > 0){
-                result = result + minute + '分钟';
-              }
-              return result
-        }
-    },
-    computed: {
-        // 计算最低机票价格
-        bestPrice(){
-            // 遍历当前航班座位信息
-            // 找出最低价 return 出来
-            let bestPrice = this.data.seat_infos[0].settle_price_child
-            this.data.seat_infos.forEach(seat =>{
-                if(seat.settle_price_child < bestPrice){
-                    bestPrice = seat.settle_price_child
-                }
-            })
-            return bestPrice
-        },
-
-        // 自己计算航班时间
-        duration(){
-            // 先将触发和到达时间都变成分钟
-            const depTimeNum = Number(this.data.dep_time.split(':')[0]*60) + Number(this.data.dep_time.split(':')[1])
-            const arrTimeNum = Number(this.data.arr_time.split(':')[0]*60) + Number(this.data.arr_time.split(':')[1])
-            let durationNum = arrTimeNum - depTimeNum
-
-            if(durationNum < 0){
-                durationNum = durationNum + (24 * 60)
+        methods: {
+            handleSubmit(seat_xid) {
+                console.log('hahaha');
+                this.$router.push({
+                    path: '/air/order',
+                    query: {
+                        id: this.data.id,
+                        seat_xid
+                    }
+                })
             }
-
-            // 相减之后换回小时:分钟的格式
-            return Math.floor(durationNum/60)+'小时'+durationNum%60+'分钟'
         }
-    },
-};
+    };
 </script>
 
 <style scoped lang="less">

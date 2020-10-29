@@ -1,13 +1,10 @@
 export const state = () => ({
-    historyList: [
-
-    ]
+    historyList: []
 })
 
 export const mutations = {
     addHistory(state, data) {
-        // state.historyList.unshift(data)
-        // 先判断是否存在一样的数据，如果不存在在进行添加
+        // 可以做判断, 如果不存在完全一样的数据在进行添加
         let isUnique = true
         state.historyList.forEach(history => {
             if (
@@ -19,7 +16,8 @@ export const mutations = {
             ) {
                 isUnique = false
             }
-        })
+        });
+
         if (isUnique) {
             state.historyList.unshift(data)
         }

@@ -1,6 +1,5 @@
 {
     "name": "xianyun",
-    "description": "国内酒店预订,闲云酒店为您提供国内数千城市的酒店预订,酒店价格查询,优质的宾馆住宿推荐、以及酒店地址、酒店图片,真实用户点评等酒店信息。",
     "version": "1.0.0",
     "private": true,
     "scripts": {
@@ -21,5 +20,10 @@
         "vue2-editor": "^2.10.2",
         "vuex-persistedstate": "^4.0.0-beta.1"
     },
-    "devDependencies": {}
+    "devDependencies": {},
+    "config": {
+        "nuxt": {
+            "host": "0.0.0.0"
+        }
+    }
 }

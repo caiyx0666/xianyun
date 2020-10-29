@@ -1,12 +1,12 @@
 <template>
-  <div class="filters">
+    <div class="filters">
         <el-row
             type="flex"
             class="filters-top"
             justify="space-between"
             align="middle"
         >
-            <el-col :span="8"> 单程： {{ data.info.departCity }} - {{ data.info.destCity }} / {{ data.info.departDate }} </el-col>
+            <el-col :span="8"> 单程： 广州 - 上海 / 2019-06-17 </el-col>
             <el-col :span="4">
                 <el-select
                     size="mini"
@@ -17,7 +17,7 @@
                     <el-option 
                         v-for="(item, index) in data.options.airport"
                         :key="index"
-                        :label="item"
+                        :label="item" 
                         :value="item"
                     > </el-option>
                 </el-select>
@@ -88,15 +88,13 @@
 </template>
 
 <script>
-export default {
-     props: ['data'],
-     data() {
+    export default {
+        data() {
             return {
-                value: "",
                 airport: "", // 机场
                 flightTimes: "", // 出发时间
                 company: "", // 航空公司
-                airSize: "", // 机型大小
+                airSize: "", // 机型大小,
                 sizeOptions: [
                     {
                         label: '大',
@@ -114,29 +112,32 @@ export default {
             };
         },
 
+        props: ['data'],
+
         methods: {
-            runFilters(){
-                // 判断哪个过滤器有设置值，再执行过滤操作
-                let res= this.data.flights
-                if(this.airport){
-                    res= this.handleAirport(res)
+            runFilters() {
+                // 判断哪个过滤器有设置值,再执行过滤动作
+                let res = this.data.flights
+                if (this.airport) {
+                    res = this.handleAirport(res)
                 }
-                if(this.flightTimes){
+                if (this.flightTimes) {
                     res = this.handleFlightTimes(res)
                 }
-                if(this.company){
+                if (this.company) {
                     res = this.handleCompany(res)
                 }
-                if(this.airSize){
+                if (this.airSize) {
                     res = this.handleAirSize(res)
                 }
                 console.log('四个过滤器检查完毕');
                 console.log(res);
-                // 四个过滤器都执行过以后，真正发送给父页面
-                this.$emit('setFilteredList',res)
+                // 四个过滤器都执行过以后, 真正发送给父页面
+                this.$emit('setFilteredList', res)
             },
-
             // 选择机场时候触发
+            // 改造原来的过滤器
+            // 变成纯函数, 接收数组, 过滤后 return
             handleAirport(originList) {
                 const res = originList.filter(flight=>{
                     return flight.org_airport_name == this.airport
@@ -146,30 +147,37 @@ export default {
 
             // 选择出发时间时候触发
             handleFlightTimes(originList) {
+                console.log(this.flightTimes);
                 const begin = Number(this.flightTimes.split(',')[0])
                 const end = Number(this.flightTimes.split(',')[1])
 
-                const res = originList.filter(flight =>{
-                    const depHour = Number(flight.dep_time.split(':')[0])
-                    return depHour >begin && depHour<end
+                const res = originList.filter(flight=>{
+                    const depHour= Number(flight.dep_time.split(":")[0])
+                    return depHour>=begin && depHour<end
                 })
+
                 return res
             },
 
             // 选择航空公司时候触发
             handleCompany(originList) {
-                // 默认会得到一个选中的 originList 值
-                // 另外这个选择器也会绑定到 this.company
-                // 只要用 filter过滤 符合return true 其他 return false 即可
-                const res = originList.filter(flight =>{
+                // 默认会的到一个选中的 value 值
+                // 另外这个选择器也会双向绑定到 this.company
+                console.log('修改了航空公司选项');
+                console.log(this.company);
+                // console.log(this.company);
+                // 当前的100条数据 data.flights
+                // 只要用filter 过滤 符合 return true 其他 return false 即可
+                const res = originList.filter(flight=>{
                     return flight.airline_name == this.company
                 })
                 return res
+
             },
 
             // 选择机型时候触发
             handleAirSize(originList) {
-                const res = originList.filter(flight =>{
+                const res = originList.filter(flight=>{
                     return flight.plane_size == this.airSize
                 })
 
@@ -179,23 +187,23 @@ export default {
             // 撤销条件时候触发
             handleFiltersCancel() {},
         },
-    }
+    };
 </script>
 
-<style lang="less" scoped>
-    .filters{
-        margin-bottom:20px;
+<style scoped lang="less">
+    .filters {
+        margin-bottom: 20px;
     }
 
-    .filters-top{
-        > div{
-            /deep/ .el-select{
-                margin-left:10px;
+    .filters-top {
+        > div {
+            /deep/ .el-select {
+                margin-left: 10px;
             }
         }
     }
 
-    .filter-cancel{
-        margin-top:10px;
+    .filter-cancel {
+        margin-top: 10px;
     }
 </style>

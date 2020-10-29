@@ -14,8 +14,7 @@
                 >
                     <div class="qrcode">
                         <!-- 二维码 -->
-                        <!-- canvas标签就是一个画布 -->
-                        <canvas id="qrcode-stage" ref="qrcodeDom"></canvas>
+                        <canvas ref="qrcodeDom"></canvas>
                         <p>请使用微信扫一扫</p>
                         <p>扫描二维码支付</p>
                     </div>
@@ -32,93 +31,97 @@
 </template>
 
 <script>
-import QRcode from 'qrcode'
+    import QRcode from "qrcode";
+
     export default {
-        // created 不能保证 token 的存在
-        // 需要利用监听器
         data() {
             return {
-                timerId : null,
+                timerId: null,
                 payData: {
-                    price: "***"
-                }
-            }
+                    price: "***",
+                },
+            };
         },
-        // 声明周期钩子函数，在页面销毁的时候触发
-        destroyed(){
-            // 在组件（页面）跳出时，记得把当前轮询的定时器清理掉
-            // 创建时将 id 存起来
-            // let timerId = setTimeout(()=>{},timeout)
+        destroyed() {
+            // 在组件(页面)跳出时, 记得把当前轮询的定时器清理掉
+            // 创建时将id存起来
+            // let timerId = setTimeout(() => {}, timeout);
             // 之后清理即可
             // 因为在创建时生成的 id 这里没法直接拿
-            // 通过data 缓存定时器 id
-            clearTimeout(this.timerId)
+            // 通过 data 缓存定时器id
+            console.log('清理定时器');
+            clearTimeout(this.timerId);
         },
-        watch:{
-            // 其实 watch 是可以单独监听对象里面的特点属性的
-            // $store.state.user.userInfo.token
-            "$store.state.user.userInfo.token":{
-                handler(){
-                    // 因为加了 immediate 属性所以一进来就会执行
-                    // 处理两个情况
-                    // 判断当前有没有 token 有就直接执行，没有就等，等到下次数据恢复完毕再次触发 watch
-                    if(this.$store.state.user.userInfo.token){
+        watch: {
+            "$store.state.user.userInfo.token": {
+                handler() {
+                    if (this.$store.state.user.userInfo.token) {
                         this.$axios({
-                            url:'/airorders/'+this.$route.query.id,
-                            headers:{
-                                Authorization:"Bearer "+this.$store.state.user.userInfo.token
-                            }
-                        }).then(res =>{
+                            url: "/airorders/" + this.$route.query.id,
+                            headers: {
+                                Authorization:
+                                    "Bearer " +
+                                    this.$store.state.user.userInfo.token,
+                            },
+                        }).then((res) => {
                             console.log(res.data);
-                            this.payData = res.data
+                            this.payData = res.data;
                             // 当前获取到支付数据
-                            // 其中二维码链接在res.data.payInfo.code_url
-                            // 需要两个东西 字符串res.data.payinfo.code_url
-                            // 另外一个是存放二维码的 dom this.$ref.qrcodeDom
-                            QRcode.toCanvas(this.$refs.qrcodeDom,res.data.payInfo.code_url,{
-                                width: 200,
-                                color: {
-                                    dark: '#000088'
+                            // 其中二维码连接在 res.data.payInfo.code_url
+                            // 需要两个东西 字符串res.data.payInfo.code_url
+                            // 另外一个是存放二维码的 dom this.$refs.qrcodeDom
+                            QRcode.toCanvas(
+                                this.$refs.qrcodeDom,
+                                res.data.payInfo.code_url,
+                                {
+                                    width: 200,
+                                    color: {
+                                        dark: "#000088",
+                                    },
                                 }
-                            })
-                            this.checkPayState()
-                        })
+                            );
+
+                            // 二维码生成完毕, 开始轮询支付状态
+                            // 可以直接写, 也可以封装成一个函数
+                            this.checkPayState();
+                        });
                     }
                 },
-                // 默认情况下只能监听到有变化的情况
-                // 但是如果是正常跳转，token 本来就存在
-                // 触发不了监听器
-                // immediate 设置默认执行一遍
-                immediate: true
-            }
-        },
-        methods:{
-            checkPayState(){
-                this.$axios({
-                    method:'post',
-                    url:'/airorders/checkpay',
-                    headers:{
-                        Authorization:
-                        "Bearer " + this.$store.state.user.userInfo.token
-                    },
-                    data:{
-                        id:this.payData.id,
-                        nonce_str:this.payData.price,
-                        out_trade_no:this.payData.payInfo.order_no
-                    }
-                }).then(res =>{
-                    // console.log(res.data);
-                    this.showPayState(res.data.trade_state);
-                    if(res.data.trade_state == "SUCCESS"){
-                        this.$message.success('感谢巨款0.01元')
-                    }else{
-                        this.timerId = setTimeout(()=>{
-                            this.checkPayState()
-                        },3000)
-                    }
-                })
+                immediate: true,
             },
-            showPayState(state){
+        },
+        methods: {
+            checkPayState() {
+                this.$axios({
+                    method: "post",
+                    url: "/airorders/checkpay",
+                    headers: {
+                        Authorization:
+                            "Bearer " + this.$store.state.user.userInfo.token,
+                    },
+                    data: {
+                        id: this.payData.id,
+                        nonce_str: this.payData.price,
+                        out_trade_no: this.payData.payInfo.order_no,
+                    },
+                }).then((res) => {
+                    console.log(res.data);
+                    // 拓展, 如何处理一堆不确定的状态
+                    // 不同状态用不同的逻辑实现, 这里用console 模拟
+                    // 最简单就是if判断
+
+                    this.showPayState(res.data.trade_state);
+
+                    if (res.data.trade_state == "SUCCESS") {
+                        this.$message.success("感谢巨款 0.01 元");
+                    } else {
+                        this.timerId = setTimeout(() => {
+                            this.checkPayState();
+                        }, 3000);
+                    }
+                });
+            },
+            showPayState(state) {
                 const stateOption = {
                     SUCCESS: "支付成功",
                     REFUND: "转入退款",
@@ -128,63 +131,63 @@ import QRcode from 'qrcode'
                     USERPAYING: "用户支付中",
                     PAYERROR: "支付失败",
                 };
-                // console.log('这里是处理各种状态的方法');
-                // console.log(stateOption[state]);
-            }
-        }
+                console.log("这里是处理各种状态的方法");
+                console.log(stateOption[state]);
+            },
+        },
     };
 </script>
 
 <style scoped lang="less">
-.container{
-    background:#f5f5f5;
-    padding: 30px 0;
+    .container {
+        background: #f5f5f5;
+        padding: 30px 0;
 
-    .main{
-        width:1000px;
-        margin:0 auto;
+        .main {
+            width: 1000px;
+            margin: 0 auto;
 
-        .pay-title{
-            text-align: right;
-            span{
-                font-size:28px;
-                color:orangered;
-            }
-        }
-
-        .pay-main{
-            background:#fff;
-            margin-top:10px;
-            border-top: 5px orange solid;
-            padding:30px;
-
-            h4{
-                font-size: 28px;
-                font-weight: normal;
-                margin-bottom: 10px;
+            .pay-title {
+                text-align: right;
+                span {
+                    font-size: 28px;
+                    color: orangered;
+                }
             }
 
-            .pay-qrcode{
-                padding:0 80px;
-            }
+            .pay-main {
+                background: #fff;
+                margin-top: 10px;
+                border-top: 5px orange solid;
+                padding: 30px;
 
-            .qrcode{
-                border:1px #ddd solid;
-                padding:15px;
-                height: fit-content;
-
-                #qrcode-stage{
-                    width:200px;
-                    height:200px;
+                h4 {
+                    font-size: 28px;
+                    font-weight: normal;
                     margin-bottom: 10px;
                 }
 
-                p{
-                    line-height: 2;
-                    text-align: center;
+                .pay-qrcode {
+                    padding: 0 80px;
+                }
+
+                .qrcode {
+                    border: 1px #ddd solid;
+                    padding: 15px;
+                    height: fit-content;
+
+                    #qrcode-stage {
+                        width: 200px;
+                        height: 200px;
+                        margin-bottom: 10px;
+                    }
+
+                    p {
+                        line-height: 2;
+                        text-align: center;
+                    }
                 }
             }
         }
     }
-}
 </style>

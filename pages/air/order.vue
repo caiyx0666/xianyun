@@ -3,7 +3,7 @@
         <el-row type="flex" justify="space-between">
             <!-- 订单表单 -->
             <div class="main">
-                <OrderForm v-if="flightData.id" :data="flightData" @setTotalPrice="setTotalPrice"/>
+                <OrderForm @setTotalPrice="setTotalPrice" v-if="flightData.id" :data="flightData"/>
             </div>
 
             <!-- 侧边栏 -->
@@ -16,27 +16,27 @@
 
 <script>
     export default {
-        data(){
-            return{
-                flightData:{},
-                totalPrice:0
+        data() {
+            return {
+                flightData: {},
+                totalPrice: 0
             }
         },
-        created(){
-            // 父页面先获取机票数据
-            // 分别交给两个组件
+        // 父页面先获取机票数据
+        // 分别交给两个组件
+        created() {
             this.$axios({
-                url:'/airs/'+this.$route.query.id,
-                params:{
-                    seat_xid:this.$route.query.seat_xid
+                url: '/airs/' + this.$route.query.id,
+                params: {
+                    seat_xid: this.$route.query.seat_xid
                 }
             }).then(res=>{
                 console.log(res.data);
                 this.flightData = res.data
             })
         },
-        methods:{
-            setTotalPrice(newTotalPrice){
+        methods: {
+            setTotalPrice(newTotalPrice) {
                 this.totalPrice = newTotalPrice
             }
         }
