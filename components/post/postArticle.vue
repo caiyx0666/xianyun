@@ -56,11 +56,9 @@
         {{ data.title }}
       </div>
       <!-- 文章内容 -->
-      <div
-        class="article"
-        v-html="data.content"
-        @click="handleClickArticle(data.id)"
-      ></div>
+      <div class="article" @click="handleClickArticle(data.id)">
+        {{ data.summary }}
+      </div>
       <!-- 图片部分 -->
       <div class="photo" @click="handleClickArticle(data.id)">
         <img :src="data.images[0]" alt="" />
@@ -104,11 +102,9 @@
         {{ data.title }}
       </div>
       <!-- 文章内容 -->
-      <div
-        class="article"
-        v-html="data.content"
-        @click="handleClickArticle(data.id)"
-      ></div>
+      <div class="article" @click="handleClickArticle(data.id)">
+        {{ data.summary }}
+      </div>
       <!-- 图片部分 -->
       <div class="photo" @click="handleClickArticle(data.id)">
         <img :src="data.images[0]" alt="" />
@@ -151,11 +147,9 @@
         {{ data.title }}
       </div>
       <!-- 文章内容 -->
-      <div
-        class="article"
-        v-html="data.content"
-        @click="handleClickArticle(data.id)"
-      ></div>
+      <div class="article" @click="handleClickArticle(data.id)">
+        {{ data.summary }}
+      </div>
       <!-- 用户信息 -->
       <div class="subcontain">
         <div class="info">
