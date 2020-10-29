@@ -155,18 +155,6 @@
   "LazyPostContent": {
     "description": "Auto imported from components/post/postContent.vue"
   },
-  "LoginForm": {
-    "description": "Auto imported from components/user/LoginForm.vue"
-  },
-  "LazyLoginForm": {
-    "description": "Auto imported from components/user/LoginForm.vue"
-  },
-  "RegisterForm": {
-    "description": "Auto imported from components/user/RegisterForm.vue"
-  },
-  "LazyRegisterForm": {
-    "description": "Auto imported from components/user/RegisterForm.vue"
-  },
   "CommentMain": {
     "description": "Auto imported from components/test/CommentMain.vue"
   },
@@ -178,5 +166,17 @@
   },
   "LazyCommentParent": {
     "description": "Auto imported from components/test/CommentParent.vue"
+  },
+  "LoginForm": {
+    "description": "Auto imported from components/user/LoginForm.vue"
+  },
+  "LazyLoginForm": {
+    "description": "Auto imported from components/user/LoginForm.vue"
+  },
+  "RegisterForm": {
+    "description": "Auto imported from components/user/RegisterForm.vue"
+  },
+  "LazyRegisterForm": {
+    "description": "Auto imported from components/user/RegisterForm.vue"
   }
 }

@@ -24,10 +24,10 @@ export { default as Parent } from '../..\\components\\post\\Parent.vue'
 export { default as PostArticle } from '../..\\components\\post\\postArticle.vue'
 export { default as PostAside } from '../..\\components\\post\\postAside.vue'
 export { default as PostContent } from '../..\\components\\post\\postContent.vue'
-export { default as LoginForm } from '../..\\components\\user\\LoginForm.vue'
-export { default as RegisterForm } from '../..\\components\\user\\RegisterForm.vue'
 export { default as CommentMain } from '../..\\components\\test\\CommentMain.vue'
 export { default as CommentParent } from '../..\\components\\test\\CommentParent.vue'
+export { default as LoginForm } from '../..\\components\\user\\LoginForm.vue'
+export { default as RegisterForm } from '../..\\components\\user\\RegisterForm.vue'
 
 export const LazyPageFooter = import('../..\\components\\PageFooter.vue' /* webpackChunkName: "components_PageFooter" */).then(c => c.default || c)
 export const LazyPageHeader = import('../..\\components\\PageHeader.vue' /* webpackChunkName: "components_PageHeader" */).then(c => c.default || c)
@@ -55,7 +55,7 @@ export const LazyParent = import('../..\\components\\post\\Parent.vue' /* webpac
 export const LazyPostArticle = import('../..\\components\\post\\postArticle.vue' /* webpackChunkName: "components_post/postArticle" */).then(c => c.default || c)
 export const LazyPostAside = import('../..\\components\\post\\postAside.vue' /* webpackChunkName: "components_post/postAside" */).then(c => c.default || c)
 export const LazyPostContent = import('../..\\components\\post\\postContent.vue' /* webpackChunkName: "components_post/postContent" */).then(c => c.default || c)
-export const LazyLoginForm = import('../..\\components\\user\\LoginForm.vue' /* webpackChunkName: "components_user/LoginForm" */).then(c => c.default || c)
-export const LazyRegisterForm = import('../..\\components\\user\\RegisterForm.vue' /* webpackChunkName: "components_user/RegisterForm" */).then(c => c.default || c)
 export const LazyCommentMain = import('../..\\components\\test\\CommentMain.vue' /* webpackChunkName: "components_test/CommentMain" */).then(c => c.default || c)
 export const LazyCommentParent = import('../..\\components\\test\\CommentParent.vue' /* webpackChunkName: "components_test/CommentParent" */).then(c => c.default || c)
+export const LazyLoginForm = import('../..\\components\\user\\LoginForm.vue' /* webpackChunkName: "components_user/LoginForm" */).then(c => c.default || c)
+export const LazyRegisterForm = import('../..\\components\\user\\RegisterForm.vue' /* webpackChunkName: "components_user/RegisterForm" */).then(c => c.default || c)
