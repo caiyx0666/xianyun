@@ -51,7 +51,7 @@
             <HotelFilter @getHotelList="getHotelList" />
 
             <!-- 酒店列表 -->
-            <div v-if="hotelList.data.length">
+            <div v-if="hotelList.data.length" class="HotelList">
                 <HotelList v-loading="loading" :hotel="hotel" v-for="hotel in hotelList.data" :key="hotel.id" />
             </div>
 
@@ -90,6 +90,7 @@ export default {
         }
     },
     created() {
+        
         this.loading = true
         this.isMap = true
     },
@@ -152,7 +153,9 @@ export default {
 
         // 获取酒店列表
         async getHotelList(hotelOption) {
-            this.isBox = true
+            if(this.HotelList){
+                this.isBox = false
+            }
             this.loading = true
             // 用于地址栏显示
             let str = "";
@@ -224,7 +227,13 @@ export default {
 
         // 当前页发生变化
         currentChange(newCurrent) {
-            // console.log(newCurrent);
+            this.isBox = false
+            // 移动到酒店列表的上方
+            let HotelHeight = document.querySelector('.HotelList').offsetTop
+            window.scrollTo({ 
+                top: HotelHeight, 
+                behavior: "smooth" 
+            });
             // 先根据页数获取酒店的条数
             this.currentPage = newCurrent
             this.limit = newCurrent * 10
