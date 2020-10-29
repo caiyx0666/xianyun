@@ -269,7 +269,8 @@ export default {
       cursor: pointer;
     }
     .article {
-      height: 70px;
+      height: 0px;
+      height: 55px;
       font-size: 14px;
       color: #666;
       overflow: hidden;
@@ -277,7 +278,7 @@ export default {
       display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
-      margin: 10px 0;
+      margin: 15px 0;
       cursor: pointer;
     }
 
@@ -348,6 +349,7 @@ export default {
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
+    margin: 10px 0;
     cursor: pointer;
   }
   .photo {
@@ -426,6 +428,7 @@ export default {
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
+    margin: 10px 0;
     cursor: pointer;
   }
   .photo {
@@ -501,6 +504,7 @@ export default {
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
+    margin: 10px 0;
     cursor: pointer;
   }
   .subcontain {
