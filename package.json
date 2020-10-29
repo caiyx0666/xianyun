@@ -1,24 +1,29 @@
 {
-  "name": "xianyun",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "dev": "nuxt --open",
-    "build": "nuxt build",
-    "start": "nuxt start",
-    "generate": "nuxt generate"
-  },
-  "dependencies": {
-    "@nuxtjs/axios": "^5.12.2",
-    "core-js": "^3.6.5",
-    "element-ui": "^2.13.2",
-    "less": "^3.12.2",
-    "less-loader": "^7.0.2",
-    "moment": "^2.29.1",
-    "nuxt": "^2.14.6",
-    "qrcode": "^1.4.4",
-    "vue2-editor": "^2.10.2",
-    "vuex-persistedstate": "^4.0.0-beta.1"
-  },
-  "devDependencies": {}
+    "name": "xianyun",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "nuxt --open",
+        "build": "nuxt build",
+        "start": "nuxt start",
+        "generate": "nuxt generate"
+    },
+    "dependencies": {
+        "@nuxtjs/axios": "^5.12.2",
+        "core-js": "^3.6.5",
+        "element-ui": "^2.13.2",
+        "less": "^3.12.2",
+        "less-loader": "^7.0.2",
+        "moment": "^2.29.1",
+        "nuxt": "^2.14.6",
+        "qrcode": "^1.4.4",
+        "vue2-editor": "^2.10.2",
+        "vuex-persistedstate": "^4.0.0-beta.1"
+    },
+    "devDependencies": {},
+    "config": {
+        "nuxt": {
+            "host": "0.0.0.0"
+        }
+    }
 }

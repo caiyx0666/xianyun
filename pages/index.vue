@@ -43,12 +43,12 @@
 </template>
 
 <script>
+import { Message } from "element-ui";
 export default {
     created() {
         this.$axios({
             url: "/scenics/banners",
         }).then((res) => {
-            // console.log(res.data);
             const { data } = res.data;
             this.banners = data;
         });
@@ -57,6 +57,8 @@ export default {
         return {
             banners: [],
             currentOption: 0,
+            isLoading: false,
+            // 搜索内容
             searchValue: "",
             options: [
                 {
@@ -87,13 +89,44 @@ export default {
             }
         },
         handleSearch() {
-            // 这里是首页, 并不真正发请求
-            // 只是将当前的搜索关键字传递到结果列表页
-            // 由搜索结果页自己发请求, 这是后续的操作
+            // 防止多次点击 判断开门还是关门  true => return 关门   false => 继续执行 开门
+            if (this.isLoading) return;
 
-            // 编程式导航 用法一样
+            // tab栏切换，定位到具体对象的
             const optionItem = this.options[this.currentOption];
-            this.$router.push(optionItem.pageUrl + this.searchValue);
+
+            // 判断搜索为空或有空格时
+            if (this.searchValue.replace(/[ ]/g, "").length == 0) return;
+
+            this.isLoading = true;
+
+            // 发送请求检验输入的城市是否合法
+            this.$axios({
+                url: "/cities?name=" + this.searchValue,
+            }).then((res) => {
+                // 查询结果的数组长度为0
+                if (res.data.data.length == 0) {
+                    Message.error("您输入的城市不存在");
+                    setTimeout(() => {
+                        this.isLoading = false;
+                    }, 1500);
+                } else {
+                    // 判断输入的字段是否带有'市'字
+                    if (this.searchValue.indexOf("市") > -1) {
+                        // 跳转 带上搜索内容
+                        // 存在'市'，要去掉之后再跳转
+                        this.$router.push(
+                            optionItem.pageUrl +
+                                this.searchValue.replace("市", "")
+                        );
+                    } else {
+                        // 不存在市就不用去掉，直接跳转
+                        this.$router.push(
+                            optionItem.pageUrl + this.searchValue
+                        );
+                    }
+                }
+            });
         },
     },
 };
