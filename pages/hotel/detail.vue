@@ -1,12 +1,14 @@
 <template>
   <div class="first_head" v-if="hotelList">
     <div class="row" v-if="show" @click="show = false"></div>
+    <div class="rowOne" v-if="showDian" @click="showDian = false"></div>
     <div class="container">
       <!-- 面包屑导航栏 -->
       <el-row>
         <el-col>
           <div class="breadcrumb">
-            您在这里：酒店 >
+            <span style="font-weight: 700">您在这里：</span>
+            酒店 >
             <span @click="handleClick">{{ hotelList.real_city }}</span> >
             {{ hotelList.name }}
           </div>
@@ -120,6 +122,17 @@
           </li>
         </ul>
 
+        <div class="dianOne" @click="showDian = true" v-if="!isShowDian">
+          <span class="shouThree el-icon-document-copy"></span>
+          <el-button type="text"></el-button>
+          <span>评分</span>
+        </div>
+        <div class="dianTwo" @click="showDian = true" v-if="isShowDian">
+          <span class="shouThree el-icon-document-copy"></span>
+          <el-button type="text"></el-button>
+          <span>评分</span>
+        </div>
+
         <div class="cangOne" @click="isShowStart" v-if="!showPrice">
           <span class="shou el-icon-star-off" v-if="showStart"></span>
           <span
@@ -158,6 +171,12 @@
         </div>
       </div>
     </div>
+    <!-- 把遮罩层的点击事件传给子组件 -->
+    <Like
+      v-if="showDian"
+      :hotelList="hotelList"
+      @showDianOne="showDianOne"
+    ></Like>
     <div class="container">
       <!-- 预定部分 -->
       <Booking :hotelList="hotelList.products" ref="book"></Booking>
@@ -196,8 +215,10 @@ export default {
   data() {
     return {
       show: false,
+      showDian: false,
       showStart: true,
       showPrice: false,
+
       dialogTableVisible: false,
       hotelList: {},
       baseSrc: require("~/assets/images/1.jpeg"),
@@ -225,6 +246,7 @@ export default {
       isNoTrackScroll: false,
       activeIndex: 1,
       msgBox: null,
+      isShowDian: false,
     };
   },
   computed: {},
@@ -233,16 +255,21 @@ export default {
     console.log(this.hotelList.address);
 
     window.onscroll = () => {
+      // 拿到nav距离页面可视窗口的距离
       let offset = this.getPageOffsetTop(this.$refs.nav);
-
+      //  如果nav的距离小于页面滚动的距离那么nav就固定
       if (offset < window.pageYOffset) {
         this.isFixed = true;
         // nav导航栏固定显示预定&价钱
         this.showPrice = true;
+        this.isShowDian = true;
       } else {
         this.isFixed = false;
         this.showPrice = false;
+        this.isShowDian = false;
         if (!this.isNoTrackScroll) {
+          // 上面加了动态class，如果再nav不固定的时候，isNoTrackScroll=false就给activeIndex=0
+          // 这样子不固定的时候nav就不会有下划线
           this.activeIndex = 0;
         }
       }
@@ -250,6 +277,9 @@ export default {
   },
 
   methods: {
+    showDianOne() {
+      this.showDian = false;
+    },
     open() {
       this.$confirm("真的要取消收藏吗？", "提示", {
         confirmButtonText: "确定",
@@ -281,24 +311,33 @@ export default {
       }
     },
     getToggle(num) {
+      // 调用函数让activeIndex=传入的num的时候，自动添加active的动态class类名
       this.activeIndex = num;
     },
     getPageOffsetTop(elm) {
+      // offset就是距离
+      // 获取元素距离页面顶部的距离
       let offset = 0;
       while (true) {
         if (elm == document.body) {
           return offset;
         }
+        // offsetTop：元素到上一个offsetParent顶部的距离
+        // 如果元素有多个爸爸，就要累加offsetTop
         offset += elm.offsetTop;
+        // 距离元素最近的一个有定位的爸爸，如果爸爸都不符合条件，offsetParent为body
         elm = elm.offsetParent;
       }
     },
     scrollToElement(elm) {
+      // 给nav导航加一个旗帜，来到了这里就是true
+      // 就是滚动的时候，让下划线一直是true的状态
       this.isNoTrackScroll = true;
-
+      // 因为顶部有60px的头部，所以要-60，不然会挡住
       var t = elm.offsetTop - 60;
-
+      // window.pageYOffset当前滚动的距离
       let offset = window.pageYOffset;
+      // 先清空定时器
       let timer = null;
       if (timer) {
         clearInterval(timer);
@@ -306,9 +345,13 @@ export default {
 
       timer = setInterval(() => {
         window.scrollTo(0, offset);
+        // 每次步进12 每次位移的越多 速度越快
+        // 如果距离小于12就直接等于目标
+        // 不然可能一直在目标两边反复横跳都去不到目标
         offset += offset - t < 0 ? 12 : -12;
         if (Math.abs(offset - t) < 12) {
           window.scrollTo(0, t);
+          // 旗帜在这里结束变为false
           this.isNoTrackScroll = false;
 
           clearInterval(timer);
@@ -322,9 +365,9 @@ export default {
           id: this.$route.query.id,
         },
       }).then((res) => {
-        // console.log(res.data);
+        console.log(res.data);
         this.hotelList = res.data.data[0];
-        console.log(this.hotelList);
+        // console.log(this.hotelList);
       });
     },
     // handleClick(item) {
@@ -487,7 +530,7 @@ export default {
     }
 
     .cang {
-      font-size: 14px;
+      font-size: 16px;
       position: absolute;
       left: 980px;
       top: 17px;
@@ -498,7 +541,7 @@ export default {
       font-size: 14px;
       position: absolute;
       left: 1174px;
-      top: 17px;
+      top: 19px;
       align-items: center;
       display: flex;
     }
@@ -521,6 +564,22 @@ export default {
       padding: 0 5px 0 0;
       font-size: 22px;
       color: #f90;
+    }
+    .shouThree {
+      font-size: 22px;
+      color: #f90;
+    }
+    .dianOne {
+      position: absolute;
+      left: 1080px;
+      top: 17px;
+      font-size: 14px;
+    }
+    .dianTwo {
+      position: absolute;
+      left: 890px;
+      top: 17px;
+      font-size: 14px;
     }
     .price {
       position: absolute;
@@ -560,6 +619,15 @@ export default {
   z-index: 999;
 }
 .row {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 200;
+}
+.rowOne {
   position: fixed;
   top: 0;
   left: 0;

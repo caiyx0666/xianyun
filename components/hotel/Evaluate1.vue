@@ -17,7 +17,6 @@
           <div class="content">
             {{ item.content }}
           </div>
-
           <el-input
             class="revert"
             type="textarea"
