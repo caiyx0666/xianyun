@@ -147,6 +147,7 @@ export default {
         type: "success",
         center: true,
       }).then(() => {
+        // 子组件接收，即可关闭
         this.$emit("showDianOne");
         this.$message({
           type: "success",

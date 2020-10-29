@@ -171,6 +171,7 @@
         </div>
       </div>
     </div>
+    <!-- 把遮罩层的点击事件传给子组件 -->
     <Like
       v-if="showDian"
       :hotelList="hotelList"
