@@ -85,4 +85,11 @@ export default {
          */
         extend(config, ctx) {}
     },
+    router: {
+        base: '/xingyue'
+    },
+    generate: {
+        dir: 'docs',
+        subFolders: false
+    }
 }
