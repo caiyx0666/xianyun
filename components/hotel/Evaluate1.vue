@@ -41,7 +41,7 @@
 export default {
   data() {
     return {
-      eye: false,
+      eye: -1,
       textarea: [],
       hotel: "",
       datas: {},
