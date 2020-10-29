@@ -11,12 +11,12 @@
       <!-- 攻略详情 -->
       <div class="left" v-if="details">
         <!-- 文章标题 -->
-        <h1>{{details.title}}</h1>
+        <h1>{{ details.title }}</h1>
         <div class="post-info">
           <!-- 文章发布时间 -->
-          <span>攻略：{{details.created_at}}</span>
+          <span>攻略：{{ details.created_at }}</span>
           <!-- 阅读量 -->
-          <span>阅读：{{details.watch}}</span>
+          <span>阅读：{{ details.watch }}</span>
         </div>
 
         <!-- 文章内容 -->
@@ -26,7 +26,7 @@
         <div class="icon">
           <div class="outline" @click="clickOutline">
             <span class="el-icon-edit-outline"></span>
-            评论({{pageList.total}})
+            评论({{ pageList.total }})
           </div>
           <div class="share" @click="clickShare">
             <span class="el-icon-share"></span>
@@ -38,7 +38,7 @@
         <div class="comment">
           <div class="pinglun">评论</div>
           <div class="replyname" v-if="$store.state.user.reply.replyName">
-            回复 @{{$store.state.user.reply.replyName}}
+            回复 @{{ $store.state.user.reply.replyName }}
             <span @click="closeReply">X</span>
           </div>
           <!-- 评论框 -->
@@ -79,7 +79,11 @@
           </div>
           <!-- 评论内容 -->
           <div class="commentBox" v-if="commentList">
-            <Main :comment="comment" v-for="comment in commentList" :key="comment.id" />
+            <Main
+              :comment="comment"
+              v-for="comment in commentList"
+              :key="comment.id"
+            />
           </div>
 
           <!-- 分页 -->
@@ -126,7 +130,7 @@ export default {
         // 用户名
         nickname: "",
         // 时间戳
-        created_at: ""
+        created_at: "",
       },
       // 上传图片
       dialogImageUrl: "",
@@ -139,7 +143,7 @@ export default {
       // 默认每页显示2条
       pageSize: 2,
       // 当前页码的下标
-      pageIndex: 1
+      pageIndex: 1,
     };
   },
   // 获取文章数据
@@ -166,8 +170,8 @@ export default {
     // 封装获取文章数据
     detail() {
       this.$axios({
-        url: "/posts?id=" + this.$route.query.id
-      }).then(res => {
+        url: "/posts?id=" + this.$route.query.id,
+      }).then((res) => {
         console.log("文章数据", res.data.data);
         // 修改获取到的文章数据里的 created_at 时间戳，转换为需要渲染的数据格式，再存到 details
         res.data.data[0].created_at = moment(
@@ -183,9 +187,9 @@ export default {
         params: {
           post: this.$route.query.id,
           _limit: this.pageSize,
-          _start: (this.pageIndex - 1) * this.pageSize
-        }
-      }).then(res => {
+          _start: (this.pageIndex - 1) * this.pageSize,
+        },
+      }).then((res) => {
         console.log("这里是评论", res.data);
         this.pageList = res.data;
         this.commentList = res.data.data;
@@ -214,7 +218,7 @@ export default {
       let data = {
         content: this.textarea,
         post: this.$route.query.id,
-        pics: this.pics
+        pics: this.pics,
       };
       // 判断 reply.follow 有数据,就将回复id的参数 follow 添加到 data 对象里面
       if (this.$store.state.user.reply.follow) {
@@ -229,9 +233,9 @@ export default {
         url: "/comments",
         data,
         headers: {
-          Authorization: "Bearer " + this.$store.state.user.userInfo.token
-        }
-      }).then(res => {
+          Authorization: "Bearer " + this.$store.state.user.userInfo.token,
+        },
+      }).then((res) => {
         console.log(res);
         this.$store.commit("user/clearReply");
         this.textarea = "";
@@ -243,7 +247,7 @@ export default {
     // 图片移出
     handleRemove(file, fileList) {
       console.log(file, fileList);
-      this.pics = fileList.map(item => {
+      this.pics = fileList.map((item) => {
         return item.response[0];
       });
     },
@@ -267,7 +271,7 @@ export default {
       this.$store.commit("user/clearReply");
       // 就让输入框高亮,输入框绑定 ref="input" 属性拿到输入框
       this.$refs.input.focus();
-    }
+    },
   },
   watch: {
     // 监听 store 里面 reply.follow 数据的变化
@@ -283,8 +287,8 @@ export default {
       this.detail();
       // 获取评论
       this.reply();
-    }
-  }
+    },
+  },
 };
 </script>
 
