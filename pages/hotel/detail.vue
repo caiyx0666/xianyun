@@ -275,7 +275,9 @@ export default {
       }
     };
   },
-
+  destroyed() {
+    window.onscroll = null;
+  },
   methods: {
     showDianOne() {
       this.showDian = false;

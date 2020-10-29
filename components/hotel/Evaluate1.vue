@@ -20,15 +20,15 @@
           <el-input
             class="revert"
             type="textarea"
-            @focus="focuss"
+            @focus="focuss(index)"
             @blur="blurs"
             :rows="1"
             placeholder="请输入内容"
-            v-model="textarea"
+            v-model="textarea[index]"
           >
           </el-input>
 
-          <div v-show="eye" class="button">
+          <div v-show="eye == index" class="button">
             <div>回复</div>
           </div>
         </div>
@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       eye: false,
-      textarea: "",
+      textarea: [],
       hotel: "",
       datas: {},
     };
@@ -60,11 +60,11 @@ export default {
     });
   },
   methods: {
-    focuss() {
-      this.eye = true;
+    focuss(index) {
+      this.eye = index;
     },
     blurs() {
-      this.eye = false;
+      this.eye = -1;
     },
   },
 };
