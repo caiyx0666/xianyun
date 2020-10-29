@@ -203,5 +203,11 @@ export default {
     width: 300px;
     margin: 100px auto;
   }
+  .el-pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    justify-content: space-around;
+  }
 }
 </style>
