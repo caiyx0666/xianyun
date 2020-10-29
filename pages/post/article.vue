@@ -287,6 +287,7 @@ export default {
                         this.form.title = "";
                         this.form.content = "";
                         this.form.choiceCity = "";
+                        this.$router.push("/post/");
                     }
                 });
             } else {
