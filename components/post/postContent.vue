@@ -38,7 +38,7 @@
     <!-- 文章列表部分 -->
     <div>
       <div class="message" v-if="totalList.total == 0">
-        该页面正在制作中,敬请期待!!
+        该城市还没攻略哦,快去写一条吧!
       </div>
       <PostArticle
         v-for="(article, index) in articleList"
@@ -130,6 +130,7 @@ export default {
 
     searchClick() {
       if (this.value == "") {
+        this.$message.closeAll();
         this.$message("请输入内容");
       }
       this.$router.push(`/post?city=${this.value}`);
@@ -201,6 +202,12 @@ export default {
   .message {
     width: 300px;
     margin: 100px auto;
+  }
+  .el-pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    justify-content: space-around;
   }
 }
 </style>
