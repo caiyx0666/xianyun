@@ -1,0 +1,182 @@
+{
+  "PageFooter": {
+    "description": "Auto imported from components/PageFooter.vue"
+  },
+  "LazyPageFooter": {
+    "description": "Auto imported from components/PageFooter.vue"
+  },
+  "PageHeader": {
+    "description": "Auto imported from components/PageHeader.vue"
+  },
+  "LazyPageHeader": {
+    "description": "Auto imported from components/PageHeader.vue"
+  },
+  "FlightsAside": {
+    "description": "Auto imported from components/air/FlightsAside.vue"
+  },
+  "LazyFlightsAside": {
+    "description": "Auto imported from components/air/FlightsAside.vue"
+  },
+  "FlightsFilter": {
+    "description": "Auto imported from components/air/FlightsFilter.vue"
+  },
+  "LazyFlightsFilter": {
+    "description": "Auto imported from components/air/FlightsFilter.vue"
+  },
+  "FlightsItem": {
+    "description": "Auto imported from components/air/FlightsItem.vue"
+  },
+  "LazyFlightsItem": {
+    "description": "Auto imported from components/air/FlightsItem.vue"
+  },
+  "FlightsListHead": {
+    "description": "Auto imported from components/air/FlightsListHead.vue"
+  },
+  "LazyFlightsListHead": {
+    "description": "Auto imported from components/air/FlightsListHead.vue"
+  },
+  "OrderAside": {
+    "description": "Auto imported from components/air/OrderAside.vue"
+  },
+  "LazyOrderAside": {
+    "description": "Auto imported from components/air/OrderAside.vue"
+  },
+  "OrderForm": {
+    "description": "Auto imported from components/air/OrderForm.vue"
+  },
+  "LazyOrderForm": {
+    "description": "Auto imported from components/air/OrderForm.vue"
+  },
+  "SearchForm": {
+    "description": "Auto imported from components/air/SearchForm.vue"
+  },
+  "LazySearchForm": {
+    "description": "Auto imported from components/air/SearchForm.vue"
+  },
+  "Booking": {
+    "description": "Auto imported from components/hotel/Booking.vue"
+  },
+  "LazyBooking": {
+    "description": "Auto imported from components/hotel/Booking.vue"
+  },
+  "Comment": {
+    "description": "Auto imported from components/hotel/comment.vue"
+  },
+  "LazyComment": {
+    "description": "Auto imported from components/hotel/comment.vue"
+  },
+  "Evaluate": {
+    "description": "Auto imported from components/hotel/Evaluate.vue"
+  },
+  "LazyEvaluate": {
+    "description": "Auto imported from components/hotel/Evaluate.vue"
+  },
+  "Evaluate1": {
+    "description": "Auto imported from components/hotel/Evaluate1.vue"
+  },
+  "LazyEvaluate1": {
+    "description": "Auto imported from components/hotel/Evaluate1.vue"
+  },
+  "HotelFilter": {
+    "description": "Auto imported from components/hotel/HotelFilter.vue"
+  },
+  "LazyHotelFilter": {
+    "description": "Auto imported from components/hotel/HotelFilter.vue"
+  },
+  "HotelList": {
+    "description": "Auto imported from components/hotel/HotelList.vue"
+  },
+  "LazyHotelList": {
+    "description": "Auto imported from components/hotel/HotelList.vue"
+  },
+  "HotelQuery": {
+    "description": "Auto imported from components/hotel/HotelQuery.vue"
+  },
+  "LazyHotelQuery": {
+    "description": "Auto imported from components/hotel/HotelQuery.vue"
+  },
+  "Info": {
+    "description": "Auto imported from components/hotel/Info.vue"
+  },
+  "LazyInfo": {
+    "description": "Auto imported from components/hotel/Info.vue"
+  },
+  "Like": {
+    "description": "Auto imported from components/hotel/Like.vue"
+  },
+  "LazyLike": {
+    "description": "Auto imported from components/hotel/Like.vue"
+  },
+  "Map": {
+    "description": "Auto imported from components/hotel/Map.vue"
+  },
+  "LazyMap": {
+    "description": "Auto imported from components/hotel/Map.vue"
+  },
+  "Nav": {
+    "description": "Auto imported from components/hotel/Nav.vue"
+  },
+  "LazyNav": {
+    "description": "Auto imported from components/hotel/Nav.vue"
+  },
+  "ArticlesList": {
+    "description": "Auto imported from components/post/ArticlesList.vue"
+  },
+  "LazyArticlesList": {
+    "description": "Auto imported from components/post/ArticlesList.vue"
+  },
+  "Main": {
+    "description": "Auto imported from components/post/Main.vue"
+  },
+  "LazyMain": {
+    "description": "Auto imported from components/post/Main.vue"
+  },
+  "Parent": {
+    "description": "Auto imported from components/post/Parent.vue"
+  },
+  "LazyParent": {
+    "description": "Auto imported from components/post/Parent.vue"
+  },
+  "PostArticle": {
+    "description": "Auto imported from components/post/postArticle.vue"
+  },
+  "LazyPostArticle": {
+    "description": "Auto imported from components/post/postArticle.vue"
+  },
+  "PostAside": {
+    "description": "Auto imported from components/post/postAside.vue"
+  },
+  "LazyPostAside": {
+    "description": "Auto imported from components/post/postAside.vue"
+  },
+  "PostContent": {
+    "description": "Auto imported from components/post/postContent.vue"
+  },
+  "LazyPostContent": {
+    "description": "Auto imported from components/post/postContent.vue"
+  },
+  "LoginForm": {
+    "description": "Auto imported from components/user/LoginForm.vue"
+  },
+  "LazyLoginForm": {
+    "description": "Auto imported from components/user/LoginForm.vue"
+  },
+  "RegisterForm": {
+    "description": "Auto imported from components/user/RegisterForm.vue"
+  },
+  "LazyRegisterForm": {
+    "description": "Auto imported from components/user/RegisterForm.vue"
+  },
+  "CommentMain": {
+    "description": "Auto imported from components/test/CommentMain.vue"
+  },
+  "LazyCommentMain": {
+    "description": "Auto imported from components/test/CommentMain.vue"
+  },
+  "CommentParent": {
+    "description": "Auto imported from components/test/CommentParent.vue"
+  },
+  "LazyCommentParent": {
+    "description": "Auto imported from components/test/CommentParent.vue"
+  }
+}
