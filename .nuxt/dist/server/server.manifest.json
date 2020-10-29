@@ -1,0 +1,39 @@
+{
+  "entry": "server.js",
+  "files": {
+    "pages/air/flights.js": "pages/air/flights.js",
+    "pages/air/index.js": "pages/air/index.js",
+    "pages/air/order.js": "pages/air/order.js",
+    "pages/air/pay.js": "pages/air/pay.js",
+    "pages/hotel/detail.js": "pages/hotel/detail.js",
+    "pages/hotel/index.js": "pages/hotel/index.js",
+    "pages/index.js": "pages/index.js",
+    "pages/post/article.js": "pages/post/article.js",
+    "pages/post/detail.js": "pages/post/detail.js",
+    "pages/post/index.js": "pages/post/index.js",
+    "pages/test.js": "pages/test.js",
+    "pages/tsetone.js": "pages/tsetone.js",
+    "pages/user/index.js": "pages/user/index.js",
+    "pages/user/login.js": "pages/user/login.js",
+    "pages/user/personal.js": "pages/user/personal.js",
+    "server.js": "server.js"
+  },
+  "maps": {
+    "pages/air/flights.js": "pages/air/flights.js.map",
+    "pages/air/index.js": "pages/air/index.js.map",
+    "pages/air/order.js": "pages/air/order.js.map",
+    "pages/air/pay.js": "pages/air/pay.js.map",
+    "pages/hotel/detail.js": "pages/hotel/detail.js.map",
+    "pages/hotel/index.js": "pages/hotel/index.js.map",
+    "pages/index.js": "pages/index.js.map",
+    "pages/post/article.js": "pages/post/article.js.map",
+    "pages/post/detail.js": "pages/post/detail.js.map",
+    "pages/post/index.js": "pages/post/index.js.map",
+    "pages/test.js": "pages/test.js.map",
+    "pages/tsetone.js": "pages/tsetone.js.map",
+    "pages/user/index.js": "pages/user/index.js.map",
+    "pages/user/login.js": "pages/user/login.js.map",
+    "pages/user/personal.js": "pages/user/personal.js.map",
+    "server.js": "server.js.map"
+  }
+}
