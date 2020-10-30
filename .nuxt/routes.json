@@ -3,105 +3,90 @@
     "name": "air",
     "path": "/air",
     "component": "D:\\\\前端开发\\\\线下黑马学习\\\\07-Vue\\\\day21\\\\xingyue\\\\pages\\\\air\\\\index.vue",
-    "chunkName": "pages/air/index",
-    "_name": "_7714db00"
+    "chunkName": "pages/air/index"
   },
   {
     "name": "hotel",
     "path": "/hotel",
     "component": "D:\\\\前端开发\\\\线下黑马学习\\\\07-Vue\\\\day21\\\\xingyue\\\\pages\\\\hotel\\\\index.vue",
-    "chunkName": "pages/hotel/index",
-    "_name": "_70417bd6"
+    "chunkName": "pages/hotel/index"
   },
   {
     "name": "post",
     "path": "/post",
     "component": "D:\\\\前端开发\\\\线下黑马学习\\\\07-Vue\\\\day21\\\\xingyue\\\\pages\\\\post\\\\index.vue",
-    "chunkName": "pages/post/index",
-    "_name": "_70cfd72a"
+    "chunkName": "pages/post/index"
   },
   {
     "name": "test",
     "path": "/test",
     "component": "D:\\\\前端开发\\\\线下黑马学习\\\\07-Vue\\\\day21\\\\xingyue\\\\pages\\\\test.vue",
-    "chunkName": "pages/test",
-    "_name": "_4705e56c"
+    "chunkName": "pages/test"
   },
   {
     "name": "tsetone",
     "path": "/tsetone",
     "component": "D:\\\\前端开发\\\\线下黑马学习\\\\07-Vue\\\\day21\\\\xingyue\\\\pages\\\\tsetone.vue",
-    "chunkName": "pages/tsetone",
-    "_name": "_1c892bb0"
+    "chunkName": "pages/tsetone"
   },
   {
     "name": "user",
     "path": "/user",
     "component": "D:\\\\前端开发\\\\线下黑马学习\\\\07-Vue\\\\day21\\\\xingyue\\\\pages\\\\user\\\\index.vue",
-    "chunkName": "pages/user/index",
-    "_name": "_c1fb29c2"
+    "chunkName": "pages/user/index"
   },
   {
     "name": "air-flights",
     "path": "/air/flights",
     "component": "D:\\\\前端开发\\\\线下黑马学习\\\\07-Vue\\\\day21\\\\xingyue\\\\pages\\\\air\\\\flights.vue",
-    "chunkName": "pages/air/flights",
-    "_name": "_9810749e"
+    "chunkName": "pages/air/flights"
   },
   {
     "name": "air-order",
     "path": "/air/order",
     "component": "D:\\\\前端开发\\\\线下黑马学习\\\\07-Vue\\\\day21\\\\xingyue\\\\pages\\\\air\\\\order.vue",
-    "chunkName": "pages/air/order",
-    "_name": "_457f5a08"
+    "chunkName": "pages/air/order"
   },
   {
     "name": "air-pay",
     "path": "/air/pay",
     "component": "D:\\\\前端开发\\\\线下黑马学习\\\\07-Vue\\\\day21\\\\xingyue\\\\pages\\\\air\\\\pay.vue",
-    "chunkName": "pages/air/pay",
-    "_name": "_44114cd6"
+    "chunkName": "pages/air/pay"
   },
   {
     "name": "hotel-detail",
     "path": "/hotel/detail",
     "component": "D:\\\\前端开发\\\\线下黑马学习\\\\07-Vue\\\\day21\\\\xingyue\\\\pages\\\\hotel\\\\detail.vue",
-    "chunkName": "pages/hotel/detail",
-    "_name": "_30410e7d"
+    "chunkName": "pages/hotel/detail"
   },
   {
     "name": "post-article",
     "path": "/post/article",
     "component": "D:\\\\前端开发\\\\线下黑马学习\\\\07-Vue\\\\day21\\\\xingyue\\\\pages\\\\post\\\\article.vue",
-    "chunkName": "pages/post/article",
-    "_name": "_c846cd64"
+    "chunkName": "pages/post/article"
   },
   {
     "name": "post-detail",
     "path": "/post/detail",
     "component": "D:\\\\前端开发\\\\线下黑马学习\\\\07-Vue\\\\day21\\\\xingyue\\\\pages\\\\post\\\\detail.vue",
-    "chunkName": "pages/post/detail",
-    "_name": "_417e1da9"
+    "chunkName": "pages/post/detail"
   },
   {
     "name": "user-login",
     "path": "/user/login",
     "component": "D:\\\\前端开发\\\\线下黑马学习\\\\07-Vue\\\\day21\\\\xingyue\\\\pages\\\\user\\\\login.vue",
-    "chunkName": "pages/user/login",
-    "_name": "_68aa0e36"
+    "chunkName": "pages/user/login"
   },
   {
     "name": "user-personal",
     "path": "/user/personal",
     "component": "D:\\\\前端开发\\\\线下黑马学习\\\\07-Vue\\\\day21\\\\xingyue\\\\pages\\\\user\\\\personal.vue",
-    "chunkName": "pages/user/personal",
-    "_name": "_0b888ffa"
+    "chunkName": "pages/user/personal"
   },
   {
     "name": "index",
     "path": "/",
     "component": "D:\\\\前端开发\\\\线下黑马学习\\\\07-Vue\\\\day21\\\\xingyue\\\\pages\\\\index.vue",
-    "chunkName": "pages/index",
-    "_name": "_680b516c"
+    "chunkName": "pages/index"
   }
 ]
